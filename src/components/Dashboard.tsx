@@ -2,20 +2,32 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { usePlayerStore } from '../store/usePlayerStore';
 import { parseM3U } from '../utils/m3uParser';
 import { VideoPlayer } from './VideoPlayer';
-import { Search, Tv, MapPin, Menu, X, PlayCircle, Loader2, Heart, Moon, Sun, Info } from 'lucide-react';
+import { Tv, PlayCircle, Menu, LogOut, Search, MapPin, Heart, Info, ShieldCheck, X, Loader2 } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
-function cn(...inputs: (string | undefined | null | false)[]) {
+const cn = (...inputs: (string | undefined | null | false)[]) => {
   return twMerge(clsx(inputs));
 }
 
 const DEFAULT_M3U_URL = 'https://iptv-org.github.io/iptv/countries/de.m3u';
 
+const GEMEINWOHL_CATEGORIES = [
+  'All',
+  'Wissen & Kultur',
+  'Kinder & Familie',
+  'Lokal & Regional',
+  'Nachrichten & Gesellschaft',
+  'Gemeinsame Unterhaltung'
+];
+
 export const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
+
   const {
     channels,
-    groups,
     currentChannel,
     searchQuery,
     selectedGroup,
@@ -23,6 +35,8 @@ export const Dashboard: React.FC = () => {
     showOnlyFavorites,
     favorites,
     isTheaterMode,
+    accessibilityMode,
+    kidsMode,
     isLoading,
     error,
     setChannels,
@@ -32,34 +46,16 @@ export const Dashboard: React.FC = () => {
     setShowOnlyRegional,
     setShowOnlyFavorites,
     toggleFavorite,
+    setAccessibilityMode,
+    setKidsMode,
     setIsLoading,
     setError,
+    setUser,
   } = usePlayerStore();
 
+  const handleLogout = () => setUser(null);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-
-  // Sync theme with HTML document
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.setProperty('--background', '240 10% 3.9%');
-      document.documentElement.style.setProperty('--foreground', '0 0% 98%');
-      document.documentElement.style.setProperty('--card', '240 10% 3.9%');
-      document.documentElement.style.setProperty('--border', '240 3.7% 15.9%');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.style.setProperty('--background', '0 0% 100%');
-      document.documentElement.style.setProperty('--foreground', '240 10% 3.9%');
-      document.documentElement.style.setProperty('--card', '0 0% 98%');
-      document.documentElement.style.setProperty('--border', '240 5.9% 90%');
-    }
-  }, [theme]);
-
-  // Auto-hide sidebar in theater mode
-  useEffect(() => {
-    if (isTheaterMode) setIsSidebarOpen(false);
-  }, [isTheaterMode]);
 
   useEffect(() => {
     const fetchM3U = async () => {
@@ -83,95 +79,129 @@ export const Dashboard: React.FC = () => {
 
   const filteredChannels = useMemo(() => {
     return channels.filter((channel) => {
+      if (kidsMode && channel.gemeinwohlCategory !== 'Kinder & Familie') return false;
+
       const matchesSearch = channel.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesGroup = selectedGroup === 'All' || channel.group === selectedGroup;
+      const matchesGroup = selectedGroup === 'All' || channel.gemeinwohlCategory === selectedGroup;
       const matchesRegional = showOnlyRegional ? channel.isRegional : true;
       const matchesFavorite = showOnlyFavorites ? favorites.includes(channel.id) : true;
+      
       return matchesSearch && matchesGroup && matchesRegional && matchesFavorite;
     });
-  }, [channels, searchQuery, selectedGroup, showOnlyRegional, showOnlyFavorites, favorites]);
+  }, [channels, searchQuery, selectedGroup, showOnlyRegional, showOnlyFavorites, favorites, kidsMode]);
+
+  const baseText = accessibilityMode ? "text-lg" : "text-sm";
+  const iconSize = accessibilityMode ? "w-8 h-8" : "w-5 h-5";
+  const logoSize = kidsMode ? "w-16 h-16" : (accessibilityMode ? "w-14 h-14" : "w-10 h-10");
 
   return (
-    <div className="flex h-screen bg-background text-foreground overflow-hidden font-sans transition-colors duration-300">
-      {/* Sidebar Overlay for Mobile / Theater Mode */}
+    <div className={cn(
+      "flex h-screen bg-background text-foreground overflow-hidden font-sans transition-colors duration-300",
+      kidsMode && "bg-blue-950 text-blue-50"
+    )}>
       {!isSidebarOpen && (
         <button 
           onClick={() => setIsSidebarOpen(true)}
-          className="absolute top-4 left-4 z-50 p-2 bg-card rounded-md border border-border text-primary shadow-lg hover:bg-primary/10 transition-colors"
+          className={cn("absolute top-4 left-4 z-50 bg-card rounded-md border border-border text-primary shadow-lg hover:bg-primary/10 transition-colors", accessibilityMode ? "p-4" : "p-2")}
         >
-          <Menu className="w-5 h-5" />
+          <Menu className={iconSize} />
         </button>
       )}
 
-      {/* Sidebar */}
       <div 
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-80 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:relative flex flex-col shadow-2xl lg:shadow-none",
+          "fixed inset-y-0 left-0 z-40 w-80 lg:w-96 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:relative flex flex-col shadow-2xl lg:shadow-none",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          isTheaterMode && "lg:absolute" // Detach sidebar from flex flow in theater mode
+          isTheaterMode && "lg:absolute",
+          kidsMode && "bg-blue-900 border-blue-800"
         )}
       >
         <div className="p-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
             <Tv className="w-6 h-6" />
-            <span>OpenIPTV NRW</span>
+            <span>Das Gemeinwohl TV</span>
           </div>
           <button onClick={() => setIsSidebarOpen(false)} className="p-1 text-gray-400 hover:text-primary transition-colors">
-            <X className="w-5 h-5" />
+            <X className={iconSize} />
           </button>
         </div>
 
-        <div className="p-4 flex flex-col gap-3 border-b border-border">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search channels..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-            />
-          </div>
-          
-          <select 
-            value={selectedGroup}
-            onChange={(e) => setSelectedGroup(e.target.value)}
-            className="w-full p-2 bg-background border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
-          >
-            {groups.map(g => <option key={g} value={g}>{g}</option>)}
-          </select>
+        <div className="p-4 flex flex-col gap-4 border-b border-border">
+          {!kidsMode && (
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder={t('dashboard.searchChannels')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={cn(
+                  "w-full bg-slate-900 border border-slate-800 rounded-xl pl-12 pr-4 text-white placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium tv-focus",
+                  accessibilityMode ? "h-16 text-xl" : "h-12"
+                )}
+              />
+            </div>
+          )}
 
-          <div className="flex flex-col gap-2 mt-1">
-            <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-primary transition-colors">
-              <input 
-                type="checkbox" 
-                checked={showOnlyRegional}
-                onChange={(e) => setShowOnlyRegional(e.target.checked)}
-                className="rounded border-border text-primary focus:ring-primary bg-background"
-              />
-              <MapPin className="w-4 h-4" />
-              <span>Regional Only</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm cursor-pointer hover:text-primary transition-colors">
-              <input 
-                type="checkbox" 
-                checked={showOnlyFavorites}
-                onChange={(e) => setShowOnlyFavorites(e.target.checked)}
-                className="rounded border-border text-primary focus:ring-primary bg-background"
-              />
-              <Heart className="w-4 h-4" />
-              <span>Favorites Only</span>
-            </label>
-          </div>
+          {!kidsMode && (
+            <div className="relative">
+              <select
+                value={selectedGroup}
+                onChange={(e) => setSelectedGroup(e.target.value)}
+                className={cn(
+                  "w-full bg-slate-900 border border-slate-800 rounded-xl px-4 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all font-medium appearance-none tv-focus cursor-pointer",
+                  accessibilityMode ? "h-16 text-xl" : "h-12"
+                )}
+              >
+                {GEMEINWOHL_CATEGORIES.map(category => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+            </div>
+          )}
+          
+          {!kidsMode && (
+            <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+              <button
+                tabIndex={0}
+                onClick={() => setShowOnlyRegional(!showOnlyRegional)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-xl font-bold whitespace-nowrap transition-all border tv-focus cursor-pointer",
+                  showOnlyRegional 
+                    ? "bg-purple-500/20 text-purple-400 border-purple-500/50" 
+                    : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                )}
+              >
+                <MapPin className="w-4 h-4" />
+                {t('dashboard.regionalOnly')}
+              </button>
+              <button
+                tabIndex={0}
+                onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-xl font-bold whitespace-nowrap transition-all border tv-focus cursor-pointer",
+                  showOnlyFavorites 
+                    ? "bg-blue-500/20 text-blue-400 border-blue-500/50" 
+                    : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                )}
+              >
+                <Heart className="w-4 h-4" />
+                {t('dashboard.favoritesOnly')}
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
           {isLoading ? (
-            <div className="flex justify-center p-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+            <div className="flex justify-center p-8"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
           ) : error ? (
-            <div className="text-center p-8 text-red-500 text-sm font-medium">{error}</div>
+            <div className={cn("text-center p-8 text-red-500 font-medium", baseText)}>{error}</div>
           ) : filteredChannels.length === 0 ? (
-            <div className="text-center p-8 text-gray-500 text-sm">No channels found.</div>
+            <div className="text-center py-12 text-slate-500 font-medium">
+              <Search className="w-12 h-12 mx-auto mb-4 opacity-20" />
+              <p>{t('dashboard.noChannelsFound')}</p>
+            </div>
           ) : (
             filteredChannels.map((channel) => {
               const isFav = favorites.includes(channel.id);
@@ -179,33 +209,49 @@ export const Dashboard: React.FC = () => {
                 <div
                   key={channel.id}
                   className={cn(
-                    "w-full flex items-center gap-2 p-2 rounded-md transition-all duration-200 hover:bg-foreground/5 group",
-                    currentChannel?.id === channel.id ? "bg-primary/10 border border-primary/20" : "border border-transparent"
+                    "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 hover:bg-foreground/5 group",
+                    currentChannel?.id === channel.id ? "bg-primary/20 border border-primary/40 shadow-inner" : "border border-transparent"
                   )}
                 >
-                  <button
-                    onClick={() => toggleFavorite(channel.id)}
-                    className="p-1.5 rounded-full hover:bg-background shrink-0 transition-colors"
-                  >
-                    <Heart className={cn("w-4 h-4", isFav ? "fill-red-500 text-red-500" : "text-gray-400 group-hover:text-red-400")} />
-                  </button>
+                  {!kidsMode && (
+                    <button 
+                      tabIndex={0}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(channel.id);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.stopPropagation();
+                          toggleFavorite(channel.id);
+                        }
+                      }}
+                      className="p-2 rounded-full hover:bg-slate-800 transition-colors tv-focus"
+                    >
+                      <Heart className={cn("w-5 h-5 transition-colors", isFav ? "fill-red-500 text-red-500" : "text-slate-500")} />
+                    </button>
+                  )}
                   <div 
-                    className="flex-1 flex items-center gap-3 min-w-0 cursor-pointer"
+                    tabIndex={0}
+                    className="flex-1 flex items-center gap-4 min-w-0 cursor-pointer tv-focus rounded-xl p-1"
                     onClick={() => setCurrentChannel(channel)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') setCurrentChannel(channel);
+                    }}
                   >
-                    <div className="w-10 h-10 rounded bg-background flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                    <div className={cn("rounded-lg bg-white/10 flex items-center justify-center shrink-0 overflow-hidden shadow-sm p-1", logoSize)}>
                       {channel.logo ? (
-                        <img src={channel.logo} alt={channel.name} className="max-w-full max-h-full object-contain" />
+                        <img src={channel.logo} alt={channel.name} className="max-w-full max-h-full object-contain drop-shadow-md" />
                       ) : (
-                        <Tv className="w-5 h-5 text-gray-600" />
+                        <Tv className="w-8 h-8 text-white/50" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate">{channel.name}</div>
-                      <div className="text-xs opacity-60 truncate">{channel.group}</div>
+                      <div className={cn("font-bold text-white truncate", accessibilityMode || kidsMode ? "text-xl" : "text-base")}>{channel.name}</div>
+                      {!kidsMode && <div className={cn("opacity-70 truncate font-medium", baseText)}>{channel.gemeinwohlCategory}</div>}
                     </div>
                     {currentChannel?.id === channel.id && (
-                      <PlayCircle className="w-4 h-4 text-primary shrink-0" />
+                      <PlayCircle className="w-8 h-8 text-primary shrink-0 animate-pulse" />
                     )}
                   </div>
                 </div>
@@ -215,85 +261,116 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className={cn(
         "flex-1 flex flex-col relative transition-all duration-300",
         isTheaterMode ? "w-full absolute inset-0 z-30 bg-background" : ""
       )}>
-        <div className={cn(
-          "flex-1 flex flex-col w-full mx-auto transition-all duration-300",
-          isTheaterMode ? "max-w-none p-0" : "max-w-6xl p-4 lg:p-8"
-        )}>
-          {!isTheaterMode && (
-            <header className="mb-6 lg:ml-0 ml-12 flex justify-between items-start">
-              <div>
-                <h1 className="text-2xl font-bold tracking-tight">
-                  {currentChannel ? currentChannel.name : 'Dashboard'}
-                </h1>
-                <p className="text-sm opacity-60">
-                  {currentChannel ? `${currentChannel.group} ${currentChannel.isRegional ? '• Regional' : ''}` : 'Select a channel from the sidebar to begin streaming.'}
-                </p>
+        {!isTheaterMode && (
+          <header className="p-6 flex justify-between items-center border-b border-slate-800">
+            <h1 className="text-xl md:text-2xl font-black tracking-tight flex items-center gap-2">
+              <Tv className="text-blue-500" />
+              <span className="hidden sm:inline">{t('dashboard.defaultTitle')}</span>
+            </h1>
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <div className="hidden lg:flex items-center gap-4 bg-slate-900 rounded-full p-1 border border-slate-800">
+                <button
+                  tabIndex={0}
+                  onClick={() => setAccessibilityMode(!accessibilityMode)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all text-sm tv-focus",
+                    accessibilityMode ? "bg-green-500 text-white shadow-lg shadow-green-500/20" : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  {t('dashboard.seniorSafe')}
+                </button>
+                <button
+                  tabIndex={0}
+                  onClick={() => setKidsMode(!kidsMode)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-full font-bold transition-all text-sm tv-focus",
+                    kidsMode ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20" : "text-slate-400 hover:text-white"
+                  )}
+                >
+                  <Heart className="w-4 h-4" />
+                  {t('dashboard.kidsMode')}
+                </button>
               </div>
               <button 
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-full hover:bg-foreground/10 transition-colors"
-                title="Toggle Theme"
+                tabIndex={0}
+                onClick={handleLogout}
+                className="flex items-center gap-2 text-slate-400 hover:text-red-400 transition-colors px-3 py-2 font-bold text-sm tv-focus"
               >
-                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                <LogOut className="w-5 h-5" />
+                <span className="hidden sm:inline">{t('dashboard.signOut')}</span>
               </button>
-            </header>
-          )}
+            </div>
+          </header>
+        )}
           
-          <main className="flex-1 flex flex-col">
-            <VideoPlayer />
+        <main className="flex-1 flex flex-col">
+          <VideoPlayer />
             
-            {/* EPG / Info Section */}
-            {currentChannel && !isTheaterMode && (
-              <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Stream Info */}
-                <div className="lg:col-span-1 p-6 rounded-xl bg-card border border-border shadow-md">
-                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Info className="w-5 h-5 text-primary" />
-                    Stream Details
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="text-xs uppercase tracking-wider opacity-60">Category</div>
-                      <div className="text-sm font-medium mt-1">{currentChannel.group}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase tracking-wider opacity-60">Type</div>
-                      <div className="text-sm font-medium mt-1">
-                        {currentChannel.isRegional ? (
-                           <span className="inline-flex items-center gap-1 text-primary"><MapPin className="w-3 h-3"/> Regional Broadcast</span>
-                        ) : 'National / International'}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase tracking-wider opacity-60">Source</div>
-                      <div className="text-sm font-medium mt-1 truncate" title={currentChannel.url}>
-                        HLS Playlist (.m3u8)
-                      </div>
-                    </div>
-                  </div>
+          {currentChannel ? (
+            <div className={cn("p-6 sm:p-8 bg-slate-900", isTheaterMode && "hidden")}>
+              <div className="flex flex-wrap items-center justify-between gap-6 mb-8">
+                <div>
+                  <h2 className="text-3xl sm:text-4xl font-black mb-2 flex items-center gap-3">
+                    {currentChannel.name}
+                    {currentChannel.isRegional && (
+                      <span className="text-sm bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full font-bold border border-purple-500/30 flex items-center gap-1">
+                        <MapPin className="w-4 h-4" />
+                        {t('dashboard.regionalBroadcast')}
+                      </span>
+                    )}
+                  </h2>
+                  <p className="text-slate-400 text-lg font-medium flex items-center gap-2">
+                    <span className="relative flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    {t('dashboard.liveBroadcasting')}
+                  </p>
                 </div>
+              </div>
 
-                {/* EPG Placeholder */}
-                <div className="lg:col-span-2 p-6 rounded-xl bg-card border border-border shadow-md flex flex-col">
-                  <h3 className="text-lg font-semibold mb-4">Program Guide (EPG)</h3>
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-border rounded-lg bg-background/50">
-                    <Tv className="w-10 h-10 text-primary/50 mb-3" />
-                    <h4 className="font-medium text-lg">No EPG Data Available</h4>
-                    <p className="text-sm opacity-60 max-w-md mt-2">
-                      XMLTV schedule data is not currently loaded for <strong>{currentChannel.name}</strong>. 
-                      Connecting an EPG provider would display "Now Playing" and "Up Next" information here.
-                    </p>
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                  <div className="flex items-center gap-3 text-slate-400 mb-2 font-bold">
+                    <Info className="w-5 h-5 text-blue-500" />
+                    {t('dashboard.streamDetails')}
+                  </div>
+                  <p className="text-slate-300 leading-relaxed text-lg">
+                    {t('dashboard.youAreWatching')} <strong className="text-white">{currentChannel.name}</strong>. {t('dashboard.providedForCommonGood')}
+                  </p>
+                </div>
+                
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                  <div className="flex items-center gap-3 text-slate-400 mb-4 font-bold">
+                    <Tv className="w-5 h-5 text-blue-500" />
+                    {t('dashboard.programGuide')}
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm border-b border-slate-800 pb-2">
+                      <span className="text-slate-400 font-medium">{t('dashboard.category')}</span>
+                      <span className="text-white font-bold px-3 py-1 bg-slate-800 rounded-lg">{currentChannel.gemeinwohlCategory}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-400 font-medium">{t('dashboard.community')}</span>
+                      <span className="text-blue-400 font-bold">{currentChannel.isRegional ? 'Lokal' : 'National'}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
-          </main>
-        </div>
+            </div>
+          ) : (
+            <div className="h-full min-h-[60vh] flex flex-col items-center justify-center text-slate-500 bg-slate-900/50 rounded-3xl border-2 border-dashed border-slate-800 m-6">
+              <Tv className="w-24 h-24 mb-6 opacity-20" />
+              <p className="text-2xl font-bold">{t('dashboard.selectChannel')}</p>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );

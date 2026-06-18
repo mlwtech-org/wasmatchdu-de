@@ -12,7 +12,7 @@ function cn(...inputs: (string | undefined | null | false)[]) {
 export const VideoPlayer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const { currentChannel, isTheaterMode, setIsTheaterMode } = usePlayerStore();
+  const { currentChannel, isTheaterMode, toggleTheaterMode } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
@@ -152,7 +152,7 @@ export const VideoPlayer: React.FC = () => {
             </button>
           )}
           <button 
-            onClick={() => setIsTheaterMode(!isTheaterMode)}
+            onClick={() => toggleTheaterMode()}
             className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
             title={isTheaterMode ? "Exit Theater Mode" : "Theater Mode"}
           >

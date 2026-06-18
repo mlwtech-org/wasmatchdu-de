@@ -5,14 +5,22 @@ export interface Channel {
   logo: string;
   group: string;
   isRegional: boolean;
+  gemeinwohlCategory: string;
 }
 
 export interface PlayerState {
   currentChannel: Channel | null;
-  isPlaying: boolean;
-  volume: number;
-  isMuted: boolean;
+  channels: Channel[];
+  favorites: string[];
   isTheaterMode: boolean;
+  accessibilityMode: boolean;
+  kidsMode: boolean;
+  setCurrentChannel: (channel: Channel | null) => void;
+  setChannels: (channels: Channel[]) => void;
+  toggleFavorite: (channelId: string) => void;
+  toggleTheaterMode: () => void;
+  setAccessibilityMode: (mode: boolean) => void;
+  setKidsMode: (mode: boolean) => void;
 }
 
 export interface PlaylistState {
@@ -23,6 +31,9 @@ export interface PlaylistState {
   showOnlyRegional: boolean;
   showOnlyFavorites: boolean;
   favorites: string[];
+  accessibilityMode: boolean;
+  kidsMode: boolean;
   isLoading: boolean;
   error: string | null;
+  user: { email: string; uid: string } | null;
 }
