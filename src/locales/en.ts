@@ -1,7 +1,7 @@
 export const en = {
   translation: {
     app: {
-      title: "Das Gemeinwohl IPTV"
+      title: "WasMatchDu IPTV"
     },
     homepage: {
       features: "Features",
@@ -36,7 +36,7 @@ export const en = {
       bypassLogin: "Bypass Login (Dev Mode)"
     },
     dashboard: {
-      defaultTitle: "Gemeinwohl Dashboard",
+      defaultTitle: "WasMatchDu Dashboard",
       selectChannel: "Select a channel to connect with your community.",
       seniorSafe: "Senior Safe",
       kidsMode: "Kids Mode",
@@ -52,7 +52,7 @@ export const en = {
       programGuide: "Program Guide",
       liveBroadcasting: "Live Broadcasting",
       youAreWatching: "You are watching",
-      providedForCommonGood: "This content is provided for the common good (Gemeinwohl). Enjoy the program!"
+      providedForCommonGood: "Brought to you by WasMatchDu. Enjoy the program!"
     }
   }
 };

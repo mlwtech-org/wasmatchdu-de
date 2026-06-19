@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import { usePlayerStore } from '../store/usePlayerStore';
-import { AlertCircle, Loader2, Maximize, PictureInPicture } from 'lucide-react';
+import { AlertCircle, Loader2, Maximize, PictureInPicture, ExternalLink } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+// import { SubscribeOverlay } from './SubscribeOverlay';
 
 function cn(...inputs: (string | undefined | null | false)[]) {
   return twMerge(clsx(inputs));
@@ -12,10 +13,11 @@ function cn(...inputs: (string | undefined | null | false)[]) {
 export const VideoPlayer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const { currentChannel, isTheaterMode, toggleTheaterMode } = usePlayerStore();
+  const { currentChannel, isTheaterMode, useProxy, toggleTheaterMode } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const retryCount = useRef(0);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -24,14 +26,22 @@ export const VideoPlayer: React.FC = () => {
     const initPlayer = () => {
       setError(null);
       setIsBuffering(true);
+      retryCount.current = 0;
 
       if (Hls.isSupported()) {
         if (hlsRef.current) hlsRef.current.destroy();
 
-        const hls = new Hls({ maxBufferLength: 30, maxMaxBufferLength: 600 });
+        const hls = new Hls({ 
+          maxBufferLength: 30, 
+          maxMaxBufferLength: 600
+        });
         hlsRef.current = hls;
 
-        hls.loadSource(currentChannel.url);
+        const streamUrl = useProxy 
+          ? `http://localhost:3001/proxy?url=${encodeURIComponent(currentChannel.url)}`
+          : currentChannel.url;
+
+        hls.loadSource(streamUrl);
         hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -43,28 +53,48 @@ export const VideoPlayer: React.FC = () => {
           if (data.fatal) {
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                setError('Network error: Stream temporarily unavailable. Trying to recover...');
-                hls.startLoad();
+                if (retryCount.current < 2) {
+                  retryCount.current += 1;
+                  setError('Network connection interrupted. Trying to recover...');
+                  hls.startLoad();
+                } else {
+                  setError('This stream is currently offline, geo-blocked, or requires a proxy. Please try another channel.');
+                  setIsBuffering(false);
+                  hls.destroy();
+                }
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
-                setError('Media error encountered. Trying to recover...');
-                hls.recoverMediaError();
+                if (retryCount.current < 2) {
+                  retryCount.current += 1;
+                  setError('Media error encountered. Trying to recover...');
+                  hls.recoverMediaError();
+                } else {
+                  setError('Stream formatting is incompatible. Please try another channel.');
+                  setIsBuffering(false);
+                  hls.destroy();
+                }
                 break;
               default:
-                setError('Playback failed. Please try another channel or regional mirror.');
+                setError('Playback failed. The broadcaster might be blocking the connection.');
+                setIsBuffering(false);
                 hls.destroy();
                 break;
             }
           }
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = currentChannel.url;
+        const streamUrl = useProxy 
+          ? `http://localhost:3001/proxy?url=${encodeURIComponent(currentChannel.url)}`
+          : currentChannel.url;
+
+        video.src = streamUrl;
         video.addEventListener('loadedmetadata', () => {
           setIsBuffering(false);
           video.play().catch(console.error);
         });
         video.addEventListener('error', () => {
-          setError('Playback failed. Please try another channel or regional mirror.');
+          setError('Playback failed. This stream is currently offline or geo-blocked by the broadcaster. Please try another channel.');
+          setIsBuffering(false);
         });
       }
     };
@@ -90,21 +120,14 @@ export const VideoPlayer: React.FC = () => {
   };
 
   if (!currentChannel) {
-    return (
-      <div className={cn(
-        "flex flex-col items-center justify-center w-full bg-black/90 text-white rounded-xl border border-border transition-all duration-500 ease-in-out",
-        isTheaterMode ? "h-[80vh]" : "aspect-video"
-      )}>
-        <div className="text-xl font-semibold opacity-70">Select a channel to start watching</div>
-      </div>
-    );
+    return null;
   }
 
   return (
     <div 
       className={cn(
-        "relative w-full overflow-hidden bg-black rounded-xl group border border-border shadow-2xl transition-all duration-500 ease-in-out",
-        isTheaterMode ? "h-[80vh] rounded-none lg:rounded-xl" : "aspect-video"
+        "relative w-full h-full overflow-hidden bg-black group transition-all duration-500 ease-in-out",
+        isTheaterMode ? "fixed inset-0 z-[100]" : ""
       )}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -116,10 +139,28 @@ export const VideoPlayer: React.FC = () => {
       )}
 
       {error && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md p-6 text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
-          <h3 className="text-xl font-bold text-white mb-2">Stream Error</h3>
-          <p className="text-gray-300 max-w-md">{error}</p>
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md p-8 text-center animate-in fade-in duration-300">
+          <AlertCircle className="w-16 h-16 text-red-500 mb-6 drop-shadow-lg" />
+          <h3 className="text-2xl font-bold text-white mb-3">Stream Unavailable</h3>
+          <p className="text-slate-300 max-w-md text-lg leading-relaxed">{error}</p>
+          
+          <div className="mt-8 bg-slate-900/80 border border-slate-700 p-6 rounded-2xl max-w-lg w-full text-left backdrop-blur-md">
+            <h4 className="text-white font-bold mb-2">Want a guaranteed fix?</h4>
+            <p className="text-slate-400 text-sm mb-4">
+              Free web proxies are often blocked or too slow for live video. For the absolute best and most reliable viewing experience, install a free CORS Unblocker extension to let your browser connect directly to the broadcast servers.
+            </p>
+            <a 
+              href="https://chromewebstore.google.com/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold transition-colors pointer-events-auto"
+            >
+              <ExternalLink className="w-5 h-5" />
+              Get CORS Unblocker Extension
+            </a>
+          </div>
+          
+          <p className="text-slate-500 mt-6 text-xs font-medium uppercase tracking-wider">Common with free IPTV links</p>
         </div>
       )}
 
@@ -160,6 +201,12 @@ export const VideoPlayer: React.FC = () => {
           </button>
         </div>
       </div>
+      
+      {/* TEMPORARILY DISABLED FOR DEVELOPMENT
+      {!user?.isPremium && currentChannel && import.meta.env.PROD && (
+        <SubscribeOverlay />
+      )}
+      */}
     </div>
   );
 };

@@ -1,3 +1,9 @@
+export interface User {
+  uid: string;
+  email: string;
+  isPremium?: boolean;
+}
+
 export interface Channel {
   id: string;
   name: string;
@@ -6,6 +12,7 @@ export interface Channel {
   group: string;
   isRegional: boolean;
   gemeinwohlCategory: string;
+  isUnstable: boolean;
 }
 
 export interface PlayerState {
@@ -33,7 +40,9 @@ export interface PlaylistState {
   favorites: string[];
   accessibilityMode: boolean;
   kidsMode: boolean;
+  showUnstableChannels: boolean;
+  setShowUnstableChannels: (show: boolean) => void;
   isLoading: boolean;
   error: string | null;
-  user: { email: string; uid: string } | null;
+  user: User | null;
 }

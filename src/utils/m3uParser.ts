@@ -31,36 +31,74 @@ export const parseM3U = (m3uContent: string): Channel[] => {
         nameAndGroup.includes('regional') || 
         nameAndGroup.includes('lokal');
 
-      // Gemeinwohl Categorization
-      let gemeinwohlCategory = 'Gemeinsame Unterhaltung';
+      // ZDF.de style High-Quality Categorization
+      let gemeinwohlCategory = 'Unterhaltung';
+      
       if (
         nameAndGroup.includes('arte') || 
         nameAndGroup.includes('3sat') || 
         nameAndGroup.includes('doku') || 
+        nameAndGroup.includes('documentary') || 
         nameAndGroup.includes('wissen') ||
-        nameAndGroup.includes('alpha')
+        nameAndGroup.includes('science') ||
+        nameAndGroup.includes('nature') ||
+        nameAndGroup.includes('alpha') ||
+        nameAndGroup.includes('zdfinfo') ||
+        nameAndGroup.includes('history') ||
+        nameAndGroup.includes('phoenix') ||
+        nameAndGroup.includes('planet')
       ) {
-        gemeinwohlCategory = 'Wissen & Kultur';
+        gemeinwohlCategory = 'Doku & Wissen';
+      } else if (
+        nameAndGroup.includes('sport') || 
+        nameAndGroup.includes('euro') || 
+        nameAndGroup.includes('kicker') ||
+        nameAndGroup.includes('motor') ||
+        nameAndGroup.includes('auto')
+      ) {
+        gemeinwohlCategory = 'Sport & Action';
+      } else if (
+        nameAndGroup.includes('film') || 
+        nameAndGroup.includes('kino') || 
+        nameAndGroup.includes('movie') ||
+        nameAndGroup.includes('serie') ||
+        nameAndGroup.includes('series') ||
+        nameAndGroup.includes('webseries') ||
+        nameAndGroup.includes('one') ||
+        nameAndGroup.includes('zdfneo') ||
+        nameAndGroup.includes('tele 5')
+      ) {
+        gemeinwohlCategory = 'Filme & Serien';
+      } else if (
+        nameAndGroup.includes('comedy') || 
+        nameAndGroup.includes('sat.1') || 
+        nameAndGroup.includes('prosieben') || 
+        nameAndGroup.includes('rtl') || 
+        nameAndGroup.includes('vox') ||
+        nameAndGroup.includes('show')
+      ) {
+        gemeinwohlCategory = 'Shows & Comedy';
       } else if (
         nameAndGroup.includes('kika') || 
         nameAndGroup.includes('kinder') || 
         nameAndGroup.includes('family') || 
         nameAndGroup.includes('disney') || 
         nameAndGroup.includes('nick') || 
-        nameAndGroup.includes('super rtl') || 
-        nameAndGroup.includes('toggo')
+        nameAndGroup.includes('toggo') ||
+        nameAndGroup.includes('cartoon')
       ) {
         gemeinwohlCategory = 'Kinder & Familie';
       } else if (isRegional) {
         gemeinwohlCategory = 'Lokal & Regional';
       } else if (
         nameAndGroup.includes('tagesschau') || 
-        nameAndGroup.includes('phoenix') || 
         nameAndGroup.includes('welt') || 
         nameAndGroup.includes('news') || 
-        nameAndGroup.includes('nachrichten')
+        nameAndGroup.includes('nachrichten') ||
+        nameAndGroup.includes('n-tv') ||
+        nameAndGroup.includes('info')
       ) {
-        gemeinwohlCategory = 'Nachrichten & Gesellschaft';
+        gemeinwohlCategory = 'Nachrichten & Info';
       }
 
       currentChannel = {
@@ -70,11 +108,23 @@ export const parseM3U = (m3uContent: string): Channel[] => {
         name,
         isRegional,
         gemeinwohlCategory,
+        isUnstable: false,
         url: '' // Will be set on the next line
       };
     } else if (line.startsWith('http') && currentChannel.name) {
       currentChannel.url = line;
+      
+      const urlLower = line.toLowerCase();
+      // Tag known problematic hosters that require VPNs, tokens, or strict CORS
+      const isBlocked = urlLower.includes('pluto.tv') || 
+                        urlLower.includes('pluto') ||
+                        urlLower.includes('dazn') || 
+                        urlLower.includes('rakuten') || 
+                        urlLower.includes('samsung');
+
+      currentChannel.isUnstable = isBlocked;
       channels.push(currentChannel as Channel);
+      
       currentChannel = {};
     }
   }

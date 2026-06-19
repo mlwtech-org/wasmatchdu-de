@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import { Tv, Heart, ShieldCheck, Users, PlayCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { usePWAInstall } from '../hooks/usePWAInstall';
+import { Download } from 'lucide-react';
 
 export const Homepage: React.FC = () => {
   const { t } = useTranslation();
+  const { isInstallable, promptInstall } = usePWAInstall();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-primary/30">
@@ -21,6 +24,14 @@ export const Homepage: React.FC = () => {
         </nav>
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
+          {isInstallable && (
+            <button 
+              onClick={promptInstall}
+              className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-4 py-2 rounded-full font-bold transition-all shadow-lg"
+            >
+              <Download className="w-4 h-4" /> Install App
+            </button>
+          )}
           <Link to="/login" className="font-bold hover:text-blue-400 transition-colors">{t('homepage.login')}</Link>
           <Link to="/login" className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-bold transition-all shadow-lg shadow-blue-500/20">
             {t('homepage.signup')}
@@ -57,6 +68,14 @@ export const Homepage: React.FC = () => {
             <Link to="/login" className="w-full sm:w-auto bg-white text-slate-950 px-8 py-4 rounded-full font-black text-lg hover:bg-slate-200 transition-all flex items-center justify-center gap-2 shadow-xl shadow-white/10">
               {t('homepage.startWatching')} <PlayCircle className="w-6 h-6" />
             </Link>
+            {isInstallable && (
+              <button 
+                onClick={promptInstall}
+                className="w-full sm:w-auto bg-slate-800 text-white border border-slate-700 px-8 py-4 rounded-full font-black text-lg hover:bg-slate-700 transition-all flex items-center justify-center gap-2 shadow-xl"
+              >
+                <Download className="w-6 h-6" /> Install Desktop App
+              </button>
+            )}
           </div>
         </div>
       </main>

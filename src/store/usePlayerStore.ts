@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Channel, PlayerState, PlaylistState } from '../types';
+import { Channel, PlayerState, PlaylistState, User } from '../types';
 
 interface StoreState extends PlayerState, PlaylistState {
   setChannels: (channels: Channel[]) => void;
@@ -12,10 +12,12 @@ interface StoreState extends PlayerState, PlaylistState {
   toggleFavorite: (channelId: string) => void;
   setAccessibilityMode: (enabled: boolean) => void;
   setKidsMode: (enabled: boolean) => void;
+  useProxy: boolean;
+  toggleProxy: () => void;
   toggleTheaterMode: () => void;
   setError: (error: string | null) => void;
   setIsLoading: (isLoading: boolean) => void;
-  setUser: (user: { email: string; uid: string } | null) => void;
+  setUser: (user: User | null) => void;
 }
 
 export const usePlayerStore = create<StoreState>()(
@@ -32,6 +34,8 @@ export const usePlayerStore = create<StoreState>()(
       favorites: [],
       accessibilityMode: false,
       kidsMode: false,
+      useProxy: false,
+      showUnstableChannels: false,
       isLoading: false,
       error: null,
       user: null,
@@ -57,6 +61,8 @@ export const usePlayerStore = create<StoreState>()(
         if (kidsMode) set({ selectedGroup: 'Kinder & Familie' });
         else set({ selectedGroup: 'All' });
       },
+      setShowUnstableChannels: (showUnstableChannels) => set({ showUnstableChannels }),
+      toggleProxy: () => set((state) => ({ useProxy: !state.useProxy })),
       toggleTheaterMode: () => set((state) => ({ isTheaterMode: !state.isTheaterMode })),
       setError: (error) => set({ error }),
       setIsLoading: (isLoading) => set({ isLoading }),
@@ -67,7 +73,9 @@ export const usePlayerStore = create<StoreState>()(
       partialize: (state) => ({ 
         favorites: state.favorites,
         accessibilityMode: state.accessibilityMode,
-        kidsMode: state.kidsMode
+        kidsMode: state.kidsMode,
+        useProxy: state.useProxy,
+        showUnstableChannels: state.showUnstableChannels
       }),
     }
   )
