@@ -17,12 +17,15 @@ export interface Channel {
 
 export interface PlayerState {
   currentChannel: Channel | null;
+  currentPlaylist: Channel[];
   channels: Channel[];
   favorites: string[];
   isTheaterMode: boolean;
   accessibilityMode: boolean;
   kidsMode: boolean;
   setCurrentChannel: (channel: Channel | null) => void;
+  setCurrentPlaylist: (channels: Channel[]) => void;
+  playNextChannel: () => void;
   setChannels: (channels: Channel[]) => void;
   toggleFavorite: (channelId: string) => void;
   toggleTheaterMode: () => void;

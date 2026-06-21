@@ -13,12 +13,54 @@ function cn(...inputs: (string | undefined | null | false)[]) {
 export const VideoPlayer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
-  const { currentChannel, isTheaterMode, useProxy, toggleTheaterMode } =
-    usePlayerStore();
+  const {
+    currentChannel,
+    isTheaterMode,
+    useProxy,
+    toggleTheaterMode,
+    playNextChannel,
+    toggleProxy,
+  } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [autoSkipCountdown, setAutoSkipCountdown] = useState<number | null>(
+    null,
+  );
+  const [proxyAttempted, setProxyAttempted] = useState(false);
   const retryCount = useRef(0);
+  const skipTimerRef = useRef<number | null>(null);
+
+  // Clear countdown when channel changes manually
+  useEffect(() => {
+    setAutoSkipCountdown(null);
+    setProxyAttempted(false);
+    if (skipTimerRef.current) {
+      window.clearInterval(skipTimerRef.current);
+    }
+  }, [currentChannel?.id]);
+
+  const startAutoSkip = () => {
+    setAutoSkipCountdown(3);
+    if (skipTimerRef.current) window.clearInterval(skipTimerRef.current);
+    skipTimerRef.current = window.setInterval(() => {
+      setAutoSkipCountdown((prev) => {
+        if (prev === null || prev <= 1) {
+          window.clearInterval(skipTimerRef.current!);
+          playNextChannel();
+          return null;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const cancelAutoSkip = () => {
+    setAutoSkipCountdown(null);
+    if (skipTimerRef.current) {
+      window.clearInterval(skipTimerRef.current);
+    }
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -62,10 +104,17 @@ export const VideoPlayer: React.FC = () => {
                   hls.startLoad();
                 } else {
                   setError(
-                    "This stream is currently offline, geo-blocked, or requires a proxy. Please try another channel.",
+                    "This stream is offline. Finding a working channel...",
                   );
                   setIsBuffering(false);
                   hls.destroy();
+
+                  if (!useProxy && !proxyAttempted) {
+                    setProxyAttempted(true);
+                    toggleProxy(); // Try proxy
+                  } else {
+                    startAutoSkip();
+                  }
                 }
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
@@ -74,19 +123,23 @@ export const VideoPlayer: React.FC = () => {
                   setError("Media error encountered. Trying to recover...");
                   hls.recoverMediaError();
                 } else {
-                  setError(
-                    "Stream formatting is incompatible. Please try another channel.",
-                  );
+                  setError("Stream incompatible. Finding a working channel...");
                   setIsBuffering(false);
                   hls.destroy();
+                  startAutoSkip();
                 }
                 break;
               default:
-                setError(
-                  "Playback failed. The broadcaster might be blocking the connection.",
-                );
+                setError("Playback failed. Finding a working channel...");
                 setIsBuffering(false);
                 hls.destroy();
+
+                if (!useProxy && !proxyAttempted) {
+                  setProxyAttempted(true);
+                  toggleProxy();
+                } else {
+                  startAutoSkip();
+                }
                 break;
             }
           }
@@ -102,10 +155,15 @@ export const VideoPlayer: React.FC = () => {
           video.play().catch(console.error);
         });
         video.addEventListener("error", () => {
-          setError(
-            "Playback failed. This stream is currently offline or geo-blocked by the broadcaster. Please try another channel.",
-          );
+          setError("Playback failed. Finding a working channel...");
           setIsBuffering(false);
+
+          if (!useProxy && !proxyAttempted) {
+            setProxyAttempted(true);
+            toggleProxy();
+          } else {
+            startAutoSkip();
+          }
         });
       }
     };
@@ -155,9 +213,41 @@ export const VideoPlayer: React.FC = () => {
           <h3 className="text-2xl font-bold text-white mb-3">
             Stream Unavailable
           </h3>
-          <p className="text-slate-300 max-w-md text-lg leading-relaxed">
+          <p className="text-slate-300 max-w-md text-lg leading-relaxed mb-8">
             {error}
           </p>
+
+          {autoSkipCountdown !== null ? (
+            <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-4">
+              <div className="text-xl font-bold text-blue-400">
+                Skipping to next channel in {autoSkipCountdown}...
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => {
+                    cancelAutoSkip();
+                    playNextChannel();
+                  }}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition-colors"
+                >
+                  Skip Now
+                </button>
+                <button
+                  onClick={cancelAutoSkip}
+                  className="px-6 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-full font-bold transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={playNextChannel}
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold text-lg transition-colors shadow-lg shadow-blue-500/20"
+            >
+              Play Next Channel
+            </button>
+          )}
         </div>
       )}
 
