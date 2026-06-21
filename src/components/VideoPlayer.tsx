@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { AlertCircle, Loader2, Maximize, PictureInPicture } from "lucide-react";
+import {
+  AlertCircle,
+  Loader2,
+  Maximize,
+  PictureInPicture,
+  RefreshCw,
+} from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 // import { SubscribeOverlay } from './SubscribeOverlay';
@@ -62,6 +68,19 @@ export const VideoPlayer: React.FC = () => {
     }
   };
 
+  const handleResync = () => {
+    if (hlsRef.current) {
+      setError(null);
+      setIsBuffering(true);
+      hlsRef.current.recoverMediaError();
+      hlsRef.current.startLoad();
+    } else if (videoRef.current) {
+      // For native HTML5 players (Safari)
+      videoRef.current.load();
+      videoRef.current.play().catch(console.error);
+    }
+  };
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !currentChannel) return;
@@ -77,6 +96,11 @@ export const VideoPlayer: React.FC = () => {
         const hls = new Hls({
           maxBufferLength: 30,
           maxMaxBufferLength: 600,
+          enableWorker: true,
+          lowLatencyMode: true,
+          liveSyncDurationCount: 3,
+          liveMaxLatencyDurationCount: 10,
+          maxLiveSyncPlaybackRate: 1.5,
         });
         hlsRef.current = hls;
 
@@ -272,6 +296,13 @@ export const VideoPlayer: React.FC = () => {
           LIVE
         </div>
         <div className="flex gap-2 pointer-events-auto">
+          <button
+            onClick={handleResync}
+            className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+            title="Fix Lag / Resync"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
           {document.pictureInPictureEnabled && (
             <button
               onClick={handlePiP}
