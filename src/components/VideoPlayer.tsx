@@ -8,9 +8,11 @@ import {
   PictureInPicture,
   RefreshCw,
   Cast,
+  Subtitles,
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useLiveTranslation } from "../hooks/useLiveTranslation";
 // import { SubscribeOverlay } from './SubscribeOverlay';
 
 function cn(...inputs: (string | undefined | null | false)[]) {
@@ -49,6 +51,19 @@ export const VideoPlayer: React.FC = () => {
   );
   const [proxyAttempted, setProxyAttempted] = useState(false);
   const [isCastAvailable, setIsCastAvailable] = useState(false);
+
+  // Track Selection State
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [audioTracks, setAudioTracks] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [subtitleTracks, setSubtitleTracks] = useState<any[]>([]);
+  const [currentAudioTrack, setCurrentAudioTrack] = useState<number>(-1);
+  const [currentSubtitleTrack, setCurrentSubtitleTrack] = useState<number>(-1);
+  const [showCCMenu, setShowCCMenu] = useState(false);
+  const [isAITranslateEnabled, setIsAITranslateEnabled] = useState(false);
+
+  const liveTranslationText = useLiveTranslation(isAITranslateEnabled);
+
   const retryCount = useRef(0);
   const skipTimerRef = useRef<number | null>(null);
 
@@ -80,6 +95,20 @@ export const VideoPlayer: React.FC = () => {
     setAutoSkipCountdown(null);
     if (skipTimerRef.current) {
       window.clearInterval(skipTimerRef.current);
+    }
+  };
+
+  const handleSubtitleChange = (id: number) => {
+    if (hlsRef.current) {
+      hlsRef.current.subtitleTrack = id;
+      setCurrentSubtitleTrack(id);
+    }
+  };
+
+  const handleAudioChange = (id: number) => {
+    if (hlsRef.current) {
+      hlsRef.current.audioTrack = id;
+      setCurrentAudioTrack(id);
     }
   };
 
@@ -177,7 +206,28 @@ export const VideoPlayer: React.FC = () => {
 
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
           setIsBuffering(false);
+          setAudioTracks(hls.audioTracks || []);
+          setSubtitleTracks(hls.subtitleTracks || []);
+          setCurrentAudioTrack(hls.audioTrack);
+          setCurrentSubtitleTrack(hls.subtitleTrack);
           video.play().catch(console.error);
+        });
+
+        hls.on(Hls.Events.AUDIO_TRACK_LOADED, () => {
+          setAudioTracks(hls.audioTracks || []);
+          setCurrentAudioTrack(hls.audioTrack);
+        });
+
+        hls.on(Hls.Events.SUBTITLE_TRACKS_UPDATED, () => {
+          setSubtitleTracks(hls.subtitleTracks || []);
+        });
+
+        hls.on(Hls.Events.AUDIO_TRACK_SWITCHED, (_, data) => {
+          setCurrentAudioTrack(data.id);
+        });
+
+        hls.on(Hls.Events.SUBTITLE_TRACK_SWITCH, (_, data) => {
+          setCurrentSubtitleTrack(data.id);
         });
 
         hls.on(Hls.Events.ERROR, (_, data) => {
@@ -350,6 +400,17 @@ export const VideoPlayer: React.FC = () => {
         onPlaying={() => setIsBuffering(false)}
       />
 
+      {/* AI Live Translation Text Overlay */}
+      {isAITranslateEnabled && liveTranslationText && (
+        <div className="absolute bottom-24 inset-x-0 flex justify-center pointer-events-none px-4 z-40">
+          <div className="bg-black/70 backdrop-blur-sm px-6 py-3 rounded-xl max-w-3xl border border-white/10 shadow-2xl">
+            <p className="text-white text-xl md:text-2xl font-medium text-center drop-shadow-md leading-relaxed">
+              {liveTranslationText}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Custom Overlays & Controls */}
       <div
         className={cn(
@@ -370,6 +431,125 @@ export const VideoPlayer: React.FC = () => {
               <Cast className="w-4 h-4" />
             </button>
           )}
+
+          <div className="relative">
+            <button
+              onClick={() => setShowCCMenu(!showCCMenu)}
+              className={cn(
+                "p-2 rounded-md backdrop-blur-md transition-colors flex items-center gap-2",
+                showCCMenu || isAITranslateEnabled
+                  ? "bg-blue-600 text-white"
+                  : "bg-black/60 hover:bg-black/80 text-white",
+              )}
+              title="Subtitles & Audio"
+            >
+              <Subtitles className="w-4 h-4" />
+            </button>
+
+            {showCCMenu && (
+              <div className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 min-w-[280px] shadow-2xl z-50">
+                {/* AI Live Translation Section */}
+                <div className="mb-4 pb-4 border-b border-slate-700/50">
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    AI Live Captions
+                  </h4>
+                  <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                    Uses your microphone to listen to the TV and generate
+                    real-time captions. Ensure speakers are on.
+                  </p>
+                  <button
+                    onClick={() =>
+                      setIsAITranslateEnabled(!isAITranslateEnabled)
+                    }
+                    className={cn(
+                      "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-medium flex justify-between items-center",
+                      isAITranslateEnabled
+                        ? "bg-blue-600/20 text-blue-400"
+                        : "bg-slate-800 text-slate-300 hover:bg-slate-700",
+                    )}
+                  >
+                    <span>Enable AI Captions</span>
+                    <span
+                      className={cn(
+                        "w-8 h-4 rounded-full flex items-center transition-all duration-300",
+                        isAITranslateEnabled ? "bg-blue-500" : "bg-slate-600",
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "w-3 h-3 bg-white rounded-full transition-all duration-300 transform",
+                          isAITranslateEnabled
+                            ? "translate-x-4"
+                            : "translate-x-1",
+                        )}
+                      ></span>
+                    </span>
+                  </button>
+                </div>
+
+                {subtitleTracks.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      Native Subtitles
+                    </h4>
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => handleSubtitleChange(-1)}
+                        className={cn(
+                          "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                          currentSubtitleTrack === -1
+                            ? "bg-blue-600/20 text-blue-400 font-medium"
+                            : "text-slate-300 hover:bg-slate-800",
+                        )}
+                      >
+                        Off
+                      </button>
+                      {subtitleTracks.map((track, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleSubtitleChange(i)}
+                          className={cn(
+                            "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                            currentSubtitleTrack === i
+                              ? "bg-blue-600/20 text-blue-400 font-medium"
+                              : "text-slate-300 hover:bg-slate-800",
+                          )}
+                        >
+                          {track.name || `Track ${i + 1}`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {audioTracks.length > 1 && (
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                      Native Audio
+                    </h4>
+                    <div className="space-y-1">
+                      {audioTracks.map((track, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleAudioChange(i)}
+                          className={cn(
+                            "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                            currentAudioTrack === i
+                              ? "bg-blue-600/20 text-blue-400 font-medium"
+                              : "text-slate-300 hover:bg-slate-800",
+                          )}
+                        >
+                          {track.name || `Audio ${i + 1}`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           <button
             onClick={handleResync}
             className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
