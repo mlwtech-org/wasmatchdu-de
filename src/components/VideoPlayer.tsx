@@ -7,6 +7,7 @@ import {
   Maximize,
   PictureInPicture,
   RefreshCw,
+  Cast,
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -14,6 +15,19 @@ import { twMerge } from "tailwind-merge";
 
 function cn(...inputs: (string | undefined | null | false)[]) {
   return twMerge(clsx(inputs));
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare let chrome: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+declare let cast: any;
+
+declare global {
+  interface Window {
+    __onGCastApiAvailable?: (isAvailable: boolean) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cast?: any;
+  }
 }
 
 export const VideoPlayer: React.FC = () => {
@@ -34,6 +48,7 @@ export const VideoPlayer: React.FC = () => {
     null,
   );
   const [proxyAttempted, setProxyAttempted] = useState(false);
+  const [isCastAvailable, setIsCastAvailable] = useState(false);
   const retryCount = useRef(0);
   const skipTimerRef = useRef<number | null>(null);
 
@@ -78,6 +93,55 @@ export const VideoPlayer: React.FC = () => {
       // For native HTML5 players (Safari)
       videoRef.current.load();
       videoRef.current.play().catch(console.error);
+    }
+  };
+
+  useEffect(() => {
+    window.__onGCastApiAvailable = (isAvailable: boolean) => {
+      if (isAvailable) {
+        setIsCastAvailable(true);
+        try {
+          cast.framework.CastContext.getInstance().setOptions({
+            receiverApplicationId:
+              chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+          });
+        } catch (err) {
+          console.error("Cast initialization failed", err);
+        }
+      }
+    };
+
+    // Check if it's already loaded (sometimes it loads before React mounts)
+    if (window.cast && window.cast.framework) {
+      setIsCastAvailable(true);
+    }
+  }, []);
+
+  const handleCast = () => {
+    if (!currentChannel) return;
+    try {
+      const context = cast.framework.CastContext.getInstance();
+      context
+        .requestSession()
+        .then(() => {
+          const session = context.getCurrentSession();
+          if (!session) return;
+          const mediaInfo = new chrome.cast.media.MediaInfo(
+            currentChannel.url,
+            "application/x-mpegURL",
+          );
+          const request = new chrome.cast.media.LoadRequest(mediaInfo);
+          session.loadMedia(request).then(
+            () => console.log("Cast load succeeded"),
+            (err: unknown) => console.error("Cast load failed", err),
+          );
+        })
+        .catch((err: unknown) => {
+          console.error("Cast session request failed", err);
+        });
+    } catch (err) {
+      console.error("Cast error", err);
     }
   };
 
@@ -197,6 +261,7 @@ export const VideoPlayer: React.FC = () => {
     return () => {
       if (hlsRef.current) hlsRef.current.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChannel, useProxy]);
 
   const handlePiP = async () => {
@@ -296,6 +361,15 @@ export const VideoPlayer: React.FC = () => {
           LIVE
         </div>
         <div className="flex gap-2 pointer-events-auto">
+          {isCastAvailable && (
+            <button
+              onClick={handleCast}
+              className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+              title="Cast to TV"
+            >
+              <Cast className="w-4 h-4" />
+            </button>
+          )}
           <button
             onClick={handleResync}
             className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"

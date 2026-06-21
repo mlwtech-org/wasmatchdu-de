@@ -33,6 +33,7 @@ export const usePlayerStore = create<StoreState>()(
       showOnlyRegional: false,
       showOnlyFavorites: false,
       favorites: [],
+      recentlyWatched: [],
       accessibilityMode: false,
       kidsMode: false,
       useProxy: false,
@@ -45,8 +46,21 @@ export const usePlayerStore = create<StoreState>()(
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
         set({ channels, groups: ["All", ...groups] });
       },
-      setCurrentChannel: (channel) =>
-        set({ currentChannel: channel, error: null }),
+      setCurrentChannel: (channel) => {
+        set((state) => {
+          if (!channel) return { currentChannel: null, error: null };
+
+          const newRecent = [
+            channel.id,
+            ...state.recentlyWatched.filter((id) => id !== channel.id),
+          ].slice(0, 5);
+          return {
+            currentChannel: channel,
+            error: null,
+            recentlyWatched: newRecent,
+          };
+        });
+      },
       setCurrentPlaylist: (channels) => set({ currentPlaylist: channels }),
       playNextChannel: () => {
         const { currentChannel, currentPlaylist } = get();
@@ -91,6 +105,7 @@ export const usePlayerStore = create<StoreState>()(
       name: "openiptv-storage",
       partialize: (state) => ({
         favorites: state.favorites,
+        recentlyWatched: state.recentlyWatched,
         accessibilityMode: state.accessibilityMode,
         kidsMode: state.kidsMode,
         useProxy: state.useProxy,

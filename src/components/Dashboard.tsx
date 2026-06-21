@@ -388,9 +388,41 @@ export const Dashboard: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-6 md:space-y-12">
+                {/* Recently Watched Row */}
+                {!searchQuery &&
+                  !kidsMode &&
+                  usePlayerStore.getState().recentlyWatched.length > 0 && (
+                    <ChannelRow
+                      title="Recently Watched"
+                      channels={usePlayerStore
+                        .getState()
+                        .recentlyWatched.map((id) =>
+                          filteredChannels.find((c) => c.id === id),
+                        )
+                        .filter(
+                          (c): c is import("../types").Channel =>
+                            c !== undefined,
+                        )}
+                    />
+                  )}
+
                 {/* Search Results (if searching) */}
                 {searchQuery && (
                   <ChannelRow title={searchQuery} channels={filteredChannels} />
+                )}
+
+                {/* Favorites Row */}
+                {!searchQuery && !kidsMode && (
+                  <ChannelRow
+                    title={t("dashboard.favoritesOnly")}
+                    channels={filteredChannels.filter((c) =>
+                      channels.find(
+                        (f) =>
+                          f.id === c.id &&
+                          usePlayerStore.getState().favorites.includes(c.id),
+                      ),
+                    )}
+                  />
                 )}
 
                 {/* Render Category Rows */}
@@ -408,20 +440,6 @@ export const Dashboard: React.FC = () => {
                       />
                     );
                   })}
-
-                {/* Favorites Row */}
-                {!searchQuery && !kidsMode && (
-                  <ChannelRow
-                    title={t("dashboard.favoritesOnly")}
-                    channels={filteredChannels.filter((c) =>
-                      channels.find(
-                        (f) =>
-                          f.id === c.id &&
-                          usePlayerStore.getState().favorites.includes(c.id),
-                      ),
-                    )}
-                  />
-                )}
               </div>
             )}
           </main>

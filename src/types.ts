@@ -20,6 +20,7 @@ export interface PlayerState {
   currentPlaylist: Channel[];
   channels: Channel[];
   favorites: string[];
+  recentlyWatched: string[];
   isTheaterMode: boolean;
   accessibilityMode: boolean;
   kidsMode: boolean;
