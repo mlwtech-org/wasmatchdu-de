@@ -9,6 +9,8 @@ import {
   RefreshCw,
   Cast,
   Subtitles,
+  ListVideo,
+  X,
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -32,15 +34,31 @@ declare global {
   }
 }
 
+const SUPPORTED_LANGUAGES = [
+  { code: "de-DE", label: "German" },
+  { code: "en-US", label: "English" },
+  { code: "es-ES", label: "Spanish" },
+  { code: "fr-FR", label: "French" },
+  { code: "it-IT", label: "Italian" },
+  { code: "pt-BR", label: "Portuguese" },
+  { code: "nl-NL", label: "Dutch" },
+  { code: "tr-TR", label: "Turkish" },
+  { code: "ru-RU", label: "Russian" },
+  { code: "ar-SA", label: "Arabic" },
+];
+
 export const VideoPlayer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const {
     currentChannel,
+    currentPlaylist,
     isTheaterMode,
     useProxy,
     toggleTheaterMode,
     playNextChannel,
+    playPreviousChannel,
+    setCurrentChannel,
     toggleProxy,
   } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
@@ -61,11 +79,34 @@ export const VideoPlayer: React.FC = () => {
   const [currentSubtitleTrack, setCurrentSubtitleTrack] = useState<number>(-1);
   const [showCCMenu, setShowCCMenu] = useState(false);
   const [isAITranslateEnabled, setIsAITranslateEnabled] = useState(false);
+  const [sourceLang, setSourceLang] = useState("de-DE");
+  const [targetLang, setTargetLang] = useState("en-US");
+  const [showQuickSurf, setShowQuickSurf] = useState(false);
 
-  const liveTranslationText = useLiveTranslation(isAITranslateEnabled);
+  const liveTranslationText = useLiveTranslation(
+    isAITranslateEnabled,
+    sourceLang,
+    targetLang,
+  );
 
   const retryCount = useRef(0);
   const skipTimerRef = useRef<number | null>(null);
+
+  // Keyboard controls for channel surfing
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement?.tagName === "INPUT") return;
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        playPreviousChannel();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        playNextChannel();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [playNextChannel, playPreviousChannel]);
 
   // Clear countdown when channel changes manually
   useEffect(() => {
@@ -452,24 +493,65 @@ export const VideoPlayer: React.FC = () => {
                 <div className="mb-4 pb-4 border-b border-slate-700/50">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                    AI Live Captions
+                    Foreign Language Translator
                   </h4>
                   <p className="text-xs text-slate-400 mb-3 leading-relaxed">
-                    Uses your microphone to listen to the TV and generate
-                    real-time captions. Ensure speakers are on.
+                    Uses your microphone to listen and translate the TV in
+                    real-time.
                   </p>
+
+                  <div className="space-y-2 mb-3">
+                    <div className="flex flex-col">
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
+                        Listen In (Spoken)
+                      </label>
+                      <select
+                        className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
+                        value={sourceLang}
+                        onChange={(e) => setSourceLang(e.target.value)}
+                      >
+                        {SUPPORTED_LANGUAGES.map((lang) => (
+                          <option key={lang.code} value={lang.code}>
+                            {lang.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
+                        Translate To
+                      </label>
+                      <select
+                        className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
+                        value={targetLang}
+                        onChange={(e) => setTargetLang(e.target.value)}
+                      >
+                        {SUPPORTED_LANGUAGES.map((lang) => (
+                          <option key={lang.code} value={lang.code}>
+                            {lang.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
                   <button
                     onClick={() =>
                       setIsAITranslateEnabled(!isAITranslateEnabled)
                     }
                     className={cn(
-                      "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-medium flex justify-between items-center",
+                      "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-medium flex justify-between items-center mt-2",
                       isAITranslateEnabled
                         ? "bg-blue-600/20 text-blue-400"
                         : "bg-slate-800 text-slate-300 hover:bg-slate-700",
                     )}
                   >
-                    <span>Enable AI Captions</span>
+                    <span>
+                      {isAITranslateEnabled
+                        ? "Translation Active"
+                        : "Start Translating"}
+                    </span>
                     <span
                       className={cn(
                         "w-8 h-4 rounded-full flex items-center transition-all duration-300",
@@ -573,6 +655,77 @@ export const VideoPlayer: React.FC = () => {
           >
             <Maximize className="w-4 h-4" />
           </button>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowQuickSurf(!showQuickSurf)}
+              className={cn(
+                "p-2 rounded-md backdrop-blur-md transition-colors",
+                showQuickSurf
+                  ? "bg-blue-600 text-white"
+                  : "bg-black/60 hover:bg-black/80 text-white",
+              )}
+              title="Quick Surf Channels"
+            >
+              <ListVideo className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Surf Sidebar */}
+      <div
+        className={cn(
+          "absolute top-0 right-0 h-full w-64 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 flex flex-col transition-transform duration-300 ease-out z-40",
+          showQuickSurf ? "translate-x-0" : "translate-x-full",
+        )}
+      >
+        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+          <h3 className="font-bold text-white flex items-center gap-2">
+            <ListVideo className="w-4 h-4 text-blue-400" />
+            Quick Surf
+          </h3>
+          <button
+            onClick={() => setShowQuickSurf(false)}
+            className="p-1 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-white/10 hover:scrollbar-thumb-white/20">
+          {currentPlaylist.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setCurrentChannel(c)}
+              className={cn(
+                "w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 flex items-center gap-3",
+                currentChannel?.id === c.id
+                  ? "bg-blue-600/20 text-blue-400 font-medium"
+                  : "text-slate-300 hover:bg-white/5 hover:text-white",
+              )}
+            >
+              {c.logo ? (
+                <img
+                  src={c.logo}
+                  alt={c.name}
+                  className="w-6 h-6 object-contain rounded bg-white/5"
+                />
+              ) : (
+                <div className="w-6 h-6 rounded bg-slate-800 flex items-center justify-center text-[10px] font-bold">
+                  {c.name.substring(0, 2).toUpperCase()}
+                </div>
+              )}
+              <span className="truncate flex-1">{c.name}</span>
+            </button>
+          ))}
+        </div>
+        <div className="p-3 border-t border-white/10 text-xs text-center text-slate-500 bg-black/20">
+          Tip: Use{" "}
+          <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] ml-1">
+            ↑
+          </kbd>{" "}
+          <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px]">↓</kbd>{" "}
+          to zap
         </div>
       </div>
 

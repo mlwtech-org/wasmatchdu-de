@@ -5,6 +5,8 @@ import { Channel, PlayerState, PlaylistState, User } from "../types";
 interface StoreState extends PlayerState, PlaylistState {
   setChannels: (channels: Channel[]) => void;
   setCurrentChannel: (channel: Channel | null) => void;
+  playNextChannel: () => void;
+  playPreviousChannel: () => void;
   setSearchQuery: (query: string) => void;
   setSelectedGroup: (group: string) => void;
   setShowOnlyRegional: (show: boolean) => void;
@@ -71,6 +73,19 @@ export const usePlayerStore = create<StoreState>()(
         if (currentIndex !== -1 && currentIndex + 1 < currentPlaylist.length) {
           set({
             currentChannel: currentPlaylist[currentIndex + 1],
+            error: null,
+          });
+        }
+      },
+      playPreviousChannel: () => {
+        const { currentChannel, currentPlaylist } = get();
+        if (!currentChannel || currentPlaylist.length === 0) return;
+        const currentIndex = currentPlaylist.findIndex(
+          (c) => c.id === currentChannel.id,
+        );
+        if (currentIndex > 0) {
+          set({
+            currentChannel: currentPlaylist[currentIndex - 1],
             error: null,
           });
         }
