@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import Hls from "hls.js";
 import { usePlayerStore } from "../store/usePlayerStore";
 import {
@@ -52,13 +52,16 @@ export const VideoPlayer: React.FC = () => {
   const hlsRef = useRef<Hls | null>(null);
   const {
     currentChannel,
-    currentPlaylist,
+    channels,
+    groups,
+    selectedGroup,
     isTheaterMode,
     useProxy,
     toggleTheaterMode,
     playNextChannel,
     playPreviousChannel,
     setCurrentChannel,
+    setCurrentPlaylist,
     toggleProxy,
   } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
@@ -82,6 +85,14 @@ export const VideoPlayer: React.FC = () => {
   const [sourceLang, setSourceLang] = useState("de-DE");
   const [targetLang, setTargetLang] = useState("en-US");
   const [showQuickSurf, setShowQuickSurf] = useState(false);
+  const [quickSurfCategory, setQuickSurfCategory] = useState(
+    selectedGroup || "All",
+  );
+
+  const quickSurfChannels = useMemo(() => {
+    if (quickSurfCategory === "All") return channels;
+    return channels.filter((c) => c.group === quickSurfCategory);
+  }, [channels, quickSurfCategory]);
 
   const liveTranslationText = useLiveTranslation(
     isAITranslateEnabled,
@@ -676,7 +687,7 @@ export const VideoPlayer: React.FC = () => {
       {/* Quick Surf Sidebar */}
       <div
         className={cn(
-          "absolute top-0 right-0 h-full w-64 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 flex flex-col transition-transform duration-300 ease-out z-40",
+          "absolute top-0 right-0 h-full w-72 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 flex flex-col transition-transform duration-300 ease-out z-40",
           showQuickSurf ? "translate-x-0" : "translate-x-full",
         )}
       >
@@ -692,11 +703,29 @@ export const VideoPlayer: React.FC = () => {
             <X className="w-4 h-4" />
           </button>
         </div>
+
+        <div className="p-2 border-b border-white/5 bg-black/20">
+          <select
+            value={quickSurfCategory}
+            onChange={(e) => setQuickSurfCategory(e.target.value)}
+            className="w-full bg-slate-800 text-slate-300 text-xs rounded border border-slate-700 px-2 py-1.5 outline-none focus:border-blue-500"
+          >
+            {groups.map((group) => (
+              <option key={group} value={group}>
+                {group}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-white/10 hover:scrollbar-thumb-white/20">
-          {currentPlaylist.map((c) => (
+          {quickSurfChannels.map((c) => (
             <button
               key={c.id}
-              onClick={() => setCurrentChannel(c)}
+              onClick={() => {
+                setCurrentPlaylist(quickSurfChannels);
+                setCurrentChannel(c);
+              }}
               className={cn(
                 "w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 flex items-center gap-3",
                 currentChannel?.id === c.id
