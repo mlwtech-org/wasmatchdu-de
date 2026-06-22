@@ -7,7 +7,7 @@ import {
   signInWithEmailLink,
 } from "firebase/auth";
 import { auth } from "../lib/firebase";
-import { Tv, Loader2, Info, CheckCircle2 } from "lucide-react";
+import { Loader2, Info, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
@@ -93,9 +93,14 @@ export const Login: React.FC = () => {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-4">
         {/* Logo */}
-        <div className="flex justify-center mb-8">
-          <div className="w-16 h-16 bg-white flex items-center justify-center">
-            <Tv className="w-10 h-10 text-black" />
+        <div className="flex justify-center mb-10 mt-4">
+          <div className="relative w-24 h-24 group">
+            <div className="absolute inset-0 bg-blue-500/40 blur-2xl rounded-[1.5rem] group-hover:bg-blue-400/50 transition-colors duration-500"></div>
+            <img
+              src="/icon.png"
+              alt="WasMatchDu IPTV Logo"
+              className="relative z-10 w-full h-full object-cover rounded-[1.5rem] shadow-2xl ring-1 ring-white/10"
+            />
           </div>
         </div>
 
