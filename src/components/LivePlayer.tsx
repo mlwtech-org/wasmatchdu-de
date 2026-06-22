@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import Hls from "hls.js";
 import {
   ArrowLeft,
@@ -15,6 +15,7 @@ import {
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -22,19 +23,22 @@ export const LivePlayer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(true);
 
+  // Prefer the playback_url passed from GoLive via router state (Mux CDN URL).
+  // Fallback: construct from streamId for direct URL navigation.
+  const playbackUrl: string =
+    (location.state as { playback_url?: string } | null)?.playback_url ??
+    `https://stream.mux.com/${streamId}.m3u8`;
+
   useEffect(() => {
     if (!videoRef.current || !streamId) return;
 
     const video = videoRef.current;
-    // We use the HLS endpoint provided by MediaMTX
-    const hlsUrl = `http://localhost:8888/${streamId}/stream.m3u8`;
+    const hlsUrl = playbackUrl; // Mux CDN HLS URL
 
     let hls: Hls;
 
     if (Hls.isSupported()) {
-      hls = new Hls({
-        maxLiveSyncPlaybackRate: 1.5,
-      });
+      hls = new Hls({ maxLiveSyncPlaybackRate: 1.5 });
       hls.loadSource(hlsUrl);
       hls.attachMedia(video);
 
@@ -64,22 +68,18 @@ export const LivePlayer: React.FC = () => {
         }
       });
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Native HLS support (Safari)
+      // Native HLS support (Safari / iOS)
       video.src = hlsUrl;
-      video.addEventListener("loadedmetadata", () => {
-        video.play();
-      });
-      video.addEventListener("error", () => {
-        setError("Stream is currently offline.");
-      });
+      video.addEventListener("loadedmetadata", () => video.play());
+      video.addEventListener("error", () =>
+        setError("Stream is currently offline."),
+      );
     }
 
     return () => {
-      if (hls) {
-        hls.destroy();
-      }
+      if (hls) hls.destroy();
     };
-  }, [streamId]);
+  }, [streamId, playbackUrl]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;

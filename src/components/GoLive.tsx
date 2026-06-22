@@ -18,6 +18,7 @@ export const GoLive: React.FC = () => {
   const [streamData, setStreamData] = useState<{
     stream_id: string;
     stream_key: string;
+    playback_url: string;
     ingest_urls: { srt: string; rtmp: string };
   } | null>(null);
   const [showKey, setShowKey] = useState(false);
@@ -320,7 +321,11 @@ export const GoLive: React.FC = () => {
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={() => navigate(`/live/${streamData.stream_id}`)}
+                  onClick={() =>
+                    navigate(`/live/${streamData.stream_id}`, {
+                      state: { playback_url: streamData.playback_url },
+                    })
+                  }
                   className="flex-1 flex justify-center items-center py-3 px-4 rounded-lg bg-green-600 hover:bg-green-500 text-white font-medium transition-colors shadow-lg shadow-green-900/20"
                 >
                   Preview Stream
