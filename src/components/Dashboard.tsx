@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { parseM3U } from "../utils/m3uParser";
 import { VideoPlayer } from "./VideoPlayer";
@@ -53,6 +54,8 @@ export const Dashboard: React.FC = () => {
   const { isInstallable, promptInstall } = usePWAInstall();
   const [currentTab, setCurrentTab] = useState("home");
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     channels,
@@ -183,11 +186,11 @@ export const Dashboard: React.FC = () => {
               <span className="hidden sm:inline">WasMatchDu</span>
             </div>
 
-            <nav className="hidden lg:flex items-center h-full gap-8 font-bold text-[15px]">
+            <nav className="hidden lg:flex items-center h-full gap-4 xl:gap-8 font-bold text-[15px]">
               <button
                 onClick={() => handleTabSwitch("home")}
                 className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white",
+                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
                   currentTab === "home" && !kidsMode
                     ? "border-blue-500 text-white"
                     : "border-transparent text-slate-300",
@@ -198,7 +201,7 @@ export const Dashboard: React.FC = () => {
               <button
                 onClick={() => handleTabSwitch("categories")}
                 className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white",
+                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
                   currentTab === "categories"
                     ? "border-blue-500 text-white"
                     : "border-transparent text-slate-300",
@@ -209,7 +212,7 @@ export const Dashboard: React.FC = () => {
               <button
                 onClick={() => handleTabSwitch("kids")}
                 className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white",
+                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
                   kidsMode
                     ? "border-blue-500 text-white"
                     : "border-transparent text-slate-300",
@@ -220,7 +223,7 @@ export const Dashboard: React.FC = () => {
               <button
                 onClick={() => handleTabSwitch("live")}
                 className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white",
+                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
                   currentTab === "live"
                     ? "border-blue-500 text-white"
                     : "border-transparent text-slate-300",
@@ -233,16 +236,24 @@ export const Dashboard: React.FC = () => {
 
           {/* Right: Search, Proxy & Profile */}
           <div className="flex items-center gap-4 lg:gap-6">
-            <div className="hidden md:flex relative items-center">
+            <div className="hidden md:flex relative items-center shrink min-w-0">
               <Search className="w-5 h-5 absolute left-3 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64 transition-all"
+                className="pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full lg:w-48 xl:w-64 transition-all"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            <button
+              onClick={() => navigate("/go-live")}
+              className="hidden lg:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-1.5 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
+            >
+              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              Go Live
+            </button>
 
             <button
               onClick={() => setShowUnstableChannels(!showUnstableChannels)}
@@ -290,8 +301,6 @@ export const Dashboard: React.FC = () => {
                 <Download className="w-4 h-4" /> Install App
               </button>
             )}
-
-            <LanguageSwitcher />
 
             <button
               onClick={handleLogout}
