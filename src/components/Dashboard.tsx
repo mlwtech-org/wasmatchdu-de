@@ -182,7 +182,14 @@ export const Dashboard: React.FC = () => {
               className="flex items-center gap-2 text-white font-black text-2xl tracking-tight mr-8 cursor-pointer"
               onClick={() => handleTabSwitch("home")}
             >
-              <Tv className="w-8 h-8 text-blue-500" />
+              <div className="relative w-8 h-8">
+                <div className="absolute inset-0 bg-blue-500/40 blur-lg rounded-full"></div>
+                <img
+                  src="/icon.png"
+                  alt="WasMatchDu Logo"
+                  className="relative z-10 w-full h-full object-cover rounded-lg shadow-lg ring-1 ring-white/10"
+                />
+              </div>
               <span className="hidden sm:inline">WasMatchDu</span>
             </div>
 
