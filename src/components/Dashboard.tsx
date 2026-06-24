@@ -5,6 +5,7 @@ import { parseM3U } from "../utils/m3uParser";
 import { VideoPlayer } from "./VideoPlayer";
 import { ChannelRow } from "./ChannelRow";
 import { CategoryGrid } from "./CategoryGrid";
+import { CountryGrid } from "./CountryGrid";
 import { MobileNav } from "./MobileNav";
 import {
   Tv,
@@ -235,6 +236,17 @@ export const Dashboard: React.FC = () => {
                 Categories
               </button>
               <button
+                onClick={() => handleTabSwitch("regions")}
+                className={cn(
+                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
+                  currentTab === "regions"
+                    ? "border-blue-500 text-white"
+                    : "border-transparent text-slate-300",
+                )}
+              >
+                Regions
+              </button>
+              <button
                 onClick={() => handleTabSwitch("kids")}
                 className={cn(
                   "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
@@ -344,11 +356,17 @@ export const Dashboard: React.FC = () => {
           onSelectCategory={(cat) => {
             setSearchQuery("");
             setKidsMode(false);
-            // Set selectedGroup or just filter? We don't have selectedGroup anymore,
-            // but we can scroll to the specific category row, or just rely on search.
-            // For now, let's set search query to category so it filters it.
             setSearchQuery(cat);
             setCurrentTab("home");
+          }}
+        />
+      ) : currentTab === "regions" ? (
+        <CountryGrid
+          onSelectCountry={() => {
+            setSearchQuery("");
+            setKidsMode(false);
+            setCurrentTab("home");
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         />
       ) : (

@@ -1,6 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Home, LayoutGrid, Heart, PlayCircle, Radio } from "lucide-react";
+import {
+  Home,
+  LayoutGrid,
+  Heart,
+  PlayCircle,
+  Radio,
+  Globe,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -24,6 +31,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   const navItems = [
     { id: "home", icon: Home, label: t("dashboard.defaultTitle") || "Home" },
     { id: "categories", icon: LayoutGrid, label: "Categories" },
+    { id: "regions", icon: Globe, label: "Regions" },
     { id: "kids", icon: Heart, label: "Kids" },
     { id: "live", icon: PlayCircle, label: "Live TV" },
   ];
