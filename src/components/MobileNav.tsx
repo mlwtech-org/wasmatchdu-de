@@ -7,6 +7,7 @@ import {
   PlayCircle,
   Radio,
   Globe,
+  Shield,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
@@ -72,6 +73,15 @@ export const MobileNav: React.FC<MobileNavProps> = ({
           <span className="text-[10px] font-medium tracking-tight">
             Go Live
           </span>
+        </button>
+        <button
+          onClick={() => navigate("/admin")}
+          className={cn(
+            "flex flex-col items-center justify-center w-16 h-12 rounded-xl transition-all text-blue-500 hover:text-blue-400",
+          )}
+        >
+          <Shield className="w-6 h-6 mb-1" />
+          <span className="text-[10px] font-medium tracking-tight">Admin</span>
         </button>
       </div>
     </nav>
