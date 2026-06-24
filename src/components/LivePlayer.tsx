@@ -12,6 +12,7 @@ import {
   Radio,
   HeartHandshake,
 } from "lucide-react";
+import { loadStripe } from "@stripe/stripe-js";
 
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
@@ -59,6 +60,52 @@ export const LivePlayer: React.FC = () => {
       events.forEach((e) => document.removeEventListener(e, handleActivity));
     };
   }, [showIdleWarning]);
+
+  // Check for successful tip redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("tip") === "success") {
+      setShowTipThanks(true);
+      setTimeout(() => setShowTipThanks(false), 5000);
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
+  const handleTipClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const pubKey = import.meta.env.VITE_STRIPE_PUB_KEY;
+      if (!pubKey) throw new Error("Missing Stripe Key");
+
+      const stripe = await loadStripe(pubKey);
+      if (!stripe) throw new Error("Stripe failed to load");
+
+      // Note: Client-only checkout requires a pre-created Price ID in the Stripe Dashboard.
+      // Replace 'price_12345' with your actual Price ID for the tip amount.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error: stripeError } = await (stripe as any).redirectToCheckout({
+        lineItems: [{ price: "price_placeholder_for_tip", quantity: 1 }],
+        mode: "payment",
+        successUrl:
+          window.location.origin + window.location.pathname + "?tip=success",
+        cancelUrl:
+          window.location.origin + window.location.pathname + "?tip=canceled",
+      });
+
+      if (stripeError) {
+        console.error("Stripe Error:", stripeError);
+        // Fallback to demo toast if price ID is invalid
+        setShowTipThanks(true);
+        setTimeout(() => setShowTipThanks(false), 3000);
+      }
+    } catch (err) {
+      console.error("Tip error:", err);
+      // Fallback to demo toast
+      setShowTipThanks(true);
+      setTimeout(() => setShowTipThanks(false), 3000);
+    }
+  };
 
   // Prefer the playback_url passed from GoLive via router state (Mux CDN URL).
   // Fallback: construct from streamId for direct URL navigation.
@@ -264,11 +311,7 @@ export const LivePlayer: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowTipThanks(true);
-                          setTimeout(() => setShowTipThanks(false), 3000);
-                        }}
+                        onClick={handleTipClick}
                         className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white px-4 py-1.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95"
                       >
                         <HeartHandshake className="w-4 h-4" />

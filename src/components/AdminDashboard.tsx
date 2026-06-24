@@ -128,12 +128,21 @@ export const AdminDashboard: React.FC = () => {
             <h3 className="text-slate-400 font-medium mb-1">
               Today's Revenue (Tips & Subs)
             </h3>
-            <div className="text-4xl font-black text-white tracking-tight">
+            <div className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
               $
               {dailyRevenue.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
+              {import.meta.env.VITE_STRIPE_PUB_KEY?.startsWith("pk_live_") ? (
+                <span className="text-[10px] font-bold text-white bg-rose-600 px-2 py-0.5 rounded uppercase tracking-wider">
+                  LIVE
+                </span>
+              ) : (
+                <span className="text-[10px] font-bold text-white bg-orange-500 px-2 py-0.5 rounded uppercase tracking-wider">
+                  TEST
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-500 mt-4 flex items-center gap-1">
               <ArrowUpRight className="w-3 h-3 text-emerald-500" />
