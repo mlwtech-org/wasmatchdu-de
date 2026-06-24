@@ -20,6 +20,8 @@ interface StoreState extends PlayerState, PlaylistState {
   setError: (error: string | null) => void;
   setIsLoading: (isLoading: boolean) => void;
   setUser: (user: User | null) => void;
+  trendingEnabled: boolean;
+  setTrendingEnabled: (enabled: boolean) => void;
 }
 
 export const usePlayerStore = create<StoreState>()(
@@ -43,6 +45,7 @@ export const usePlayerStore = create<StoreState>()(
       isLoading: false,
       error: null,
       user: null,
+      trendingEnabled: true,
 
       setChannels: (channels) => {
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
@@ -115,6 +118,7 @@ export const usePlayerStore = create<StoreState>()(
       setError: (error) => set({ error }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setUser: (user) => set({ user }),
+      setTrendingEnabled: (trendingEnabled) => set({ trendingEnabled }),
     }),
     {
       name: "openiptv-storage",

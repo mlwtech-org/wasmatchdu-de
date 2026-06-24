@@ -76,6 +76,7 @@ export const Dashboard: React.FC = () => {
     toggleProxy,
     showUnstableChannels,
     setShowUnstableChannels,
+    trendingEnabled,
   } = usePlayerStore();
 
   const handleLogout = () => setUser(null);
@@ -450,13 +451,16 @@ export const Dashboard: React.FC = () => {
             ) : (
               <div className="space-y-6 md:space-y-12">
                 {/* Trending Now Row */}
-                {!searchQuery && !kidsMode && trendingChannels.length > 0 && (
-                  <ChannelRow
-                    title="🔥 Trending Now"
-                    channels={trendingChannels}
-                    isTrending={true}
-                  />
-                )}
+                {!searchQuery &&
+                  !kidsMode &&
+                  trendingEnabled &&
+                  trendingChannels.length > 0 && (
+                    <ChannelRow
+                      title="🔥 Trending Now"
+                      channels={trendingChannels}
+                      isTrending={true}
+                    />
+                  )}
 
                 {/* Recently Watched Row */}
                 {!searchQuery &&

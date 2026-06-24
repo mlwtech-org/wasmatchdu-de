@@ -13,17 +13,22 @@ import {
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import { usePlayerStore } from "../store/usePlayerStore";
 
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const trendingEnabled = usePlayerStore((state) => state.trendingEnabled);
+  const setTrendingEnabled = usePlayerStore(
+    (state) => state.setTrendingEnabled,
+  );
 
   // Mock Data States
   const [concurrentViewers, setConcurrentViewers] = useState(45291);
+  const [isTrendingActive, setIsTrendingActive] = useState(trendingEnabled);
   const [dailyRevenue, setDailyRevenue] = useState(12450.5);
-  const [trendingEnabled, setTrendingEnabled] = useState(true);
   const [autoModeration, setAutoModeration] = useState(true);
 
   // Simulate live changing data
@@ -160,26 +165,37 @@ export const AdminDashboard: React.FC = () => {
               <Settings className="w-5 h-5 text-blue-500" />
               Dynamic CMS Controls
             </h3>
+            <p className="text-slate-400 mt-2 mb-6">
+              Toggle features via Firebase Remote Config in real-time.
+            </p>
 
             <div className="space-y-6">
-              <div className="flex items-center justify-between p-4 bg-slate-950 rounded-xl border border-slate-800/50">
+              <div className="flex items-center justify-between p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <div>
-                  <h4 className="font-bold text-white">Trending Streams UI</h4>
-                  <p className="text-sm text-slate-500">
-                    Show the 🔥 Trending Now carousel on the dashboard.
+                  <h4 className="font-bold text-white">Trending Streams Row</h4>
+                  <p className="text-sm text-slate-400">
+                    Currently syncing with Firebase Remote Config:
+                    `trending_streams_enabled`
                   </p>
                 </div>
                 <button
-                  onClick={() => setTrendingEnabled(!trendingEnabled)}
+                  onClick={() => {
+                    const newState = !isTrendingActive;
+                    setIsTrendingActive(newState);
+                    setTrendingEnabled(newState);
+                    alert(
+                      "Trending streams visibility updated locally! To update this globally for all users, you must change the 'trending_streams_enabled' parameter in your Firebase Console > Remote Config.",
+                    );
+                  }}
                   className={cn(
                     "w-12 h-6 rounded-full transition-colors relative",
-                    trendingEnabled ? "bg-blue-600" : "bg-slate-700",
+                    isTrendingActive ? "bg-blue-500" : "bg-slate-700",
                   )}
                 >
                   <span
                     className={cn(
                       "absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform",
-                      trendingEnabled ? "translate-x-6" : "translate-x-0",
+                      isTrendingActive ? "translate-x-6" : "translate-x-0",
                     )}
                   />
                 </button>

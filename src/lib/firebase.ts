@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getRemoteConfig } from "firebase/remote-config";
 
 // Firebase config is injected via environment variables at build time.
 // - Local dev: set values in .env.local
@@ -16,3 +17,8 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const remoteConfig = getRemoteConfig(app);
+remoteConfig.settings.minimumFetchIntervalMillis = 3600000; // 1 hour for prod, but you can set to 0 during dev.
+remoteConfig.defaultConfig = {
+  trending_streams_enabled: true,
+};

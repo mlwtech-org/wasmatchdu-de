@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
+import { fetchAndActivate, getBoolean } from "firebase/remote-config";
+import { remoteConfig } from "./lib/firebase";
+import { usePlayerStore } from "./store/usePlayerStore";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -37,6 +41,27 @@ const PageLoader = () => (
 );
 
 function App() {
+  const setTrendingEnabled = usePlayerStore(
+    (state) => state.setTrendingEnabled,
+  );
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        // Fetch values from Firebase Remote Config
+        await fetchAndActivate(remoteConfig);
+        const isTrendingEnabled = getBoolean(
+          remoteConfig,
+          "trending_streams_enabled",
+        );
+        setTrendingEnabled(isTrendingEnabled);
+      } catch (err) {
+        console.error("Failed to fetch remote config:", err);
+      }
+    };
+    fetchConfig();
+  }, [setTrendingEnabled]);
+
   return (
     <BrowserRouter>
       <Suspense fallback={<PageLoader />}>
