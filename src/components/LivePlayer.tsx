@@ -22,6 +22,41 @@ export const LivePlayer: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(true);
+  const [showIdleWarning, setShowIdleWarning] = useState(false);
+  const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const IDLE_TIMEOUT_MS = 45 * 60 * 1000; // 45 minutes
+
+  const resetIdleTimer = () => {
+    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+    if (showIdleWarning) return; // Don't auto-reset if the warning is already showing, user must click button
+    idleTimeoutRef.current = setTimeout(() => {
+      setShowIdleWarning(true);
+      if (videoRef.current && !videoRef.current.paused) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }, IDLE_TIMEOUT_MS);
+  };
+
+  useEffect(() => {
+    resetIdleTimer();
+    const events = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+    ];
+    const handleActivity = () => {
+      if (!showIdleWarning) resetIdleTimer();
+    };
+    events.forEach((e) => document.addEventListener(e, handleActivity));
+    return () => {
+      if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+      events.forEach((e) => document.removeEventListener(e, handleActivity));
+    };
+  }, [showIdleWarning]);
 
   // Prefer the playback_url passed from GoLive via router state (Mux CDN URL).
   // Fallback: construct from streamId for direct URL navigation.
@@ -163,6 +198,32 @@ export const LivePlayer: React.FC = () => {
                 {isBuffering && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none">
                     <Loader2 className="w-12 h-12 text-white animate-spin" />
+                  </div>
+                )}
+
+                {/* Idle Warning Overlay */}
+                {showIdleWarning && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-50 p-6 text-center">
+                    <h2 className="text-3xl font-bold mb-4">
+                      Are you still watching?
+                    </h2>
+                    <p className="text-slate-300 mb-8 max-w-md">
+                      Playback has been paused to save data. Click the button
+                      below to resume the live stream.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setShowIdleWarning(false);
+                        resetIdleTimer();
+                        if (videoRef.current) {
+                          videoRef.current.play();
+                          setIsPlaying(true);
+                        }
+                      }}
+                      className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full font-semibold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+                    >
+                      Yes, keep watching
+                    </button>
                   </div>
                 )}
 
