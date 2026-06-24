@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icon.png"],
       manifest: {
-        name: "Das Gemeinwohl IPTV",
-        short_name: "GemeinwohlTV",
+        name: "WasMatchDu IPTV",
+        short_name: "WasMatchDu",
         description: "Streaming for the Common Good",
         theme_color: "#0f172a",
         background_color: "#0f172a",
