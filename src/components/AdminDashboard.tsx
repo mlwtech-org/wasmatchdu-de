@@ -9,6 +9,9 @@ import {
   TrendingUp,
   LayoutDashboard,
   ChevronLeft,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
@@ -30,6 +33,33 @@ export const AdminDashboard: React.FC = () => {
   const [isTrendingActive, setIsTrendingActive] = useState(trendingEnabled);
   const [dailyRevenue, setDailyRevenue] = useState(12450.5);
   const [autoModeration, setAutoModeration] = useState(true);
+
+  const [flaggedStreams, setFlaggedStreams] = useState([
+    {
+      id: "stream_8x2",
+      channel: "Sky Sports Action",
+      reason: "Copyright Violation",
+      confidence: 96,
+      time: "2 mins ago",
+      thumbnail:
+        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=200&q=80",
+    },
+    {
+      id: "stream_9p1",
+      channel: "HBO Comedy HD",
+      reason: "NSFW Content",
+      confidence: 88,
+      time: "5 mins ago",
+      thumbnail:
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&q=80",
+    },
+  ]);
+
+  const handleModerate = (id: string, action: "ban" | "approve") => {
+    setFlaggedStreams((prev) => prev.filter((s) => s.id !== id));
+    // In a real app, this would make an API call to Firebase/Backend
+    alert(`Stream has been ${action === "ban" ? "BANNED" : "APPROVED"}.`);
+  };
 
   // Simulate live changing data
   useEffect(() => {
@@ -260,15 +290,70 @@ export const AdminDashboard: React.FC = () => {
                 </button>
               </div>
 
-              <div className="p-4 border border-dashed border-slate-700 rounded-xl bg-slate-950/50 flex flex-col items-center justify-center text-center">
-                <Activity className="w-8 h-8 text-slate-600 mb-2" />
-                <p className="text-sm font-medium text-slate-400">
-                  Monitoring 142 Active Streams in Real-Time
-                </p>
-                <p className="text-xs text-slate-600 mt-1">
-                  Zero infractions detected today.
-                </p>
-              </div>
+              {flaggedStreams.length > 0 ? (
+                <div className="space-y-3">
+                  <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <AlertTriangle className="w-4 h-4 text-orange-500" />
+                    Review Queue ({flaggedStreams.length})
+                  </h4>
+                  {flaggedStreams.map((stream) => (
+                    <div
+                      key={stream.id}
+                      className="bg-slate-950 border border-slate-800 rounded-xl p-4 flex gap-4 items-center"
+                    >
+                      <img
+                        src={stream.thumbnail}
+                        alt="Flagged frame"
+                        className="w-16 h-12 object-cover rounded border border-rose-500/30"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-bold text-white truncate">
+                            {stream.channel}
+                          </h5>
+                          <span className="text-xs text-slate-500">
+                            {stream.time}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded">
+                            {stream.reason}
+                          </span>
+                          <span className="text-xs text-slate-400">
+                            {stream.confidence}% Confidence
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={() => handleModerate(stream.id, "ban")}
+                          className="p-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 rounded transition-colors"
+                          title="Ban Stream"
+                        >
+                          <XCircle className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleModerate(stream.id, "approve")}
+                          className="p-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 rounded transition-colors"
+                          title="Approve / Ignore"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 border border-dashed border-slate-700 rounded-xl bg-slate-950/50 flex flex-col items-center justify-center text-center">
+                  <Activity className="w-8 h-8 text-emerald-500 mb-2" />
+                  <p className="text-sm font-medium text-slate-300">
+                    All clear! Monitoring 142 Active Streams
+                  </p>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Zero infractions detected today.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
