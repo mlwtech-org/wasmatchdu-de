@@ -10,6 +10,7 @@ import {
   Maximize,
   Loader2,
   Radio,
+  HeartHandshake,
 } from "lucide-react";
 
 export const LivePlayer: React.FC = () => {
@@ -23,6 +24,7 @@ export const LivePlayer: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(true);
   const [showIdleWarning, setShowIdleWarning] = useState(false);
+  const [showTipThanks, setShowTipThanks] = useState(false);
   const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const IDLE_TIMEOUT_MS = 45 * 60 * 1000; // 45 minutes
@@ -227,6 +229,14 @@ export const LivePlayer: React.FC = () => {
                   </div>
                 )}
 
+                {/* Tipping Toast */}
+                {showTipThanks && (
+                  <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full shadow-2xl font-bold flex items-center gap-2 animate-bounce z-50 border border-white/20">
+                    <HeartHandshake className="w-5 h-5 text-yellow-300" />
+                    <span>$5.00 Tipped to Broadcaster! (Demo)</span>
+                  </div>
+                )}
+
                 {/* Custom Controls Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end">
                   <div className="p-4 flex items-center justify-between">
@@ -252,12 +262,25 @@ export const LivePlayer: React.FC = () => {
                         )}
                       </button>
                     </div>
-                    <button
-                      onClick={toggleFullScreen}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                    >
-                      <Maximize className="w-6 h-6" />
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowTipThanks(true);
+                          setTimeout(() => setShowTipThanks(false), 3000);
+                        }}
+                        className="flex items-center gap-2 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-400 hover:to-rose-400 text-white px-4 py-1.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95"
+                      >
+                        <HeartHandshake className="w-4 h-4" />
+                        <span className="hidden sm:inline">Support</span>
+                      </button>
+                      <button
+                        onClick={toggleFullScreen}
+                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                      >
+                        <Maximize className="w-6 h-6" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>

@@ -166,6 +166,24 @@ export const Dashboard: React.FC = () => {
     });
   }, [channels, searchQuery, kidsMode, showUnstableChannels]);
 
+  // Compute trending channels deterministically
+  const trendingChannels = useMemo(() => {
+    return [...filteredChannels]
+      .filter((c) => !c.isUnstable)
+      .sort((a, b) => {
+        let hashA = 0;
+        for (let i = 0; i < a.id.length; i++)
+          hashA = a.id.charCodeAt(i) + ((hashA << 5) - hashA);
+        let hashB = 0;
+        for (let i = 0; i < b.id.length; i++)
+          hashB = b.id.charCodeAt(i) + ((hashB << 5) - hashB);
+        const countA = Math.abs(hashA) % 49000;
+        const countB = Math.abs(hashB) % 49000;
+        return countB - countA; // Sort descending
+      })
+      .slice(0, 12);
+  }, [filteredChannels]);
+
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
       {/* Top Desktop Navigation */}
@@ -404,6 +422,15 @@ export const Dashboard: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-6 md:space-y-12">
+                {/* Trending Now Row */}
+                {!searchQuery && !kidsMode && trendingChannels.length > 0 && (
+                  <ChannelRow
+                    title="🔥 Trending Now"
+                    channels={trendingChannels}
+                    isTrending={true}
+                  />
+                )}
+
                 {/* Recently Watched Row */}
                 {!searchQuery &&
                   !kidsMode &&

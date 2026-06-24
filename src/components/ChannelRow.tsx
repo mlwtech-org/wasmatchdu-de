@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { Channel } from "../types";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { PlayCircle, Tv, Heart } from "lucide-react";
+import { PlayCircle, Tv, Heart, Flame, Users } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -11,9 +11,14 @@ const cn = (...inputs: (string | undefined | null | false)[]) =>
 interface ChannelRowProps {
   title: string;
   channels: Channel[];
+  isTrending?: boolean;
 }
 
-export const ChannelRow: React.FC<ChannelRowProps> = ({ title, channels }) => {
+export const ChannelRow: React.FC<ChannelRowProps> = ({
+  title,
+  channels,
+  isTrending,
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const {
     setCurrentChannel,
@@ -40,6 +45,12 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({ title, channels }) => {
           {channels.map((channel) => {
             const isFav = favorites.includes(channel.id);
             const isPlaying = currentChannel?.id === channel.id;
+
+            // Pseudo-random viewer count for demo purposes
+            let hash = 0;
+            for (let i = 0; i < channel.id.length; i++)
+              hash = channel.id.charCodeAt(i) + ((hash << 5) - hash);
+            const viewerCount = (Math.abs(hash) % 49000) + 1200;
 
             return (
               <div
@@ -109,6 +120,22 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({ title, channels }) => {
                   <div className="absolute top-3 left-3 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-wider rounded flex items-center gap-1 shadow-lg">
                     <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                     Live
+                  </div>
+                )}
+
+                {/* Trending Badge */}
+                {isTrending && !isPlaying && (
+                  <div className="absolute top-3 left-3 px-2 py-1 bg-orange-600/90 backdrop-blur-sm text-white text-xs font-bold rounded flex items-center gap-1 shadow-lg border border-orange-500/50">
+                    <Flame className="w-3 h-3 text-yellow-300" />
+                    Trending
+                  </div>
+                )}
+
+                {/* Viewer Count overlay for trending items */}
+                {isTrending && (
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold rounded flex items-center gap-1 shadow-lg border border-white/10">
+                    <Users className="w-3 h-3 text-slate-300" />
+                    {(viewerCount / 1000).toFixed(1)}k
                   </div>
                 )}
               </div>
