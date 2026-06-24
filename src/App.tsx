@@ -24,6 +24,11 @@ const ProtectedRoute = lazy(() =>
     default: m.ProtectedRoute,
   })),
 );
+const AdminDashboard = lazy(() =>
+  import("./components/AdminDashboard").then((m) => ({
+    default: m.AdminDashboard,
+  })),
+);
 
 const PageLoader = () => (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -59,6 +64,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <LivePlayer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />

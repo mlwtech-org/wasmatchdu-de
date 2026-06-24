@@ -340,6 +340,15 @@ export const Dashboard: React.FC = () => {
             )}
 
             <button
+              onClick={() => navigate("/admin")}
+              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition-colors ml-2"
+              title="Admin Command Center"
+            >
+              <Shield className="w-5 h-5" />
+              <span className="hidden xl:inline">Admin</span>
+            </button>
+
+            <button
               onClick={handleLogout}
               className="flex items-center gap-2 text-slate-300 hover:text-white font-bold transition-colors ml-2"
               title={t("dashboard.signOut")}
