@@ -60,7 +60,7 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                   setCurrentChannel(channel);
                 }}
                 className={cn(
-                  "relative flex-none w-[280px] md:w-[320px] aspect-video bg-slate-900 rounded-xl overflow-hidden cursor-pointer group/card snap-start transition-all duration-300 transform",
+                  "relative flex-none w-[75vw] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-video bg-slate-900 rounded-xl overflow-hidden cursor-pointer group/card snap-start transition-all duration-300 transform",
                   "hover:scale-105 hover:z-10 hover:shadow-2xl hover:shadow-black/50 border border-slate-800 hover:border-slate-600",
                   isPlaying ? "ring-2 ring-blue-500 scale-[1.02]" : "",
                 )}

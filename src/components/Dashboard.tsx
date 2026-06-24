@@ -287,10 +287,11 @@ export const Dashboard: React.FC = () => {
 
             <button
               onClick={() => navigate("/go-live")}
-              className="hidden lg:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-1.5 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
+              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
+              title="Go Live"
             >
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              Go Live
+              <span className="hidden md:inline">Go Live</span>
             </button>
 
             <button
@@ -342,7 +343,7 @@ export const Dashboard: React.FC = () => {
 
             <button
               onClick={() => navigate("/admin")}
-              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition-colors ml-2"
+              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition-colors ml-1 md:ml-2"
               title="Admin Command Center"
             >
               <Shield className="w-5 h-5" />
@@ -384,10 +385,10 @@ export const Dashboard: React.FC = () => {
           {/* Hero Section Placeholder (preserves space) */}
           <div
             className={cn(
-              "relative w-full transition-all duration-700 ease-in-out z-40 mt-16 bg-black",
+              "relative w-full transition-all duration-700 ease-in-out z-40 mt-16 bg-black max-w-[1600px] mx-auto",
               isTheaterMode
-                ? "fixed inset-0 z-50 h-screen mt-0"
-                : "aspect-video md:h-[65vh] md:aspect-auto",
+                ? "fixed inset-0 z-50 h-screen mt-0 max-w-none"
+                : "aspect-video md:h-[65vh] md:max-h-[800px] md:aspect-auto",
             )}
           >
             {/* The Actual Video Player (morphs to mini-player) */}
@@ -435,7 +436,7 @@ export const Dashboard: React.FC = () => {
           {/* Main Content: Channel Shelves */}
           <main
             className={cn(
-              "relative z-30 pb-24 transition-all duration-500",
+              "relative z-30 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full",
               currentChannel ? "-mt-8 md:-mt-24" : "mt-8",
             )}
           >
