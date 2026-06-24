@@ -150,6 +150,36 @@ export const VideoPlayer: React.FC = () => {
     }
   };
 
+  // NEW: Buffering Timeout. If stuck buffering for 10s, auto-skip.
+  useEffect(() => {
+    let timeout: number;
+    if (isBuffering && !error && !autoSkipCountdown) {
+      timeout = window.setTimeout(() => {
+        setError(
+          "Stream taking too long to load. Finding a working channel...",
+        );
+        setIsBuffering(false);
+        if (hlsRef.current) {
+          hlsRef.current.destroy();
+        }
+        if (!useProxy && !proxyAttempted) {
+          setProxyAttempted(true);
+          toggleProxy();
+        } else {
+          startAutoSkip();
+        }
+      }, 10000); // 10 seconds
+    }
+    return () => window.clearTimeout(timeout);
+  }, [
+    isBuffering,
+    error,
+    autoSkipCountdown,
+    useProxy,
+    proxyAttempted,
+    toggleProxy,
+  ]);
+
   const handleSubtitleChange = (id: number) => {
     if (hlsRef.current) {
       hlsRef.current.subtitleTrack = id;
