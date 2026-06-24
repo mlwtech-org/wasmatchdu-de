@@ -53,9 +53,10 @@ export function useLiveTranslation(
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SpeechRecognition =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).SpeechRecognition ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {

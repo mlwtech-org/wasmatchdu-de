@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import Hls from "hls.js";
+import mux from "mux-embed";
 import { usePlayerStore } from "../store/usePlayerStore";
 import {
   AlertCircle,
@@ -178,6 +179,7 @@ export const VideoPlayer: React.FC = () => {
     useProxy,
     proxyAttempted,
     toggleProxy,
+    startAutoSkip,
   ]);
 
   const handleSubtitleChange = (id: number) => {
@@ -255,6 +257,50 @@ export const VideoPlayer: React.FC = () => {
       console.error("Cast error", err);
     }
   };
+
+  // Initialize Mux Analytics
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const envKey = import.meta.env.VITE_MUX_ENV_KEY;
+    if (envKey) {
+      try {
+        mux.monitor(video, {
+          debug: false,
+          data: {
+            env_key: envKey,
+            player_name: "WasMatchDu Player",
+            player_init_time: Date.now(),
+          },
+        });
+      } catch (err) {
+        console.error("Mux init failed", err);
+      }
+    }
+    return () => {
+      try {
+        video.dispatchEvent(new Event("destroy"));
+      } catch {
+        // ignore errors on unmount
+      }
+    };
+  }, []);
+
+  // Update Mux Analytics on Channel Change
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !currentChannel) return;
+    const envKey = import.meta.env.VITE_MUX_ENV_KEY;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (envKey && (video as any).mux) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (video as any).mux.emit("videochange", {
+        video_title: currentChannel.name,
+        video_id: currentChannel.id,
+        video_stream_type: "live",
+      });
+    }
+  }, [currentChannel]);
 
   useEffect(() => {
     const video = videoRef.current;
