@@ -128,16 +128,36 @@ export const AdminDashboard: React.FC = () => {
           <button className="w-full flex items-center gap-3 px-4 py-3 bg-blue-600/10 text-blue-400 rounded-xl font-medium transition-colors">
             <LayoutDashboard className="w-5 h-5" /> Overview
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors">
+          <button
+            onClick={() =>
+              alert("Telemetry dashboard is under construction. Coming soon!")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors"
+          >
             <Activity className="w-5 h-5" /> Telemetry
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors">
+          <button
+            onClick={() =>
+              alert("CMS Content manager is under construction. Coming soon!")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors"
+          >
             <Settings className="w-5 h-5" /> CMS Content
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors">
+          <button
+            onClick={() =>
+              alert("Financials ledger is under construction. Coming soon!")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors"
+          >
             <DollarSign className="w-5 h-5" /> Financials
           </button>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors">
+          <button
+            onClick={() =>
+              alert("Moderation settings are under construction. Coming soon!")
+            }
+            className="w-full flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-xl font-medium transition-colors"
+          >
             <ShieldAlert className="w-5 h-5" /> Moderation
           </button>
         </nav>
