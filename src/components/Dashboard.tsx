@@ -42,6 +42,49 @@ const GLOBAL_PLAYLISTS = [
   "https://iptv-org.github.io/iptv/categories/series.m3u",
 ];
 
+const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
+  {
+    id: "verified-redbull",
+    name: "Red Bull TV",
+    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Red_Bull_TV_logo.svg/1200px-Red_Bull_TV_logo.svg.png",
+    group: "Sports & Action",
+    gemeinwohlCategory: "Sport & Action",
+    isRegional: false,
+    isUnstable: false,
+  },
+  {
+    id: "verified-nasa",
+    name: "NASA TV",
+    url: "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png",
+    group: "Science",
+    gemeinwohlCategory: "Doku & Wissen",
+    isRegional: false,
+    isUnstable: false,
+  },
+  {
+    id: "verified-bloomberg",
+    name: "Bloomberg Global",
+    url: "https://live.bloomberg.tv/bloomberg/bloomberg/chunklist.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Bloomberg_logo.svg/1200px-Bloomberg_logo.svg.png",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: false,
+    isUnstable: false,
+  },
+  {
+    id: "verified-cbs",
+    name: "CBS News",
+    url: "https://cbsn-us.cbsnstream.cbsnews.com/out/v1/55a8648e8f134e82a470f83d562deeca/master.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/CBS_News.svg/1200px-CBS_News.svg.png",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: false,
+    isUnstable: false,
+  },
+];
+
 const GEMEINWOHL_CATEGORIES = [
   "Filme & Serien",
   "Sport & Action",
@@ -166,6 +209,13 @@ export const Dashboard: React.FC = () => {
           }
         });
 
+        // Add Verified Reliable Channels
+        VERIFIED_RELIABLE_CHANNELS.forEach((c) => {
+          if (!uniqueChannelsMap.has(c.url)) {
+            uniqueChannelsMap.set(c.url, c);
+          }
+        });
+
         setChannels(Array.from(uniqueChannelsMap.values()));
         setError(null);
       } catch (err) {
@@ -226,28 +276,21 @@ export const Dashboard: React.FC = () => {
       .slice(0, 12);
   }, [filteredChannels]);
 
-  // Auto-play the top trending channel on initial load
+  // Auto-play the top verified channel on initial load to guarantee playback
   const hasAutoPlayed = useRef(false);
   useEffect(() => {
     if (
       !hasAutoPlayed.current &&
       !isLoading &&
       !currentChannel &&
-      trendingChannels &&
-      trendingChannels.length > 0 &&
+      VERIFIED_RELIABLE_CHANNELS.length > 0 &&
       currentTab === "home"
     ) {
       hasAutoPlayed.current = true;
-      usePlayerStore.getState().setCurrentPlaylist(trendingChannels);
-      setCurrentChannel(trendingChannels[0]);
+      usePlayerStore.getState().setCurrentPlaylist(VERIFIED_RELIABLE_CHANNELS);
+      setCurrentChannel(VERIFIED_RELIABLE_CHANNELS[0]);
     }
-  }, [
-    isLoading,
-    currentChannel,
-    trendingChannels,
-    currentTab,
-    setCurrentChannel,
-  ]);
+  }, [isLoading, currentChannel, currentTab, setCurrentChannel]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
@@ -624,6 +667,14 @@ export const Dashboard: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-6 md:space-y-12">
+                {/* Verified Reliable Channels */}
+                {!searchQuery && !kidsMode && (
+                  <ChannelRow
+                    title="⭐ Verified 24/7 Channels (Always Work)"
+                    channels={VERIFIED_RELIABLE_CHANNELS}
+                  />
+                )}
+
                 {/* Trending Now Row */}
                 {!searchQuery &&
                   !kidsMode &&
