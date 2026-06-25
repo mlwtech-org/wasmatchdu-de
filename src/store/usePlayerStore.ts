@@ -22,6 +22,9 @@ interface StoreState extends PlayerState, PlaylistState {
   setUser: (user: User | null) => void;
   trendingEnabled: boolean;
   setTrendingEnabled: (enabled: boolean) => void;
+  customFeeds: string[];
+  addCustomFeed: (url: string) => void;
+  removeCustomFeed: (url: string) => void;
 }
 
 export const usePlayerStore = create<StoreState>()(
@@ -46,6 +49,7 @@ export const usePlayerStore = create<StoreState>()(
       error: null,
       user: null,
       trendingEnabled: true,
+      customFeeds: [],
 
       setChannels: (channels) => {
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
@@ -119,6 +123,17 @@ export const usePlayerStore = create<StoreState>()(
       setIsLoading: (isLoading) => set({ isLoading }),
       setUser: (user) => set({ user }),
       setTrendingEnabled: (trendingEnabled) => set({ trendingEnabled }),
+      addCustomFeed: (url) =>
+        set((state) => {
+          if (!state.customFeeds.includes(url)) {
+            return { customFeeds: [...state.customFeeds, url] };
+          }
+          return state;
+        }),
+      removeCustomFeed: (url) =>
+        set((state) => ({
+          customFeeds: state.customFeeds.filter((u) => u !== url),
+        })),
     }),
     {
       name: "openiptv-storage",
@@ -129,6 +144,7 @@ export const usePlayerStore = create<StoreState>()(
         kidsMode: state.kidsMode,
         useProxy: state.useProxy,
         showUnstableChannels: state.showUnstableChannels,
+        customFeeds: state.customFeeds,
       }),
     },
   ),

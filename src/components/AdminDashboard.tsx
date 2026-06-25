@@ -30,6 +30,9 @@ export const AdminDashboard: React.FC = () => {
   const setTrendingEnabled = usePlayerStore(
     (state) => state.setTrendingEnabled,
   );
+  const customFeeds = usePlayerStore((state) => state.customFeeds);
+  const addCustomFeed = usePlayerStore((state) => state.addCustomFeed);
+  const removeCustomFeed = usePlayerStore((state) => state.removeCustomFeed);
 
   // Mock Data States
   const [concurrentViewers, setConcurrentViewers] = useState(45291);
@@ -88,7 +91,9 @@ export const AdminDashboard: React.FC = () => {
       const uniqueChannels = Array.from(urlMap.values());
 
       usePlayerStore.getState().setChannels(uniqueChannels);
+      addCustomFeed(feedUrl);
       setParseCount(parsedChannels.length);
+      setFeedUrl("");
       alert(
         `Successfully parsed and loaded ${parsedChannels.length} channels from public feed!`,
       );
@@ -463,8 +468,35 @@ export const AdminDashboard: React.FC = () => {
               <CheckCircle className="w-5 h-5 text-emerald-500" />
               <p className="text-emerald-400 font-medium">
                 Successfully parsed {parseCount.toLocaleString()} channels. They
-                are now live on the dashboard.
+                are now live and saved to your feeds.
               </p>
+            </div>
+          )}
+
+          {customFeeds.length > 0 && (
+            <div className="mt-8">
+              <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">
+                Active Custom Feeds
+              </h4>
+              <div className="space-y-3">
+                {customFeeds.map((url) => (
+                  <div
+                    key={url}
+                    className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl"
+                  >
+                    <span className="text-slate-300 text-sm truncate mr-4 font-mono">
+                      {url}
+                    </span>
+                    <button
+                      onClick={() => removeCustomFeed(url)}
+                      className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-colors"
+                      title="Remove Feed"
+                    >
+                      <XCircle className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

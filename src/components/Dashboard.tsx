@@ -117,15 +117,20 @@ export const Dashboard: React.FC = () => {
         }
 
         const primaryPlaylist = `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
-        const urlsToFetch = [primaryPlaylist, ...GLOBAL_PLAYLISTS];
+        const customFeeds = usePlayerStore.getState().customFeeds;
+        const urlsToFetch = [
+          primaryPlaylist,
+          ...GLOBAL_PLAYLISTS,
+          ...customFeeds,
+        ];
 
         const responses = await Promise.all(
           urlsToFetch.map((u) => fetch(u).catch(() => null)),
         );
         let validResponses = responses.filter((r) => r && r.ok) as Response[];
 
-        // If the country playlist doesn't exist, fallback to DE
-        if (!validResponses[0]) {
+        // If the country playlist doesn't exist and we don't have custom feeds, fallback to DE
+        if (!validResponses[0] && customFeeds.length === 0) {
           const fallbackRes = await fetch(
             "https://iptv-org.github.io/iptv/countries/de.m3u",
           );
@@ -147,6 +152,14 @@ export const Dashboard: React.FC = () => {
         // Deduplicate channels by URL so we don't show the same stream twice
         const uniqueChannelsMap = new Map();
         allChannels.forEach((c) => {
+          if (!uniqueChannelsMap.has(c.url)) {
+            uniqueChannelsMap.set(c.url, c);
+          }
+        });
+
+        // Always keep existing channels that were previously stored (so custom ones aren't lost if fetch fails)
+        const currentChannels = usePlayerStore.getState().channels;
+        currentChannels.forEach((c) => {
           if (!uniqueChannelsMap.has(c.url)) {
             uniqueChannelsMap.set(c.url, c);
           }
