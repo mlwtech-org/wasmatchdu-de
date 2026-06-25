@@ -12,11 +12,14 @@ import {
   CheckCircle,
   XCircle,
   AlertTriangle,
+  Globe,
+  Download,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 import { usePlayerStore } from "../store/usePlayerStore";
+import { parseM3U } from "../utils/m3uParser";
 
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
@@ -33,6 +36,11 @@ export const AdminDashboard: React.FC = () => {
   const [isTrendingActive, setIsTrendingActive] = useState(trendingEnabled);
   const [dailyRevenue, setDailyRevenue] = useState(12450.5);
   const [autoModeration, setAutoModeration] = useState(true);
+  const [feedUrl, setFeedUrl] = useState(
+    "https://iptv-org.github.io/iptv/index.m3u",
+  );
+  const [isParsing, setIsParsing] = useState(false);
+  const [parseCount, setParseCount] = useState<number | null>(null);
 
   const [flaggedStreams, setFlaggedStreams] = useState([
     {
@@ -59,6 +67,39 @@ export const AdminDashboard: React.FC = () => {
     setFlaggedStreams((prev) => prev.filter((s) => s.id !== id));
     // In a real app, this would make an API call to Firebase/Backend
     alert(`Stream has been ${action === "ban" ? "BANNED" : "APPROVED"}.`);
+  };
+
+  const handleFetchFeed = async () => {
+    if (!feedUrl) return;
+    setIsParsing(true);
+    try {
+      const res = await fetch(feedUrl);
+      const text = await res.text();
+      const parsedChannels = parseM3U(text);
+      const existingChannels = usePlayerStore.getState().channels;
+
+      // Merge unique channels based on URL to prevent infinite duplicates if clicked twice
+      const urlMap = new Map();
+      [...existingChannels, ...parsedChannels].forEach((c) => {
+        if (!urlMap.has(c.url)) {
+          urlMap.set(c.url, c);
+        }
+      });
+      const uniqueChannels = Array.from(urlMap.values());
+
+      usePlayerStore.getState().setChannels(uniqueChannels);
+      setParseCount(parsedChannels.length);
+      alert(
+        `Successfully parsed and loaded ${parsedChannels.length} channels from public feed!`,
+      );
+    } catch (e) {
+      console.error(e);
+      alert(
+        "Failed to load feed. It may be restricted by CORS or an invalid URL.",
+      );
+    } finally {
+      setIsParsing(false);
+    }
   };
 
   // Simulate live changing data
@@ -356,6 +397,56 @@ export const AdminDashboard: React.FC = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Public Feed Aggregator */}
+        <div className="mt-6 bg-slate-900 border border-slate-800 rounded-2xl p-6">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-2">
+            <Globe className="w-5 h-5 text-indigo-500" />
+            Public Feed Aggregator
+          </h3>
+          <p className="text-slate-400 mb-6 max-w-3xl">
+            Import free public IPTV streams instantly using M3U playlists. Try
+            the standard <code>iptv-org</code> global feed below, which contains
+            over 30,000 channels.
+          </p>
+
+          <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+            <div className="flex-1 w-full">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                Public M3U URL
+              </label>
+              <input
+                type="url"
+                value={feedUrl}
+                onChange={(e) => setFeedUrl(e.target.value)}
+                placeholder="https://example.com/playlist.m3u"
+                className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+            </div>
+            <button
+              onClick={handleFetchFeed}
+              disabled={isParsing || !feedUrl}
+              className="w-full md:w-auto mt-6 md:mt-0 flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isParsing ? (
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Download className="w-5 h-5" />
+              )}
+              {isParsing ? "Parsing..." : "Fetch & Sync"}
+            </button>
+          </div>
+
+          {parseCount !== null && !isParsing && (
+            <div className="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-emerald-500" />
+              <p className="text-emerald-400 font-medium">
+                Successfully parsed {parseCount.toLocaleString()} channels. They
+                are now live on the dashboard.
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>
