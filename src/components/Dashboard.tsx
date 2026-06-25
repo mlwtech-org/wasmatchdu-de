@@ -15,11 +15,20 @@ import {
   Maximize2,
   Shield,
   ShieldAlert,
+  Menu,
+  X,
+  Home,
+  Grid,
+  Globe2,
+  Baby,
+  MonitorPlay,
+  Settings,
+  Download,
+  AlertTriangle,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { usePWAInstall } from "../hooks/usePWAInstall";
-import { Download, AlertTriangle } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -55,6 +64,7 @@ export const Dashboard: React.FC = () => {
   const { isInstallable, promptInstall } = usePWAInstall();
   const [currentTab, setCurrentTab] = useState("home");
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -196,13 +206,20 @@ export const Dashboard: React.FC = () => {
         )}
       >
         <div className="flex items-center justify-between h-16 px-4 md:px-8 max-w-[1600px] mx-auto">
-          {/* Left: Logo & Nav Links */}
+          {/* Left: Menu & Logo */}
           <div className="flex items-center h-full">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="mr-2 md:mr-4 p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              title="Open Menu"
+            >
+              <Menu className="w-6 h-6 md:w-7 md:h-7" />
+            </button>
             <div
-              className="flex items-center gap-2 text-white font-black text-2xl tracking-tight mr-8 cursor-pointer"
+              className="flex items-center gap-2 text-white font-black text-xl md:text-2xl tracking-tight cursor-pointer"
               onClick={() => handleTabSwitch("home")}
             >
-              <div className="relative w-8 h-8">
+              <div className="relative w-7 h-7 md:w-8 md:h-8">
                 <div className="absolute inset-0 bg-blue-500/40 blur-lg rounded-full"></div>
                 <img
                   src="/icon.png"
@@ -212,68 +229,10 @@ export const Dashboard: React.FC = () => {
               </div>
               <span className="hidden sm:inline">WasMatchDu</span>
             </div>
-
-            <nav className="hidden lg:flex items-center h-full gap-4 xl:gap-8 font-bold text-[15px]">
-              <button
-                onClick={() => handleTabSwitch("home")}
-                className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
-                  currentTab === "home" && !kidsMode
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-slate-300",
-                )}
-              >
-                Homepage
-              </button>
-              <button
-                onClick={() => handleTabSwitch("categories")}
-                className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
-                  currentTab === "categories"
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-slate-300",
-                )}
-              >
-                Categories
-              </button>
-              <button
-                onClick={() => handleTabSwitch("regions")}
-                className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
-                  currentTab === "regions"
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-slate-300",
-                )}
-              >
-                Regions
-              </button>
-              <button
-                onClick={() => handleTabSwitch("kids")}
-                className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
-                  kidsMode
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-slate-300",
-                )}
-              >
-                Children
-              </button>
-              <button
-                onClick={() => handleTabSwitch("live")}
-                className={cn(
-                  "h-full px-1 border-b-[3px] transition-colors hover:text-white whitespace-nowrap",
-                  currentTab === "live"
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-slate-300",
-                )}
-              >
-                Live & TV
-              </button>
-            </nav>
           </div>
 
-          {/* Right: Search, Proxy & Profile */}
-          <div className="flex items-center gap-4 lg:gap-6">
+          {/* Right: Search, Quick Actions */}
+          <div className="flex items-center gap-2 md:gap-4 lg:gap-6">
             <div className="hidden md:flex relative items-center shrink min-w-0">
               <Search className="w-5 h-5 absolute left-3 text-slate-400" />
               <input
@@ -287,80 +246,241 @@ export const Dashboard: React.FC = () => {
 
             <button
               onClick={() => navigate("/go-live")}
-              className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
+              className="hidden sm:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
               title="Go Live"
             >
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
               <span className="hidden md:inline">Go Live</span>
             </button>
 
+            <div className="hidden sm:block">
+              <LanguageSwitcher />
+            </div>
+
+            {/* Profile Avatar Trigger for Sidebar */}
             <button
-              onClick={() => setShowUnstableChannels(!showUnstableChannels)}
-              className={cn(
-                "hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
-                showUnstableChannels
-                  ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                  : "bg-slate-800 text-slate-400 hover:text-slate-300",
-              )}
-              title="Show channels that might be geo-blocked or unstable (e.g. Pluto TV, DAZN)"
+              onClick={() => setIsSidebarOpen(true)}
+              className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700 transition-colors border border-slate-700 ml-1 md:ml-0"
             >
-              <AlertTriangle className="w-4 h-4" />
-              <span className="hidden xl:inline">
-                {showUnstableChannels ? "Unstable: ON" : "Unstable: OFF"}
-              </span>
-            </button>
-
-            <button
-              onClick={toggleProxy}
-              className={cn(
-                "hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold transition-colors",
-                useProxy
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                  : "bg-slate-800 text-slate-400 hover:text-slate-300",
-              )}
-              title="Use Proxy to bypass network restrictions for broken streams"
-            >
-              {useProxy ? (
-                <Shield className="w-4 h-4" />
-              ) : (
-                <ShieldAlert className="w-4 h-4" />
-              )}
-              <span className="hidden xl:inline">
-                {useProxy ? "Proxy ON" : "Proxy OFF"}
-              </span>
-            </button>
-
-            <LanguageSwitcher />
-
-            {isInstallable && (
-              <button
-                onClick={promptInstall}
-                className="hidden lg:flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-full font-bold transition-all text-sm"
-              >
-                <Download className="w-4 h-4" /> Install App
-              </button>
-            )}
-
-            <button
-              onClick={() => navigate("/admin")}
-              className="flex items-center gap-2 text-blue-400 hover:text-blue-300 font-bold transition-colors ml-1 md:ml-2"
-              title="Admin Command Center"
-            >
-              <Shield className="w-5 h-5" />
-              <span className="hidden xl:inline">Admin</span>
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-2 text-slate-300 hover:text-white font-bold transition-colors ml-2"
-              title={t("dashboard.signOut")}
-            >
-              <UserCircle className="w-6 h-6" />
-              <span className="hidden xl:inline">My Account</span>
+              <UserCircle className="w-5 h-5 md:w-6 md:h-6" />
             </button>
           </div>
         </div>
       </header>
+
+      {/* Sidebar Drawer Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Drawer */}
+      <aside
+        className={cn(
+          "fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 backdrop-blur-xl border-r border-slate-800 z-[110] transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto shadow-2xl flex flex-col",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+        )}
+      >
+        <div className="p-4 flex items-center justify-between border-b border-slate-800 sticky top-0 bg-slate-950/95 backdrop-blur-md z-10">
+          <div className="flex items-center gap-2 text-white font-black text-xl tracking-tight">
+            <div className="relative w-6 h-6">
+              <img
+                src="/icon.png"
+                alt="Logo"
+                className="w-full h-full object-cover rounded shadow"
+              />
+            </div>
+            WasMatchDu
+          </div>
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-4 flex-1">
+          {/* Main Navigation */}
+          <div className="space-y-1 mb-8">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">
+              Discover
+            </h4>
+            <button
+              onClick={() => {
+                handleTabSwitch("home");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                currentTab === "home" && !kidsMode
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <Home className="w-5 h-5" /> Homepage
+            </button>
+            <button
+              onClick={() => {
+                handleTabSwitch("categories");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                currentTab === "categories"
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <Grid className="w-5 h-5" /> Categories
+            </button>
+            <button
+              onClick={() => {
+                handleTabSwitch("regions");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                currentTab === "regions"
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <Globe2 className="w-5 h-5" /> Regions
+            </button>
+            <button
+              onClick={() => {
+                handleTabSwitch("kids");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                kidsMode
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <Baby className="w-5 h-5" /> Children
+            </button>
+            <button
+              onClick={() => {
+                handleTabSwitch("live");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                currentTab === "live"
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <MonitorPlay className="w-5 h-5" /> Live & TV
+            </button>
+          </div>
+
+          {/* Account Settings */}
+          <div className="space-y-1 mb-8">
+            <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">
+              Account & Tools
+            </h4>
+            {isInstallable && (
+              <button
+                onClick={() => {
+                  promptInstall();
+                  setIsSidebarOpen(false);
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+              >
+                <Download className="w-5 h-5" /> Install App
+              </button>
+            )}
+            <button
+              onClick={() => {
+                navigate("/admin");
+                setIsSidebarOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-blue-400 hover:bg-blue-500/10 transition-colors"
+            >
+              <Shield className="w-5 h-5" /> Admin Center
+            </button>
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsSidebarOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+              <UserCircle className="w-5 h-5" /> Sign Out
+            </button>
+          </div>
+
+          {/* Advanced Toggles */}
+          <div className="space-y-3 bg-slate-900 p-4 rounded-2xl border border-slate-800">
+            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <Settings className="w-4 h-4" /> Advanced
+            </h4>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-slate-300">
+                <AlertTriangle
+                  className={cn(
+                    "w-4 h-4",
+                    showUnstableChannels ? "text-amber-400" : "text-slate-500",
+                  )}
+                />
+                <span>Show Unstable</span>
+              </div>
+              <button
+                onClick={() => setShowUnstableChannels(!showUnstableChannels)}
+                className={cn(
+                  "w-10 h-5 rounded-full transition-colors relative",
+                  showUnstableChannels ? "bg-amber-500" : "bg-slate-700",
+                )}
+              >
+                <span
+                  className={cn(
+                    "absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform",
+                    showUnstableChannels ? "translate-x-5" : "translate-x-0",
+                  )}
+                />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-slate-300">
+                <ShieldAlert
+                  className={cn(
+                    "w-4 h-4",
+                    useProxy ? "text-emerald-400" : "text-slate-500",
+                  )}
+                />
+                <span>Bypass CORS Proxy</span>
+              </div>
+              <button
+                onClick={toggleProxy}
+                className={cn(
+                  "w-10 h-5 rounded-full transition-colors relative",
+                  useProxy ? "bg-emerald-500" : "bg-slate-700",
+                )}
+              >
+                <span
+                  className={cn(
+                    "absolute top-0.5 left-0.5 bg-white w-4 h-4 rounded-full transition-transform",
+                    useProxy ? "translate-x-5" : "translate-x-0",
+                  )}
+                />
+              </button>
+            </div>
+
+            <p className="text-[10px] text-slate-500 leading-tight mt-2">
+              Enable proxy if streams are failing due to network blocks. Enable
+              unstable to see experimental sources.
+            </p>
+          </div>
+        </div>
+      </aside>
 
       {currentTab === "categories" ? (
         <CategoryGrid
