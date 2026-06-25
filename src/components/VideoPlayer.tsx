@@ -309,9 +309,7 @@ export const VideoPlayer: React.FC = () => {
         });
         hlsRef.current = hls;
 
-        const streamUrl = useProxy
-          ? `https://corsproxy.io/?${encodeURIComponent(currentChannel.url)}`
-          : currentChannel.url;
+        const streamUrl = currentChannel.url;
 
         hls.loadSource(streamUrl);
         hls.attachMedia(video);
@@ -366,9 +364,7 @@ export const VideoPlayer: React.FC = () => {
           }
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        const streamUrl = useProxy
-          ? `https://corsproxy.io/?${encodeURIComponent(currentChannel.url)}`
-          : currentChannel.url;
+        const streamUrl = currentChannel.url;
 
         video.src = streamUrl;
         video.addEventListener("loadedmetadata", () => {
