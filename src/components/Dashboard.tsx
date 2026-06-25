@@ -238,6 +238,7 @@ export const Dashboard: React.FC = () => {
       currentTab === "home"
     ) {
       hasAutoPlayed.current = true;
+      usePlayerStore.getState().setCurrentPlaylist(trendingChannels);
       setCurrentChannel(trendingChannels[0]);
     }
   }, [
