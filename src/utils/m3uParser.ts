@@ -123,6 +123,14 @@ export const parseM3U = (m3uContent: string): Channel[] => {
         urlLower.includes("rakuten") ||
         urlLower.includes("samsung");
 
+      // Filter out explicitly geo-blocked channels
+      if (
+        currentChannel.name &&
+        currentChannel.name.toLowerCase().includes("geo-blocked")
+      ) {
+        isBlocked = true;
+      }
+
       // Modern browsers block HTTP video streams on HTTPS sites (Mixed Content)
       if (window.location.protocol === "https:" && line.startsWith("http://")) {
         isBlocked = true;
