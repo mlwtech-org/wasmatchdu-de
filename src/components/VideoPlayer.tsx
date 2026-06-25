@@ -326,7 +326,7 @@ export const VideoPlayer: React.FC = () => {
         hlsRef.current = hls;
 
         const streamUrl = useProxy
-          ? `http://localhost:3001/proxy?url=${encodeURIComponent(currentChannel.url)}`
+          ? `https://corsproxy.io/?${encodeURIComponent(currentChannel.url)}`
           : currentChannel.url;
 
         hls.loadSource(streamUrl);
@@ -412,7 +412,7 @@ export const VideoPlayer: React.FC = () => {
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         const streamUrl = useProxy
-          ? `http://localhost:3001/proxy?url=${encodeURIComponent(currentChannel.url)}`
+          ? `https://corsproxy.io/?${encodeURIComponent(currentChannel.url)}`
           : currentChannel.url;
 
         video.src = streamUrl;

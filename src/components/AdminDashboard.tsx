@@ -174,7 +174,7 @@ export const AdminDashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6 md:p-10 overflow-y-auto">
-        <header className="flex justify-between items-center mb-10">
+        <header className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-10">
           <div>
             <h1 className="text-3xl font-black text-white">
               Platform Overview
@@ -185,9 +185,9 @@ export const AdminDashboard: React.FC = () => {
           </div>
           <button
             onClick={() => navigate("/dashboard")}
-            className="md:hidden p-2 rounded-lg bg-slate-800 text-slate-300"
+            className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors font-medium border border-slate-700"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5" /> Back to Dashboard
           </button>
         </header>
 
