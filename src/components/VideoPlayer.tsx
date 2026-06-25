@@ -63,7 +63,6 @@ export const VideoPlayer: React.FC = () => {
     playPreviousChannel,
     setCurrentChannel,
     setCurrentPlaylist,
-    toggleProxy,
   } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
@@ -71,7 +70,6 @@ export const VideoPlayer: React.FC = () => {
   const [autoSkipCountdown, setAutoSkipCountdown] = useState<number | null>(
     null,
   );
-  const [proxyAttempted, setProxyAttempted] = useState(false);
   const [isCastAvailable, setIsCastAvailable] = useState(false);
 
   // Track Selection State
@@ -123,7 +121,6 @@ export const VideoPlayer: React.FC = () => {
   // Clear countdown when channel changes manually
   useEffect(() => {
     setAutoSkipCountdown(null);
-    setProxyAttempted(false);
     if (skipTimerRef.current) {
       window.clearInterval(skipTimerRef.current);
     }
@@ -151,36 +148,23 @@ export const VideoPlayer: React.FC = () => {
     }
   };
 
-  // NEW: Buffering Timeout. If stuck buffering for 10s, auto-skip.
+  // Buffering Timeout. If stuck buffering for 8s, auto-skip to find a working channel quickly.
   useEffect(() => {
     let timeout: number;
-    if (isBuffering && !error && !autoSkipCountdown) {
+    // Don't cancel timeout just because we have an informational error message
+    // Only cancel if we've already started the auto-skip countdown
+    if (isBuffering && !autoSkipCountdown) {
       timeout = window.setTimeout(() => {
-        setError(
-          "Stream taking too long to load. Finding a working channel...",
-        );
+        setError("Stream taking too long to load. Skipping...");
         setIsBuffering(false);
         if (hlsRef.current) {
           hlsRef.current.destroy();
         }
-        if (!useProxy && !proxyAttempted) {
-          setProxyAttempted(true);
-          toggleProxy();
-        } else {
-          startAutoSkip();
-        }
-      }, 10000); // 10 seconds
+        startAutoSkip();
+      }, 8000); // 8 seconds for aggressive surfing
     }
     return () => window.clearTimeout(timeout);
-  }, [
-    isBuffering,
-    error,
-    autoSkipCountdown,
-    useProxy,
-    proxyAttempted,
-    toggleProxy,
-    startAutoSkip,
-  ]);
+  }, [isBuffering, autoSkipCountdown, startAutoSkip]);
 
   const handleSubtitleChange = (id: number) => {
     if (hlsRef.current) {
@@ -360,52 +344,23 @@ export const VideoPlayer: React.FC = () => {
 
         hls.on(Hls.Events.ERROR, (_, data) => {
           if (data.fatal) {
+            setIsBuffering(false);
+            hls.destroy();
+
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                if (retryCount.current < 2) {
-                  retryCount.current += 1;
-                  setError(
-                    "Network connection interrupted. Trying to recover...",
-                  );
-                  hls.startLoad();
-                } else {
-                  setError(
-                    "This stream is offline. Finding a working channel...",
-                  );
-                  setIsBuffering(false);
-                  hls.destroy();
-
-                  if (!useProxy && !proxyAttempted) {
-                    setProxyAttempted(true);
-                    toggleProxy(); // Try proxy
-                  } else {
-                    startAutoSkip();
-                  }
-                }
+                setError(
+                  "Stream offline or blocked. Finding a working channel...",
+                );
+                startAutoSkip();
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
-                if (retryCount.current < 2) {
-                  retryCount.current += 1;
-                  setError("Media error encountered. Trying to recover...");
-                  hls.recoverMediaError();
-                } else {
-                  setError("Stream incompatible. Finding a working channel...");
-                  setIsBuffering(false);
-                  hls.destroy();
-                  startAutoSkip();
-                }
+                setError("Stream incompatible. Finding a working channel...");
+                startAutoSkip();
                 break;
               default:
                 setError("Playback failed. Finding a working channel...");
-                setIsBuffering(false);
-                hls.destroy();
-
-                if (!useProxy && !proxyAttempted) {
-                  setProxyAttempted(true);
-                  toggleProxy();
-                } else {
-                  startAutoSkip();
-                }
+                startAutoSkip();
                 break;
             }
           }
@@ -423,13 +378,7 @@ export const VideoPlayer: React.FC = () => {
         video.addEventListener("error", () => {
           setError("Playback failed. Finding a working channel...");
           setIsBuffering(false);
-
-          if (!useProxy && !proxyAttempted) {
-            setProxyAttempted(true);
-            toggleProxy();
-          } else {
-            startAutoSkip();
-          }
+          startAutoSkip();
         });
       }
     };
