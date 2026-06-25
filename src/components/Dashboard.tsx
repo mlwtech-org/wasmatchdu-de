@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { parseM3U } from "../utils/m3uParser";
@@ -81,6 +81,7 @@ export const Dashboard: React.FC = () => {
     showUnstableChannels,
     setShowUnstableChannels,
     trendingEnabled,
+    setCurrentChannel,
   } = usePlayerStore();
 
   const handleLogout = () => setUser(null);
@@ -224,6 +225,28 @@ export const Dashboard: React.FC = () => {
       })
       .slice(0, 12);
   }, [filteredChannels]);
+
+  // Auto-play the top trending channel on initial load
+  const hasAutoPlayed = useRef(false);
+  useEffect(() => {
+    if (
+      !hasAutoPlayed.current &&
+      !isLoading &&
+      !currentChannel &&
+      trendingChannels &&
+      trendingChannels.length > 0 &&
+      currentTab === "home"
+    ) {
+      hasAutoPlayed.current = true;
+      setCurrentChannel(trendingChannels[0]);
+    }
+  }, [
+    isLoading,
+    currentChannel,
+    trendingChannels,
+    currentTab,
+    setCurrentChannel,
+  ]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
