@@ -35,13 +35,7 @@ import { twMerge } from "tailwind-merge";
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
 
-const LANGUAGE_TO_M3U_MAP: Record<string, string> = {
-  en: "https://iptv-org.github.io/iptv/languages/eng.m3u",
-  de: "https://iptv-org.github.io/iptv/languages/deu.m3u",
-  es: "https://iptv-org.github.io/iptv/languages/spa.m3u",
-  fr: "https://iptv-org.github.io/iptv/languages/fra.m3u",
-  hi: "https://iptv-org.github.io/iptv/languages/hin.m3u",
-};
+// Replaced LANGUAGE_TO_M3U_MAP with IP detection
 
 const GLOBAL_PLAYLISTS = [
   "https://iptv-org.github.io/iptv/categories/documentary.m3u",
@@ -60,7 +54,7 @@ const GEMEINWOHL_CATEGORIES = [
 ];
 
 export const Dashboard: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { isInstallable, promptInstall } = usePWAInstall();
   const [currentTab, setCurrentTab] = useState("home");
   const [isMiniPlayer, setIsMiniPlayer] = useState(false);
@@ -109,14 +103,36 @@ export const Dashboard: React.FC = () => {
     const fetchM3U = async () => {
       setIsLoading(true);
       try {
-        const currentLang = i18n.language;
-        const langCode = currentLang?.split("-")[0]?.toLowerCase() || "de";
-        const primaryPlaylist =
-          LANGUAGE_TO_M3U_MAP[langCode] || LANGUAGE_TO_M3U_MAP["de"];
+        let countryCode = "de"; // Fallback to Germany
+        try {
+          const geoRes = await fetch("https://get.geojs.io/v1/ip/country.json");
+          if (geoRes.ok) {
+            const geoData = await geoRes.json();
+            if (geoData.country) {
+              countryCode = geoData.country.toLowerCase();
+            }
+          }
+        } catch (e) {
+          console.warn("Geo-IP failed, falling back to default.", e);
+        }
+
+        const primaryPlaylist = `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
         const urlsToFetch = [primaryPlaylist, ...GLOBAL_PLAYLISTS];
 
-        const responses = await Promise.all(urlsToFetch.map((u) => fetch(u)));
-        const validResponses = responses.filter((r) => r.ok);
+        const responses = await Promise.all(
+          urlsToFetch.map((u) => fetch(u).catch(() => null)),
+        );
+        let validResponses = responses.filter((r) => r && r.ok) as Response[];
+
+        // If the country playlist doesn't exist, fallback to DE
+        if (!validResponses[0]) {
+          const fallbackRes = await fetch(
+            "https://iptv-org.github.io/iptv/countries/de.m3u",
+          );
+          if (fallbackRes.ok) validResponses[0] = fallbackRes;
+        }
+
+        validResponses = validResponses.filter(Boolean);
 
         if (validResponses.length === 0)
           throw new Error("Failed to fetch playlists");
@@ -147,7 +163,7 @@ export const Dashboard: React.FC = () => {
     };
 
     fetchM3U();
-  }, [i18n.language, setChannels, setError, setIsLoading]);
+  }, [setChannels, setError, setIsLoading]);
 
   useEffect(() => {
     const handleScroll = () => {
