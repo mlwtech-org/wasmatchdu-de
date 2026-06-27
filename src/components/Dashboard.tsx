@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { VideoPlayer } from "./VideoPlayer";
+import { HeroCarousel } from "./HeroCarousel";
 import { ChannelRow } from "./ChannelRow";
 import { CategoryGrid } from "./CategoryGrid";
 import { CountryGrid } from "./CountryGrid";
@@ -601,7 +601,7 @@ export const Dashboard: React.FC = () => {
                 }
               }}
             >
-              <VideoPlayer />
+              <HeroCarousel />
 
               {/* Mini-Player Overlay */}
               {isMiniPlayer && currentChannel && !isTheaterMode && (
