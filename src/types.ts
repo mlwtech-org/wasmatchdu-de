@@ -22,6 +22,9 @@ export interface Channel {
   gemeinwohlCategory: string;
   isUnstable: boolean;
   currentProgram?: string;
+  currentProgramTime?: string;
+  nextProgram?: string;
+  nextProgramTime?: string;
 }
 
 export interface PlayerState {

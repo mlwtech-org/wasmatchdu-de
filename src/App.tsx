@@ -6,6 +6,7 @@ import { fetchAndActivate, getBoolean } from "firebase/remote-config";
 import { remoteConfig } from "./lib/firebase";
 import { usePlayerStore } from "./store/usePlayerStore";
 import { AIAssistantOrb } from "./components/AIAssistantOrb";
+import { useFetchChannels } from "./hooks/useFetchChannels";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -25,10 +26,14 @@ const LivePlayer = lazy(() =>
   import("./components/LivePlayer").then((m) => ({ default: m.LivePlayer })),
 );
 const ProfileSelection = lazy(() =>
-  import("./components/ProfileSelection").then((m) => ({ default: m.ProfileSelection })),
+  import("./components/ProfileSelection").then((m) => ({
+    default: m.ProfileSelection,
+  })),
 );
 const CreateProfile = lazy(() =>
-  import("./components/CreateProfile").then((m) => ({ default: m.CreateProfile })),
+  import("./components/CreateProfile").then((m) => ({
+    default: m.CreateProfile,
+  })),
 );
 const ProtectedRoute = lazy(() =>
   import("./components/ProtectedRoute").then((m) => ({
@@ -46,7 +51,9 @@ const SportsHub = lazy(() =>
   })),
 );
 const ManageProfiles = lazy(() =>
-  import("./components/ManageProfiles").then((m) => ({ default: m.ManageProfiles })),
+  import("./components/ManageProfiles").then((m) => ({
+    default: m.ManageProfiles,
+  })),
 );
 
 const PageLoader = () => (
@@ -59,6 +66,8 @@ function App() {
   const setTrendingEnabled = usePlayerStore(
     (state) => state.setTrendingEnabled,
   );
+
+  useFetchChannels();
 
   useEffect(() => {
     const fetchConfig = async () => {

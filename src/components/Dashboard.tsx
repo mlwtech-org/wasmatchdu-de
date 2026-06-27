@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { parseM3U } from "../utils/m3uParser";
 import { VideoPlayer } from "./VideoPlayer";
 import { ChannelRow } from "./ChannelRow";
 import { CategoryGrid } from "./CategoryGrid";
 import { CountryGrid } from "./CountryGrid";
+import { RadioHub } from "./RadioHub";
 import { MobileNav } from "./MobileNav";
 import {
   Tv,
+  Radio,
   Search,
   UserCircle,
   Loader2,
@@ -38,68 +39,10 @@ const cn = (...inputs: (string | undefined | null | false)[]) =>
 
 // Replaced LANGUAGE_TO_M3U_MAP with IP detection
 
-const GLOBAL_PLAYLISTS = [
-  "https://iptv-org.github.io/iptv/categories/documentary.m3u",
-  "https://iptv-org.github.io/iptv/categories/series.m3u",
-];
-
-const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
-  {
-    id: "verified-redbull",
-    name: "Red Bull TV",
-    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Red_Bull_TV_logo.svg/1200px-Red_Bull_TV_logo.svg.png",
-    group: "Sports & Action",
-    gemeinwohlCategory: "Sport & Action",
-    isRegional: false,
-    isUnstable: false,
-    currentProgram: "Live: Red Bull Cliff Diving World Series",
-  },
-  {
-    id: "verified-dw",
-    name: "DW English",
-    url: "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Deutsche_Welle_logo.svg/1200px-Deutsche_Welle_logo.svg.png",
-    group: "News",
-    gemeinwohlCategory: "Nachrichten & Info",
-    isRegional: false,
-    isUnstable: false,
-    currentProgram: "Live: DW News Desk",
-  },
-  {
-    id: "verified-cgtn",
-    name: "CGTN Global",
-    url: "https://news.cgtn.com/resource/live/english/cgtn-news.m3u8",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/CGTN_logo.svg/1200px-CGTN_logo.svg.png",
-    group: "News",
-    gemeinwohlCategory: "Nachrichten & Info",
-    isRegional: false,
-    isUnstable: false,
-    currentProgram: "Live: Global Watch",
-  },
-  {
-    id: "verified-bbb",
-    name: "Big Buck Bunny (Test)",
-    url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Big_buck_bunny_poster_big.jpg/800px-Big_buck_bunny_poster_big.jpg",
-    group: "Movies",
-    gemeinwohlCategory: "Filme & Serien",
-    isRegional: false,
-    isUnstable: false,
-    currentProgram: "Big Buck Bunny (4K Remaster)",
-  }
-];
-
-const GEMEINWOHL_CATEGORIES = [
-  "Filme & Serien",
-  "Sport & Action",
-  "Doku & Wissen",
-  "Nachrichten & Info",
-  "Shows & Comedy",
-  "Kinder & Familie",
-  "Lokal & Regional",
-  "Unterhaltung",
-];
+import {
+  VERIFIED_RELIABLE_CHANNELS,
+  GEMEINWOHL_CATEGORIES,
+} from "../lib/constants";
 
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
@@ -118,10 +61,7 @@ export const Dashboard: React.FC = () => {
     kidsMode,
     isLoading,
     error,
-    setChannels,
     setKidsMode,
-    setIsLoading,
-    setError,
     setUser,
     isTheaterMode,
     useProxy,
@@ -131,13 +71,13 @@ export const Dashboard: React.FC = () => {
     trendingEnabled,
     setCurrentChannel,
     setCurrentPlaylist,
-    customFeeds,
     profiles,
     activeProfileId,
   } = usePlayerStore();
 
-  const activeProfile = profiles.find(p => p.id === activeProfileId);
-  const activeAvatar = AVATARS.find(a => a.id === activeProfile?.avatarUrl) || AVATARS[0];
+  const activeProfile = profiles.find((p) => p.id === activeProfileId);
+  const activeAvatar =
+    AVATARS.find((a) => a.id === activeProfile?.avatarUrl) || AVATARS[0];
   const AvatarIcon = activeAvatar.icon;
 
   const handleLogout = () => setUser(null);
@@ -147,107 +87,22 @@ export const Dashboard: React.FC = () => {
       setKidsMode(true);
       setCurrentTab("home");
     } else if (tab === "live") {
-      setKidsMode(false);
-      setCurrentTab("home");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (currentChannel) {
+        navigate(`/live/${currentChannel.id}`);
+      } else if (VERIFIED_RELIABLE_CHANNELS.length > 0) {
+        navigate(`/live/${VERIFIED_RELIABLE_CHANNELS[0].id}`);
+      } else if (channels.length > 0) {
+        navigate(`/live/${channels[0].id}`);
+      } else {
+        setKidsMode(false);
+        setCurrentTab("home");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } else {
       setKidsMode(false);
       setCurrentTab(tab);
     }
   };
-
-  useEffect(() => {
-    const fetchM3U = async () => {
-      setIsLoading(true);
-      try {
-        let countryCode = "de"; // Fallback to Germany
-        try {
-          const geoRes = await fetch("https://get.geojs.io/v1/ip/country.json");
-          if (geoRes.ok) {
-            const geoData = await geoRes.json();
-            if (geoData.country) {
-              countryCode = geoData.country.toLowerCase();
-            }
-          }
-        } catch (e) {
-          console.warn("Geo-IP failed, falling back to default.", e);
-        }
-
-        // Primary validated stream URL (updated via GitHub Actions every 12h)
-        const verifiedPlaylist = `https://raw.githubusercontent.com/mlwtech-org/wasmatchdu-de/validated-streams/verified_streams.m3u`;
-        const primaryPlaylist = `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
-        
-        const urlsToFetch = [
-          verifiedPlaylist, // Try verified first
-          ...GLOBAL_PLAYLISTS,
-          ...customFeeds,
-        ];
-
-        let responses = await Promise.all(
-          urlsToFetch.map((u) => fetch(u).catch(() => null)),
-        );
-        let validResponses = responses.filter((r) => r && r.ok) as Response[];
-
-        // If the verified playlist doesn't exist yet (e.g. GitHub Action hasn't run), fallback to original
-        if (!validResponses[0] && customFeeds.length === 0) {
-          console.warn("Verified playlist not found, falling back to raw public feed.");
-          const fallbackRes = await fetch(primaryPlaylist);
-          if (fallbackRes.ok) {
-              validResponses[0] = fallbackRes;
-          } else {
-              // Final fallback to DE if even the dynamic country code fails
-              const finalFallback = await fetch("https://iptv-org.github.io/iptv/countries/de.m3u");
-              if (finalFallback.ok) validResponses[0] = finalFallback;
-          }
-        }
-
-        validResponses = validResponses.filter(Boolean);
-
-        if (validResponses.length === 0)
-          throw new Error("Failed to fetch playlists");
-
-        const texts = await Promise.all(validResponses.map((r) => r.text()));
-
-        let allChannels: import("../types").Channel[] = [];
-        texts.forEach((text) => {
-          allChannels = [...allChannels, ...parseM3U(text)];
-        });
-
-        // Deduplicate channels by URL so we don't show the same stream twice
-        const uniqueChannelsMap = new Map();
-        allChannels.forEach((c) => {
-          if (!uniqueChannelsMap.has(c.url)) {
-            uniqueChannelsMap.set(c.url, c);
-          }
-        });
-
-        // Always keep existing channels that were previously stored (so custom ones aren't lost if fetch fails)
-        const currentChannels = usePlayerStore.getState().channels;
-        currentChannels.forEach((c) => {
-          if (!uniqueChannelsMap.has(c.url)) {
-            uniqueChannelsMap.set(c.url, c);
-          }
-        });
-
-        // Add Verified Reliable Channels
-        VERIFIED_RELIABLE_CHANNELS.forEach((c) => {
-          if (!uniqueChannelsMap.has(c.url)) {
-            uniqueChannelsMap.set(c.url, c);
-          }
-        });
-
-        setChannels(Array.from(uniqueChannelsMap.values()));
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching M3U:", err);
-        setError("Failed to load channel list. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchM3U();
-  }, [setChannels, setError, setIsLoading, customFeeds]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -298,7 +153,13 @@ export const Dashboard: React.FC = () => {
 
   const liveEventsChannels = useMemo(() => {
     return filteredChannels
-      .filter((c) => !c.isUnstable && c.currentProgram && (c.currentProgram.startsWith("Live:") || c.gemeinwohlCategory === "Sport & Action"))
+      .filter(
+        (c) =>
+          !c.isUnstable &&
+          c.currentProgram &&
+          (c.currentProgram.startsWith("Live:") ||
+            c.gemeinwohlCategory === "Sport & Action"),
+      )
       .slice(0, 15);
   }, [filteredChannels]);
 
@@ -316,7 +177,13 @@ export const Dashboard: React.FC = () => {
       setCurrentPlaylist(VERIFIED_RELIABLE_CHANNELS);
       setCurrentChannel(VERIFIED_RELIABLE_CHANNELS[0]);
     }
-  }, [isLoading, currentChannel, currentTab, setCurrentChannel, setCurrentPlaylist]);
+  }, [
+    isLoading,
+    currentChannel,
+    currentTab,
+    setCurrentChannel,
+    setCurrentPlaylist,
+  ]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
@@ -363,6 +230,24 @@ export const Dashboard: React.FC = () => {
 
             <button
               data-focusable="true"
+              onClick={() => {
+                const liveChannel =
+                  liveEventsChannels[0] ||
+                  channels[0] ||
+                  VERIFIED_RELIABLE_CHANNELS[0];
+                if (liveChannel) {
+                  navigate(`/live/${liveChannel.id}`);
+                }
+              }}
+              className="hidden sm:flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-blue-500/20 whitespace-nowrap shrink-0"
+              title="Live TV Mode"
+            >
+              <MonitorPlay className="w-4 h-4" />
+              <span className="hidden md:inline">Live TV Mode</span>
+            </button>
+
+            <button
+              data-focusable="true"
               onClick={() => navigate("/go-live")}
               className="hidden sm:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
               title="Go Live"
@@ -379,7 +264,7 @@ export const Dashboard: React.FC = () => {
             <button
               data-focusable="true"
               onClick={() => setIsSidebarOpen(true)}
-              className={`w-8 h-8 md:w-10 md:h-10 rounded-full ${activeProfile ? `bg-gradient-to-br ${activeAvatar.color}` : 'bg-slate-800'} flex items-center justify-center text-slate-300 hover:text-white transition-colors border border-slate-700 ml-1 md:ml-0 shadow-lg ring-2 ring-white/10 hover:ring-white/30 hover:scale-105`}
+              className={`w-8 h-8 md:w-10 md:h-10 rounded-full ${activeProfile ? `bg-gradient-to-br ${activeAvatar.color}` : "bg-slate-800"} flex items-center justify-center text-slate-300 hover:text-white transition-colors border border-slate-700 ml-1 md:ml-0 shadow-lg ring-2 ring-white/10 hover:ring-white/30 hover:scale-105`}
             >
               {activeProfile ? (
                 <AvatarIcon className="w-5 h-5 md:w-6 md:h-6 text-white/90" />
@@ -432,31 +317,37 @@ export const Dashboard: React.FC = () => {
             <div className="mb-4 bg-slate-900/50 rounded-2xl p-3 border border-slate-800 flex flex-col items-center gap-3">
               {activeProfile && (
                 <>
-                  <div className={`w-16 h-16 rounded-[1rem] bg-gradient-to-br ${activeAvatar.color} flex items-center justify-center shadow-inner ring-1 ring-white/10`}>
+                  <div
+                    className={`w-16 h-16 rounded-[1rem] bg-gradient-to-br ${activeAvatar.color} flex items-center justify-center shadow-inner ring-1 ring-white/10`}
+                  >
                     <AvatarIcon className="w-8 h-8 text-white/90" />
                   </div>
                   <div className="text-center">
-                    <div className="font-bold text-white">{activeProfile.name}</div>
-                    <div className="text-xs text-slate-500 font-medium mt-0.5">{activeProfile.isKidsMode ? 'Kids Mode' : 'Standard'}</div>
+                    <div className="font-bold text-white">
+                      {activeProfile.name}
+                    </div>
+                    <div className="text-xs text-slate-500 font-medium mt-0.5">
+                      {activeProfile.isKidsMode ? "Kids Mode" : "Standard"}
+                    </div>
                   </div>
                 </>
               )}
               <button
-                onClick={() => navigate('/sports')}
+                onClick={() => navigate("/sports")}
                 className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-medium transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)]"
               >
                 <Tv className="w-5 h-5" />
                 Regional Sports
               </button>
-              <button 
+              <button
                 data-focusable="true"
-                onClick={() => navigate('/profile-selection')}
+                onClick={() => navigate("/profile-selection")}
                 className="w-full mt-2 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition-colors"
               >
                 Switch Profile
               </button>
             </div>
-            
+
             <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">
               Discover
             </h4>
@@ -504,6 +395,21 @@ export const Dashboard: React.FC = () => {
               )}
             >
               <Globe2 className="w-5 h-5" /> Regions
+            </button>
+            <button
+              data-focusable="true"
+              onClick={() => {
+                handleTabSwitch("radio");
+                setIsSidebarOpen(false);
+              }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                currentTab === "radio"
+                  ? "bg-blue-600/10 text-blue-500"
+                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+              )}
+            >
+              <Radio className="w-5 h-5" /> Radio Hub
             </button>
             <button
               data-focusable="true"
@@ -653,14 +559,23 @@ export const Dashboard: React.FC = () => {
           }}
         />
       ) : currentTab === "regions" ? (
-        <CountryGrid
-          onSelectCountry={() => {
-            setSearchQuery("");
-            setKidsMode(false);
-            setCurrentTab("home");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        />
+        <div className="flex-1 lg:ml-64 bg-slate-950 p-4 lg:p-8">
+          <div className="max-w-7xl mx-auto mt-16 lg:mt-0">
+            <h2 className="text-3xl lg:text-4xl font-black text-white mb-6">
+              Regions
+            </h2>
+            <CountryGrid
+              onSelectCountry={() => {
+                setSearchQuery("");
+                setKidsMode(false);
+                setCurrentTab("home");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            />
+          </div>
+        </div>
+      ) : currentTab === "radio" ? (
+        <RadioHub />
       ) : (
         <>
           {/* Hero Section Placeholder (preserves space) */}
@@ -807,7 +722,9 @@ export const Dashboard: React.FC = () => {
                     return (
                       <ChannelRow
                         key={category}
-                        title={t(`categories.${category}`, { defaultValue: category })}
+                        title={t(`categories.${category}`, {
+                          defaultValue: category,
+                        })}
                         channels={categoryChannels}
                       />
                     );

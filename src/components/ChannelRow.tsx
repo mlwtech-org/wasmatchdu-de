@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Channel } from "../types";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { PlayCircle, Tv, Heart, Flame, Users } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -21,7 +22,6 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const {
-    setCurrentChannel,
     setCurrentPlaylist,
     currentChannel,
     favorites,
@@ -29,6 +29,7 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
     kidsMode,
   } = usePlayerStore();
 
+  const navigate = useNavigate();
   const [isViewAll, setIsViewAll] = useState(false);
 
   if (channels.length === 0) return null;
@@ -56,7 +57,7 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
             "gap-4 px-6 md:px-12 pb-6",
             isViewAll
               ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 auto-rows-max"
-              : "flex overflow-x-auto scrollbar-hide snap-x snap-mandatory touch-pan-x"
+              : "flex overflow-x-auto scrollbar-hide snap-x snap-mandatory touch-pan-x",
           )}
         >
           {channels.map((channel) => {
@@ -76,12 +77,12 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                 tabIndex={0}
                 onClick={() => {
                   setCurrentPlaylist(channels);
-                  setCurrentChannel(channel);
+                  navigate(`/live/${channel.id}`);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     setCurrentPlaylist(channels);
-                    setCurrentChannel(channel);
+                    navigate(`/live/${channel.id}`);
                   }
                 }}
                 className={cn(
@@ -124,7 +125,12 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                           {channel.currentProgram}
                         </p>
                         <div className="w-full h-1 bg-white/20 rounded-full mt-1.5 overflow-hidden">
-                          <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.floor(Math.random() * 60) + 20}%` }}></div>
+                          <div
+                            className="h-full bg-emerald-500 rounded-full"
+                            style={{
+                              width: `${Math.floor(Math.random() * 60) + 20}%`,
+                            }}
+                          ></div>
                         </div>
                       </div>
                     )}

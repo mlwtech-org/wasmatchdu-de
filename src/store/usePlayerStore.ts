@@ -1,10 +1,17 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Channel, PlayerState, PlaylistState, User, UserProfile } from "../types";
+import {
+  Channel,
+  PlayerState,
+  PlaylistState,
+  User,
+  UserProfile,
+} from "../types";
 
 interface StoreState extends PlayerState, PlaylistState {
   setChannels: (channels: Channel[]) => void;
   setCurrentChannel: (channel: Channel | null) => void;
+  removeChannel: (channelId: string) => void;
   playNextChannel: () => void;
   playPreviousChannel: () => void;
   setSearchQuery: (query: string) => void;
@@ -62,6 +69,12 @@ export const usePlayerStore = create<StoreState>()(
       setChannels: (channels) => {
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
         set({ channels, groups: ["All", ...groups] });
+      },
+      removeChannel: (channelId) => {
+        set((state) => {
+          const newChannels = state.channels.filter((c) => c.id !== channelId);
+          return { channels: newChannels };
+        });
       },
       setCurrentChannel: (channel) => {
         set((state) => {
@@ -130,19 +143,25 @@ export const usePlayerStore = create<StoreState>()(
       setError: (error) => set({ error }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setUser: (user) => set({ user }),
-      addProfile: (profile) => set((state) => ({ profiles: [...state.profiles, profile] })),
-      updateProfile: (id, updates) => set((state) => ({
-        profiles: state.profiles.map((p) => (p.id === id ? { ...p, ...updates } : p)),
-      })),
-      removeProfile: (id) => set((state) => ({
-        profiles: state.profiles.filter((p) => p.id !== id),
-        activeProfileId: state.activeProfileId === id ? null : state.activeProfileId,
-      })),
+      addProfile: (profile) =>
+        set((state) => ({ profiles: [...state.profiles, profile] })),
+      updateProfile: (id, updates) =>
+        set((state) => ({
+          profiles: state.profiles.map((p) =>
+            p.id === id ? { ...p, ...updates } : p,
+          ),
+        })),
+      removeProfile: (id) =>
+        set((state) => ({
+          profiles: state.profiles.filter((p) => p.id !== id),
+          activeProfileId:
+            state.activeProfileId === id ? null : state.activeProfileId,
+        })),
       setActiveProfile: (id) => {
         set({ activeProfileId: id });
         // Automatically switch kids mode based on profile
         const { profiles, setKidsMode } = get();
-        const profile = profiles.find(p => p.id === id);
+        const profile = profiles.find((p) => p.id === id);
         if (profile) {
           setKidsMode(profile.isKidsMode);
         }
