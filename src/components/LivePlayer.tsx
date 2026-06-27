@@ -92,16 +92,24 @@ export const LivePlayer: React.FC = () => {
   const { showUnstableChannels } = usePlayerStore();
   const currentChannelObj = channels.find((c) => c.id === streamId);
 
+  // Get visible channels based on filters
+  const visibleChannels = channels.filter((c) => {
+    if (!showUnstableChannels && c.isUnstable) return false;
+    if (regionFilter === "ALL") return true;
+    if (regionFilter === "REGIONAL") return c.isRegional;
+    if (regionFilter === "GLOBAL") return !c.isRegional;
+    return true;
+  });
+
+  const currentIndex = visibleChannels.findIndex((c) => c.id === streamId);
+  const nextChannel =
+    currentIndex !== -1 && currentIndex + 1 < visibleChannels.length
+      ? visibleChannels[currentIndex + 1]
+      : visibleChannels[0];
+
   // Get other channels for the sidebar
-  const otherChannels = channels
+  const otherChannels = visibleChannels
     .filter((c) => c.id !== streamId)
-    .filter((c) => {
-      if (!showUnstableChannels && c.isUnstable) return false;
-      if (regionFilter === "ALL") return true;
-      if (regionFilter === "REGIONAL") return c.isRegional;
-      if (regionFilter === "GLOBAL") return !c.isRegional;
-      return true;
-    })
     .slice(0, 50); // limit to 50 for performance
 
   // Prefer the playback_url passed from GoLive via router state (Mux CDN URL).
@@ -149,11 +157,11 @@ export const LivePlayer: React.FC = () => {
               break;
           }
 
-          if (otherChannels.length > 0) {
+          if (nextChannel) {
             // Silently remove the broken channel and instantly skip to the next
             removeChannel(streamId!);
             setTimeout(() => {
-              navigate(`/live/${otherChannels[0].id}`, { replace: true });
+              navigate(`/live/${nextChannel.id}`, { replace: true });
             }, 100);
           } else {
             setError(`${errorMsg} You may need a VPN or the channel is dead.`);
@@ -166,11 +174,11 @@ export const LivePlayer: React.FC = () => {
       video.addEventListener("loadedmetadata", () => video.play());
       video.addEventListener("error", () => {
         setIsBuffering(false);
-        if (otherChannels.length > 0) {
+        if (nextChannel) {
           // Silently remove the broken channel and instantly skip to the next
           removeChannel(streamId!);
           setTimeout(() => {
-            navigate(`/live/${otherChannels[0].id}`, { replace: true });
+            navigate(`/live/${nextChannel.id}`, { replace: true });
           }, 100);
         } else {
           setError(
@@ -183,6 +191,7 @@ export const LivePlayer: React.FC = () => {
     return () => {
       if (hls) hls.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streamId, playbackUrl]);
 
   const togglePlay = () => {
@@ -404,8 +413,7 @@ export const LivePlayer: React.FC = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (otherChannels.length > 0)
-                            handleChannelChange(otherChannels[0].id);
+                          if (nextChannel) handleChannelChange(nextChannel.id);
                         }}
                         className="p-2 hover:bg-white/10 rounded-full transition-colors"
                         title="Next Channel"
