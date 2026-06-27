@@ -3,6 +3,8 @@ import { Channel } from "../types";
 /**
  * Parses an M3U playlist file into a structured array of Channels.
  */
+const NSFW_TERMS = ["xxx", "porn", "adult", "18+", "onlyfans", "playboy", "hustler", "x-rated", "nsfw"];
+
 export const parseM3U = (m3uContent: string): Channel[] => {
   const lines = m3uContent.split("\n");
   const channels: Channel[] = [];
@@ -19,8 +21,16 @@ export const parseM3U = (m3uContent: string): Channel[] => {
       const name = nameMatch ? nameMatch[1].trim() : "Unknown Channel";
       const group = groupMatch ? groupMatch[1] : "Uncategorized";
 
-      // Advanced heuristic for German Regional Channels
       const nameAndGroup = `${name} ${group}`.toLowerCase();
+      
+      // NSFW Check - Drop the channel entirely if it matches
+      const isSafe = !NSFW_TERMS.some(term => nameAndGroup.includes(term));
+      if (!isSafe) {
+        currentChannel = {}; // Reset so the next URL line is ignored
+        continue;
+      }
+
+      // Advanced heuristic for German Regional Channels
       const isRegional =
         nameAndGroup.includes("wdr") ||
         nameAndGroup.includes("ndr") ||
@@ -70,12 +80,8 @@ export const parseM3U = (m3uContent: string): Channel[] => {
       ) {
         gemeinwohlCategory = "Filme & Serien";
       } else if (
-        nameAndGroup.includes("comedy") ||
-        nameAndGroup.includes("sat.1") ||
-        nameAndGroup.includes("prosieben") ||
-        nameAndGroup.includes("rtl") ||
-        nameAndGroup.includes("vox") ||
-        nameAndGroup.includes("show")
+        nameAndGroup.includes("show") ||
+        nameAndGroup.includes("comedy")
       ) {
         gemeinwohlCategory = "Shows & Comedy";
       } else if (
@@ -100,6 +106,15 @@ export const parseM3U = (m3uContent: string): Channel[] => {
       ) {
         gemeinwohlCategory = "Nachrichten & Info";
       }
+      
+      const groupLower = group.toLowerCase();
+      if (groupLower.includes('news') || groupLower.includes('nachrichten')) gemeinwohlCategory = 'Nachrichten & Info';
+      else if (groupLower.includes('movie') || groupLower.includes('film') || groupLower.includes('cinema')) gemeinwohlCategory = 'Filme & Serien';
+      else if (groupLower.includes('sport')) gemeinwohlCategory = 'Sport & Action';
+      else if (groupLower.includes('music') || groupLower.includes('musik')) gemeinwohlCategory = 'Musik & Kultur';
+      else if (groupLower.includes('docu') || groupLower.includes('wissen')) gemeinwohlCategory = 'Doku & Wissen';
+      else if (groupLower.includes('kids') || groupLower.includes('kinder') || groupLower.includes('family')) gemeinwohlCategory = 'Kinder & Familie';
+      else if (isRegional) gemeinwohlCategory = 'Lokal & Regional';
 
       currentChannel = {
         id: `ch-${Math.random().toString(36).substring(2, 9)}`,
@@ -137,6 +152,34 @@ export const parseM3U = (m3uContent: string): Channel[] => {
       }
 
       currentChannel.isUnstable = isBlocked;
+
+      // Mock EPG Data assignment based on category
+      let currentProgram: string | undefined = undefined;
+      const hour = new Date().getHours();
+      const gemeinwohlCategory = currentChannel.gemeinwohlCategory;
+      
+      // Only assign mock EPG to ~30% of channels to make it look realistic
+      if (Math.random() > 0.7) {
+        if (gemeinwohlCategory === 'Nachrichten & Info') {
+          currentProgram = hour < 12 ? "Live: Morning Briefing" : hour < 18 ? "Live: Global Updates" : "Live: Evening News Desk";
+        } else if (gemeinwohlCategory === 'Filme & Serien') {
+          const movies = ["The Matrix", "Inception", "Interstellar", "The Dark Knight", "Pulp Fiction", "Forrest Gump"];
+          currentProgram = `Movie: ${movies[Math.floor(Math.random() * movies.length)]}`;
+        } else if (gemeinwohlCategory === 'Sport & Action') {
+          const sports = ["Live: World Cup Qualifier", "Live: Premier League", "Sports Center", "Live: Formula 1 Practice", "Live: NBA Playoffs"];
+          currentProgram = sports[Math.floor(Math.random() * sports.length)];
+        } else if (gemeinwohlCategory === 'Kinder & Familie') {
+          const kids = ["SpongeBob SquarePants", "Peppa Pig", "Bluey", "Paw Patrol", "Tom & Jerry"];
+          currentProgram = kids[Math.floor(Math.random() * kids.length)];
+        } else if (gemeinwohlCategory === 'Doku & Wissen') {
+          const docs = ["Planet Earth II", "Cosmos", "How It's Made", "Ancient Aliens", "MythBusters"];
+          currentProgram = docs[Math.floor(Math.random() * docs.length)];
+        } else {
+          currentProgram = `Live: ${currentChannel.name} Broadcasting`;
+        }
+      }
+      currentChannel.currentProgram = currentProgram;
+
       channels.push(currentChannel as Channel);
 
       currentChannel = {};

@@ -33,8 +33,9 @@ async function translateText(
 
 export function useLiveTranslation(
   enabled: boolean,
-  sourceLang: string = "de-DE",
-  targetLang: string = "en",
+  sourceLang: string = "auto",
+  targetLang: string = "en-US",
+  speakAloud: boolean = false,
 ) {
   const [translatedText, setTranslatedText] = useState<string>("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,6 +43,7 @@ export function useLiveTranslation(
 
   // We need to keep track of the latest transcript so we don't translate every single keystroke of interim results
   const translationTimeoutRef = useRef<number | null>(null);
+  const silenceTimeoutRef = useRef<number | null>(null);
   const lastTranslatedSourceRef = useRef<string>("");
 
   useEffect(() => {
@@ -73,10 +75,18 @@ export function useLiveTranslation(
     recognition.interimResults = true;
 
     // Use the selected source language for speech recognition
-    recognition.lang = sourceLang;
+    if (sourceLang !== "auto") {
+      recognition.lang = sourceLang;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onsoundstart = () => {
+      if (silenceTimeoutRef.current) window.clearTimeout(silenceTimeoutRef.current);
+    };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
+      if (silenceTimeoutRef.current) window.clearTimeout(silenceTimeoutRef.current);
       let finalTranscript = "";
       let interimTranscript = "";
 
@@ -110,6 +120,14 @@ export function useLiveTranslation(
         ).then((res) => {
           setTranslatedText(res);
           lastTranslatedSourceRef.current = finalTranscript;
+          
+          if (speakAloud && "speechSynthesis" in window) {
+            // Cancel any currently speaking TTS so they don't overlap too much
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(res);
+            utterance.lang = targetLang;
+            window.speechSynthesis.speak(utterance);
+          }
         });
       } else {
         // Show something while translating
@@ -152,14 +170,20 @@ export function useLiveTranslation(
 
     try {
       recognition.start();
-      setTranslatedText("Listening for live audio...");
+      setTranslatedText("Listening to TV audio...");
+      
+      // Warn the user if no sound is picked up after 8 seconds
+      silenceTimeoutRef.current = window.setTimeout(() => {
+        setTranslatedText("Please turn up your speakers so the microphone can hear the TV...");
+      }, 8000);
     } catch (e) {
       console.error(e);
     }
 
     return () => {
-      if (translationTimeoutRef.current)
-        window.clearTimeout(translationTimeoutRef.current);
+      if (translationTimeoutRef.current) window.clearTimeout(translationTimeoutRef.current);
+      if (silenceTimeoutRef.current) window.clearTimeout(silenceTimeoutRef.current);
+      if (speakAloud && "speechSynthesis" in window) window.speechSynthesis.cancel();
       recognition.stop();
     };
   }, [enabled, sourceLang, targetLang]);

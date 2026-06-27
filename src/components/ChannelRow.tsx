@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Channel } from "../types";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { PlayCircle, Tv, Heart, Flame, Users } from "lucide-react";
@@ -29,18 +29,35 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
     kidsMode,
   } = usePlayerStore();
 
+  const [isViewAll, setIsViewAll] = useState(false);
+
   if (channels.length === 0) return null;
 
   return (
     <div className="mb-8">
-      <h3 className="text-xl md:text-2xl font-bold text-white mb-4 px-6 md:px-12 flex items-center gap-2">
-        {title}
-      </h3>
+      <div className="flex items-center justify-between px-6 md:px-12 mb-4">
+        <h3 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+          {title}
+        </h3>
+        {channels.length > 4 && (
+          <button
+            onClick={() => setIsViewAll(!isViewAll)}
+            className="text-sm md:text-base font-bold text-blue-400 hover:text-blue-300 transition-colors bg-blue-400/10 hover:bg-blue-400/20 px-3 py-1.5 rounded-full"
+          >
+            {isViewAll ? "Show Less" : "View All"}
+          </button>
+        )}
+      </div>
 
       <div className="relative group">
         <div
           ref={scrollRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide px-6 md:px-12 pb-6 snap-x snap-mandatory touch-pan-x"
+          className={cn(
+            "gap-4 px-6 md:px-12 pb-6",
+            isViewAll
+              ? "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 auto-rows-max"
+              : "flex overflow-x-auto scrollbar-hide snap-x snap-mandatory touch-pan-x"
+          )}
         >
           {channels.map((channel) => {
             const isFav = favorites.includes(channel.id);
@@ -55,12 +72,23 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
             return (
               <div
                 key={channel.id}
+                data-focusable="true"
+                tabIndex={0}
                 onClick={() => {
                   setCurrentPlaylist(channels);
                   setCurrentChannel(channel);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    setCurrentPlaylist(channels);
+                    setCurrentChannel(channel);
+                  }
+                }}
                 className={cn(
-                  "relative flex-none w-[75vw] sm:w-[240px] md:w-[280px] lg:w-[320px] aspect-video bg-slate-900 rounded-xl overflow-hidden cursor-pointer group/card snap-start transition-all duration-300 transform",
+                  "relative aspect-video bg-slate-900 rounded-xl overflow-hidden cursor-pointer group/card transition-all duration-300 transform",
+                  isViewAll
+                    ? "w-full"
+                    : "flex-none w-[75vw] sm:w-[240px] md:w-[280px] lg:w-[320px] snap-start",
                   "hover:scale-105 hover:z-10 hover:shadow-2xl hover:shadow-black/50 border border-slate-800 hover:border-slate-600",
                   isPlaying ? "ring-2 ring-blue-500 scale-[1.02]" : "",
                 )}
@@ -88,6 +116,17 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                       <p className="text-xs font-semibold text-blue-400 mt-1 uppercase tracking-wider">
                         Regional
                       </p>
+                    )}
+                    {channel.currentProgram && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-emerald-400 truncate">
+                          <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block mr-1.5 animate-pulse"></span>
+                          {channel.currentProgram}
+                        </p>
+                        <div className="w-full h-1 bg-white/20 rounded-full mt-1.5 overflow-hidden">
+                          <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.floor(Math.random() * 60) + 20}%` }}></div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

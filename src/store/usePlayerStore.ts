@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Channel, PlayerState, PlaylistState, User } from "../types";
+import { Channel, PlayerState, PlaylistState, User, UserProfile } from "../types";
 
 interface StoreState extends PlayerState, PlaylistState {
   setChannels: (channels: Channel[]) => void;
@@ -20,6 +20,12 @@ interface StoreState extends PlayerState, PlaylistState {
   setError: (error: string | null) => void;
   setIsLoading: (isLoading: boolean) => void;
   setUser: (user: User | null) => void;
+  profiles: UserProfile[];
+  activeProfileId: string | null;
+  addProfile: (profile: UserProfile) => void;
+  updateProfile: (id: string, updates: Partial<UserProfile>) => void;
+  removeProfile: (id: string) => void;
+  setActiveProfile: (id: string | null) => void;
   trendingEnabled: boolean;
   setTrendingEnabled: (enabled: boolean) => void;
   customFeeds: string[];
@@ -48,6 +54,8 @@ export const usePlayerStore = create<StoreState>()(
       isLoading: false,
       error: null,
       user: null,
+      profiles: [],
+      activeProfileId: null,
       trendingEnabled: true,
       customFeeds: [],
 
@@ -122,6 +130,23 @@ export const usePlayerStore = create<StoreState>()(
       setError: (error) => set({ error }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setUser: (user) => set({ user }),
+      addProfile: (profile) => set((state) => ({ profiles: [...state.profiles, profile] })),
+      updateProfile: (id, updates) => set((state) => ({
+        profiles: state.profiles.map((p) => (p.id === id ? { ...p, ...updates } : p)),
+      })),
+      removeProfile: (id) => set((state) => ({
+        profiles: state.profiles.filter((p) => p.id !== id),
+        activeProfileId: state.activeProfileId === id ? null : state.activeProfileId,
+      })),
+      setActiveProfile: (id) => {
+        set({ activeProfileId: id });
+        // Automatically switch kids mode based on profile
+        const { profiles, setKidsMode } = get();
+        const profile = profiles.find(p => p.id === id);
+        if (profile) {
+          setKidsMode(profile.isKidsMode);
+        }
+      },
       setTrendingEnabled: (trendingEnabled) => set({ trendingEnabled }),
       addCustomFeed: (url) =>
         set((state) => {
@@ -145,6 +170,9 @@ export const usePlayerStore = create<StoreState>()(
         useProxy: state.useProxy,
         showUnstableChannels: state.showUnstableChannels,
         customFeeds: state.customFeeds,
+        profiles: state.profiles,
+        activeProfileId: state.activeProfileId,
+        user: state.user,
       }),
     },
   ),

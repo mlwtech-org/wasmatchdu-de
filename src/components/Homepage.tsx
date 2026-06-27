@@ -15,15 +15,11 @@ export const Homepage: React.FC = () => {
       {/* Header */}
       <header className="container mx-auto px-6 py-6 flex justify-between items-center relative z-10">
         <div className="flex items-center gap-2 text-2xl font-black tracking-tighter text-white">
-          <div className="relative w-8 h-8">
-            <div className="absolute inset-0 bg-blue-500/40 blur-lg rounded-full"></div>
-            <img
-              src="/icon.png"
-              alt="WasMatchDu Logo"
-              className="relative z-10 w-full h-full object-cover rounded-lg shadow-lg ring-1 ring-white/10"
-            />
-          </div>
-          <span>{t("app.title")}</span>
+          <img
+            src="/logo.png"
+            alt="WMD Streams Logo"
+            className="h-8 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)]"
+          />
         </div>
         <nav className="hidden md:flex items-center gap-8 font-medium text-slate-300">
           <a href="#features" className="hover:text-white transition-colors">
@@ -146,16 +142,11 @@ export const Homepage: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-slate-900 py-12 text-center text-slate-500 font-medium">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <div className="relative w-6 h-6 grayscale hover:grayscale-0 transition-all duration-300">
-            <img
-              src="/icon.png"
-              alt="WasMatchDu Logo"
-              className="relative z-10 w-full h-full object-cover rounded-md shadow-md"
-            />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-slate-300">
-            {t("app.title")}
-          </span>
+          <img
+            src="/logo.png"
+            alt="WMD Streams Logo"
+            className="h-6 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)] grayscale hover:grayscale-0 transition-all duration-300"
+          />
         </div>
         <p>© 2026 Wasmatch-du Open Source Project. All rights reserved.</p>
       </footer>

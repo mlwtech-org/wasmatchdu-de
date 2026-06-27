@@ -9,6 +9,17 @@ export const de = {
     },
     dashboard: {
       defaultTitle: 'WasMatchDu Dashboard', selectChannel: 'Wählen Sie einen Sender, um sich mit Ihrer Gemeinschaft zu verbinden.', seniorSafe: 'Senioren Sicher', kidsMode: 'Kindermodus', signOut: 'Abmelden', searchChannels: 'Sender suchen...', regionalOnly: 'Nur Regional', favoritesOnly: 'Nur Favoriten', noChannelsFound: 'Keine Sender gefunden.', streamDetails: 'Stream-Details', category: 'Kategorie', community: 'Gemeinschaft', regionalBroadcast: 'Regionale Übertragung', programGuide: 'Programmführer', liveBroadcasting: 'Live-Übertragung', youAreWatching: 'Sie sehen', providedForCommonGood: 'Dieser Inhalt wird für das Gemeinwohl bereitgestellt. Viel Spaß beim Programm!'
+    },
+    categories: {
+      "Filme & Serien": "Filme & Serien",
+      "Sport & Action": "Sport & Action",
+      "Doku & Wissen": "Doku & Wissen",
+      "Shows & Comedy": "Shows & Comedy",
+      "Kinder & Familie": "Kinder & Familie",
+      "Nachrichten & Info": "Nachrichten & Info",
+      "Lokal & Regional": "Lokal & Regional",
+      "Unterhaltung": "Unterhaltung",
+      "Musik & Kultur": "Musik & Kultur"
     }
   }
 };

@@ -94,12 +94,11 @@ export const Login: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-4">
         {/* Logo */}
         <div className="flex justify-center mb-10 mt-4">
-          <div className="relative w-24 h-24 group">
-            <div className="absolute inset-0 bg-blue-500/40 blur-2xl rounded-[1.5rem] group-hover:bg-blue-400/50 transition-colors duration-500"></div>
+          <div className="relative group">
             <img
-              src="/icon.png"
-              alt="WasMatchDu IPTV Logo"
-              className="relative z-10 w-full h-full object-cover rounded-[1.5rem] shadow-2xl ring-1 ring-white/10"
+              src="/logo.png"
+              alt="WMD Streams Logo"
+              className="h-16 w-auto drop-shadow-[0_0_20px_rgba(255,20,147,0.8)] hover:drop-shadow-[0_0_30px_rgba(255,20,147,1)] transition-all duration-500"
             />
           </div>
         </div>

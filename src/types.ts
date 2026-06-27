@@ -4,6 +4,14 @@ export interface User {
   isPremium?: boolean;
 }
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  isKidsMode: boolean;
+  pin?: string;
+}
+
 export interface Channel {
   id: string;
   name: string;
@@ -13,6 +21,7 @@ export interface Channel {
   isRegional: boolean;
   gemeinwohlCategory: string;
   isUnstable: boolean;
+  currentProgram?: string;
 }
 
 export interface PlayerState {

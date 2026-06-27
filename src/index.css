@@ -59,3 +59,15 @@
     scrollbar-width: none;
   }
 }
+
+/* Smart TV Spatial Navigation Focus Styles */
+[data-focusable="true"] {
+  outline: none; /* Remove default browser outline */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-focusable="true"]:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 4px #3b82f6, 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+  z-index: 10;
+}

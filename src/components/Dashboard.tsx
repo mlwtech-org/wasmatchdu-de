@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { AVATARS } from "../lib/avatars";
 import { usePWAInstall } from "../hooks/usePWAInstall";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -52,6 +53,7 @@ const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
     gemeinwohlCategory: "Sport & Action",
     isRegional: false,
     isUnstable: false,
+    currentProgram: "Live: Red Bull Cliff Diving World Series",
   },
   {
     id: "verified-dw",
@@ -62,6 +64,7 @@ const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
     gemeinwohlCategory: "Nachrichten & Info",
     isRegional: false,
     isUnstable: false,
+    currentProgram: "Live: DW News Desk",
   },
   {
     id: "verified-cgtn",
@@ -72,6 +75,7 @@ const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
     gemeinwohlCategory: "Nachrichten & Info",
     isRegional: false,
     isUnstable: false,
+    currentProgram: "Live: Global Watch",
   },
   {
     id: "verified-bbb",
@@ -82,7 +86,8 @@ const VERIFIED_RELIABLE_CHANNELS: import("../types").Channel[] = [
     gemeinwohlCategory: "Filme & Serien",
     isRegional: false,
     isUnstable: false,
-  },
+    currentProgram: "Big Buck Bunny (4K Remaster)",
+  }
 ];
 
 const GEMEINWOHL_CATEGORIES = [
@@ -125,7 +130,15 @@ export const Dashboard: React.FC = () => {
     setShowUnstableChannels,
     trendingEnabled,
     setCurrentChannel,
+    setCurrentPlaylist,
+    customFeeds,
+    profiles,
+    activeProfileId,
   } = usePlayerStore();
+
+  const activeProfile = profiles.find(p => p.id === activeProfileId);
+  const activeAvatar = AVATARS.find(a => a.id === activeProfile?.avatarUrl) || AVATARS[0];
+  const AvatarIcon = activeAvatar.icon;
 
   const handleLogout = () => setUser(null);
 
@@ -160,25 +173,32 @@ export const Dashboard: React.FC = () => {
           console.warn("Geo-IP failed, falling back to default.", e);
         }
 
+        // Primary validated stream URL (updated via GitHub Actions every 12h)
+        const verifiedPlaylist = `https://raw.githubusercontent.com/mlwtech-org/wasmatchdu-de/validated-streams/verified_streams.m3u`;
         const primaryPlaylist = `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
-        const customFeeds = usePlayerStore.getState().customFeeds;
+        
         const urlsToFetch = [
-          primaryPlaylist,
+          verifiedPlaylist, // Try verified first
           ...GLOBAL_PLAYLISTS,
           ...customFeeds,
         ];
 
-        const responses = await Promise.all(
+        let responses = await Promise.all(
           urlsToFetch.map((u) => fetch(u).catch(() => null)),
         );
         let validResponses = responses.filter((r) => r && r.ok) as Response[];
 
-        // If the country playlist doesn't exist and we don't have custom feeds, fallback to DE
+        // If the verified playlist doesn't exist yet (e.g. GitHub Action hasn't run), fallback to original
         if (!validResponses[0] && customFeeds.length === 0) {
-          const fallbackRes = await fetch(
-            "https://iptv-org.github.io/iptv/countries/de.m3u",
-          );
-          if (fallbackRes.ok) validResponses[0] = fallbackRes;
+          console.warn("Verified playlist not found, falling back to raw public feed.");
+          const fallbackRes = await fetch(primaryPlaylist);
+          if (fallbackRes.ok) {
+              validResponses[0] = fallbackRes;
+          } else {
+              // Final fallback to DE if even the dynamic country code fails
+              const finalFallback = await fetch("https://iptv-org.github.io/iptv/countries/de.m3u");
+              if (finalFallback.ok) validResponses[0] = finalFallback;
+          }
         }
 
         validResponses = validResponses.filter(Boolean);
@@ -227,7 +247,7 @@ export const Dashboard: React.FC = () => {
     };
 
     fetchM3U();
-  }, [setChannels, setError, setIsLoading]);
+  }, [setChannels, setError, setIsLoading, customFeeds]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -276,6 +296,12 @@ export const Dashboard: React.FC = () => {
       .slice(0, 12);
   }, [filteredChannels]);
 
+  const liveEventsChannels = useMemo(() => {
+    return filteredChannels
+      .filter((c) => !c.isUnstable && c.currentProgram && (c.currentProgram.startsWith("Live:") || c.gemeinwohlCategory === "Sport & Action"))
+      .slice(0, 15);
+  }, [filteredChannels]);
+
   // Auto-play the top verified channel on initial load to guarantee playback
   const hasAutoPlayed = useRef(false);
   useEffect(() => {
@@ -287,10 +313,10 @@ export const Dashboard: React.FC = () => {
       currentTab === "home"
     ) {
       hasAutoPlayed.current = true;
-      usePlayerStore.getState().setCurrentPlaylist(VERIFIED_RELIABLE_CHANNELS);
+      setCurrentPlaylist(VERIFIED_RELIABLE_CHANNELS);
       setCurrentChannel(VERIFIED_RELIABLE_CHANNELS[0]);
     }
-  }, [isLoading, currentChannel, currentTab, setCurrentChannel]);
+  }, [isLoading, currentChannel, currentTab, setCurrentChannel, setCurrentPlaylist]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
@@ -305,42 +331,38 @@ export const Dashboard: React.FC = () => {
           {/* Left: Menu & Logo */}
           <div className="flex items-center h-full">
             <button
+              data-focusable="true"
               onClick={() => setIsSidebarOpen(true)}
               className="mr-2 md:mr-4 p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
               title="Open Menu"
             >
               <Menu className="w-6 h-6 md:w-7 md:h-7" />
             </button>
-            <div
-              className="flex items-center gap-2 text-white font-black text-xl md:text-2xl tracking-tight cursor-pointer"
-              onClick={() => handleTabSwitch("home")}
-            >
-              <div className="relative w-7 h-7 md:w-8 md:h-8">
-                <div className="absolute inset-0 bg-blue-500/40 blur-lg rounded-full"></div>
-                <img
-                  src="/icon.png"
-                  alt="WasMatchDu Logo"
-                  className="relative z-10 w-full h-full object-cover rounded-lg shadow-lg ring-1 ring-white/10"
-                />
-              </div>
-              <span className="hidden sm:inline">WasMatchDu</span>
+            <div className="flex items-center gap-3">
+              <img
+                src="/logo.png"
+                alt="WMD Streams Logo"
+                className="h-6 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)] opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
+                onClick={() => handleTabSwitch("home")}
+              />
             </div>
           </div>
 
           {/* Right: Search, Quick Actions */}
-          <div className="flex items-center gap-2 md:gap-4 lg:gap-6">
+          <div className="flex items-center gap-4 relative z-10 mr-4 md:mr-6 lg:mr-8">
             <div className="hidden md:flex relative items-center shrink min-w-0">
               <Search className="w-5 h-5 absolute left-3 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search..."
-                className="pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full lg:w-48 xl:w-64 transition-all"
+                placeholder={t("dashboard.searchChannels")}
+                className="w-full sm:w-48 lg:w-64 bg-slate-900/80 border border-slate-700/50 rounded-full py-2 pl-10 pr-4 text-sm font-medium focus:outline-none focus:border-slate-500 transition-all text-white placeholder-slate-400 shadow-inner"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
             <button
+              data-focusable="true"
               onClick={() => navigate("/go-live")}
               className="hidden sm:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
               title="Go Live"
@@ -355,10 +377,15 @@ export const Dashboard: React.FC = () => {
 
             {/* Profile Avatar Trigger for Sidebar */}
             <button
+              data-focusable="true"
               onClick={() => setIsSidebarOpen(true)}
-              className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700 transition-colors border border-slate-700 ml-1 md:ml-0"
+              className={`w-8 h-8 md:w-10 md:h-10 rounded-full ${activeProfile ? `bg-gradient-to-br ${activeAvatar.color}` : 'bg-slate-800'} flex items-center justify-center text-slate-300 hover:text-white transition-colors border border-slate-700 ml-1 md:ml-0 shadow-lg ring-2 ring-white/10 hover:ring-white/30 hover:scale-105`}
             >
-              <UserCircle className="w-5 h-5 md:w-6 md:h-6" />
+              {activeProfile ? (
+                <AvatarIcon className="w-5 h-5 md:w-6 md:h-6 text-white/90" />
+              ) : (
+                <UserCircle className="w-5 h-5 md:w-6 md:h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -391,6 +418,7 @@ export const Dashboard: React.FC = () => {
             WasMatchDu
           </div>
           <button
+            data-focusable="true"
             onClick={() => setIsSidebarOpen(false)}
             className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
           >
@@ -401,10 +429,39 @@ export const Dashboard: React.FC = () => {
         <div className="p-4 flex-1">
           {/* Main Navigation */}
           <div className="space-y-1 mb-8">
+            <div className="mb-4 bg-slate-900/50 rounded-2xl p-3 border border-slate-800 flex flex-col items-center gap-3">
+              {activeProfile && (
+                <>
+                  <div className={`w-16 h-16 rounded-[1rem] bg-gradient-to-br ${activeAvatar.color} flex items-center justify-center shadow-inner ring-1 ring-white/10`}>
+                    <AvatarIcon className="w-8 h-8 text-white/90" />
+                  </div>
+                  <div className="text-center">
+                    <div className="font-bold text-white">{activeProfile.name}</div>
+                    <div className="text-xs text-slate-500 font-medium mt-0.5">{activeProfile.isKidsMode ? 'Kids Mode' : 'Standard'}</div>
+                  </div>
+                </>
+              )}
+              <button
+                onClick={() => navigate('/sports')}
+                className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-medium transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+              >
+                <Tv className="w-5 h-5" />
+                Regional Sports
+              </button>
+              <button 
+                data-focusable="true"
+                onClick={() => navigate('/profile-selection')}
+                className="w-full mt-2 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm transition-colors"
+              >
+                Switch Profile
+              </button>
+            </div>
+            
             <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 px-3">
               Discover
             </h4>
             <button
+              data-focusable="true"
               onClick={() => {
                 handleTabSwitch("home");
                 setIsSidebarOpen(false);
@@ -419,6 +476,7 @@ export const Dashboard: React.FC = () => {
               <Home className="w-5 h-5" /> Homepage
             </button>
             <button
+              data-focusable="true"
               onClick={() => {
                 handleTabSwitch("categories");
                 setIsSidebarOpen(false);
@@ -433,6 +491,7 @@ export const Dashboard: React.FC = () => {
               <Grid className="w-5 h-5" /> Categories
             </button>
             <button
+              data-focusable="true"
               onClick={() => {
                 handleTabSwitch("regions");
                 setIsSidebarOpen(false);
@@ -447,6 +506,7 @@ export const Dashboard: React.FC = () => {
               <Globe2 className="w-5 h-5" /> Regions
             </button>
             <button
+              data-focusable="true"
               onClick={() => {
                 handleTabSwitch("kids");
                 setIsSidebarOpen(false);
@@ -461,6 +521,7 @@ export const Dashboard: React.FC = () => {
               <Baby className="w-5 h-5" /> Children
             </button>
             <button
+              data-focusable="true"
               onClick={() => {
                 handleTabSwitch("live");
                 setIsSidebarOpen(false);
@@ -483,6 +544,7 @@ export const Dashboard: React.FC = () => {
             </h4>
             {isInstallable && (
               <button
+                data-focusable="true"
                 onClick={() => {
                   promptInstall();
                   setIsSidebarOpen(false);
@@ -493,6 +555,7 @@ export const Dashboard: React.FC = () => {
               </button>
             )}
             <button
+              data-focusable="true"
               onClick={() => {
                 navigate("/admin");
                 setIsSidebarOpen(false);
@@ -529,6 +592,7 @@ export const Dashboard: React.FC = () => {
                 <span>Show Unstable</span>
               </div>
               <button
+                data-focusable="true"
                 onClick={() => setShowUnstableChannels(!showUnstableChannels)}
                 className={cn(
                   "w-10 h-5 rounded-full transition-colors relative",
@@ -555,6 +619,7 @@ export const Dashboard: React.FC = () => {
                 <span>Bypass CORS Proxy</span>
               </div>
               <button
+                data-focusable="true"
                 onClick={toggleProxy}
                 className={cn(
                   "w-10 h-5 rounded-full transition-colors relative",
@@ -675,6 +740,14 @@ export const Dashboard: React.FC = () => {
                   />
                 )}
 
+                {/* Live Events Now */}
+                {!searchQuery && !kidsMode && liveEventsChannels.length > 0 && (
+                  <ChannelRow
+                    title="🔴 Live Events & Breaking News"
+                    channels={liveEventsChannels}
+                  />
+                )}
+
                 {/* Trending Now Row */}
                 {!searchQuery &&
                   !kidsMode &&
@@ -734,7 +807,7 @@ export const Dashboard: React.FC = () => {
                     return (
                       <ChannelRow
                         key={category}
-                        title={category}
+                        title={t(`categories.${category}`, { defaultValue: category })}
                         channels={categoryChannels}
                       />
                     );

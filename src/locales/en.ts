@@ -53,6 +53,17 @@ export const en = {
       liveBroadcasting: "Live Broadcasting",
       youAreWatching: "You are watching",
       providedForCommonGood: "Brought to you by WasMatchDu. Enjoy the program!"
+    },
+    categories: {
+      "Filme & Serien": "Movies & Series",
+      "Sport & Action": "Sports & Action",
+      "Doku & Wissen": "Documentaries & Knowledge",
+      "Shows & Comedy": "Shows & Comedy",
+      "Kinder & Familie": "Kids & Family",
+      "Nachrichten & Info": "News & Info",
+      "Lokal & Regional": "Local & Regional",
+      "Unterhaltung": "Entertainment",
+      "Musik & Kultur": "Music & Culture"
     }
   }
 };

@@ -12,6 +12,10 @@ import {
   Subtitles,
   ListVideo,
   X,
+  ChevronLeft,
+  ChevronRight,
+  Volume2,
+  Sun,
 } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -36,6 +40,7 @@ declare global {
 }
 
 const SUPPORTED_LANGUAGES = [
+  { code: "auto", label: "Auto-Detect (Browser Default)" },
   { code: "de-DE", label: "German" },
   { code: "en-US", label: "English" },
   { code: "es-ES", label: "Spanish" },
@@ -58,7 +63,6 @@ export const VideoPlayer: React.FC = () => {
     selectedGroup,
     isTheaterMode,
     useProxy,
-    toggleTheaterMode,
     playNextChannel,
     playPreviousChannel,
     setCurrentChannel,
@@ -66,11 +70,12 @@ export const VideoPlayer: React.FC = () => {
   } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
   const [autoSkipCountdown, setAutoSkipCountdown] = useState<number | null>(
     null,
   );
   const [isCastAvailable, setIsCastAvailable] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const controlsTimeoutRef = useRef<number | null>(null);
 
   // Track Selection State
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -81,12 +86,16 @@ export const VideoPlayer: React.FC = () => {
   const [currentSubtitleTrack, setCurrentSubtitleTrack] = useState<number>(-1);
   const [showCCMenu, setShowCCMenu] = useState(false);
   const [isAITranslateEnabled, setIsAITranslateEnabled] = useState(false);
-  const [sourceLang, setSourceLang] = useState("de-DE");
-  const [targetLang, setTargetLang] = useState("en-US");
+  const [isAITranslateSpeakEnabled, setIsAITranslateSpeakEnabled] = useState(false);
+  const [sourceLang, setSourceLang] = useState("auto");
   const [showQuickSurf, setShowQuickSurf] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [brightness, setBrightness] = useState(1);
+  const [targetLang, setTargetLang] = useState("en-US");
   const [quickSurfCategory, setQuickSurfCategory] = useState(
     selectedGroup || "All",
   );
+  const [volume, setVolume] = useState(1);
 
   const quickSurfChannels = useMemo(() => {
     if (quickSurfCategory === "All") return channels;
@@ -97,6 +106,7 @@ export const VideoPlayer: React.FC = () => {
     isAITranslateEnabled,
     sourceLang,
     targetLang,
+    isAITranslateSpeakEnabled
   );
 
   const retryCount = useRef(0);
@@ -118,6 +128,49 @@ export const VideoPlayer: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [playNextChannel, playPreviousChannel]);
 
+  useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+    const handleMouseMove = () => {
+      setShowControls(true);
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        if (videoRef.current && !videoRef.current.paused) {
+          setShowControls(false);
+        }
+      }, 3000);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      clearTimeout(inactivityTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = volume;
+    }
+  }, [volume]);
+
+  const handleUserActivity = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      window.clearTimeout(controlsTimeoutRef.current);
+    }
+    controlsTimeoutRef.current = window.setTimeout(() => {
+      // Don't hide controls if a menu is open
+      setShowControls(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    handleUserActivity();
+    return () => {
+      if (controlsTimeoutRef.current) window.clearTimeout(controlsTimeoutRef.current);
+    };
+  }, []);
+
   // Clear countdown when channel changes manually
   useEffect(() => {
     setAutoSkipCountdown(null);
@@ -126,21 +179,6 @@ export const VideoPlayer: React.FC = () => {
     }
   }, [currentChannel?.id]);
 
-  const startAutoSkip = () => {
-    setAutoSkipCountdown(3);
-    if (skipTimerRef.current) window.clearInterval(skipTimerRef.current);
-    skipTimerRef.current = window.setInterval(() => {
-      setAutoSkipCountdown((prev) => {
-        if (prev === null || prev <= 1) {
-          window.clearInterval(skipTimerRef.current!);
-          playNextChannel();
-          return null;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
   const cancelAutoSkip = () => {
     setAutoSkipCountdown(null);
     if (skipTimerRef.current) {
@@ -148,23 +186,21 @@ export const VideoPlayer: React.FC = () => {
     }
   };
 
-  // Buffering Timeout. If stuck buffering for 8s, auto-skip to find a working channel quickly.
+  // Buffering Timeout. If stuck buffering for 10s, show error but don't auto-skip aggressively
   useEffect(() => {
     let timeout: number;
-    // Don't cancel timeout just because we have an informational error message
-    // Only cancel if we've already started the auto-skip countdown
     if (isBuffering && !autoSkipCountdown) {
       timeout = window.setTimeout(() => {
-        setError("Stream taking too long to load. Skipping...");
+        setError("Stream taking too long to load. It might be geo-blocked or offline.");
         setIsBuffering(false);
         if (hlsRef.current) {
           hlsRef.current.destroy();
+          hlsRef.current = null;
         }
-        startAutoSkip();
-      }, 8000); // 8 seconds for aggressive surfing
+      }, 10000); 
     }
     return () => window.clearTimeout(timeout);
-  }, [isBuffering, autoSkipCountdown, startAutoSkip]);
+  }, [isBuffering, autoSkipCountdown]);
 
   const handleSubtitleChange = (id: number) => {
     if (hlsRef.current) {
@@ -306,6 +342,11 @@ export const VideoPlayer: React.FC = () => {
           liveSyncDurationCount: 3,
           liveMaxLatencyDurationCount: 10,
           maxLiveSyncPlaybackRate: 1.5,
+          xhrSetup: function (xhr, url) {
+            if (useProxy && url.startsWith('http')) {
+              xhr.open('GET', 'https://corsproxy.io/?url=' + encodeURIComponent(url), true);
+            }
+          }
         });
         hlsRef.current = hls;
 
@@ -344,21 +385,17 @@ export const VideoPlayer: React.FC = () => {
           if (data.fatal) {
             setIsBuffering(false);
             hls.destroy();
+            hlsRef.current = null;
 
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                setError(
-                  "Stream offline or blocked. Finding a working channel...",
-                );
-                startAutoSkip();
+                setError("Stream offline or blocked by CORS. You may need a VPN or the channel is dead.");
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
-                setError("Stream incompatible. Finding a working channel...");
-                startAutoSkip();
+                setError("Stream format is incompatible or broken.");
                 break;
               default:
-                setError("Playback failed. Finding a working channel...");
-                startAutoSkip();
+                setError("Playback failed. The community stream is currently offline.");
                 break;
             }
           }
@@ -372,9 +409,8 @@ export const VideoPlayer: React.FC = () => {
           video.play().catch(console.error);
         });
         video.addEventListener("error", () => {
-          setError("Playback failed. Finding a working channel...");
+          setError("Playback failed. The community stream is currently offline.");
           setIsBuffering(false);
-          startAutoSkip();
         });
       }
     };
@@ -382,7 +418,15 @@ export const VideoPlayer: React.FC = () => {
     initPlayer();
 
     return () => {
-      if (hlsRef.current) hlsRef.current.destroy();
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChannel, useProxy]);
@@ -400,18 +444,29 @@ export const VideoPlayer: React.FC = () => {
     }
   };
 
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      containerRef.current?.requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   if (!currentChannel) {
     return null;
   }
 
   return (
     <div
+      ref={containerRef}
       className={cn(
         "relative w-full h-full overflow-hidden bg-black group transition-all duration-500 ease-in-out",
         isTheaterMode ? "fixed inset-0 z-[100]" : "",
       )}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      onMouseMove={handleUserActivity}
+      onTouchStart={handleUserActivity}
+      onMouseEnter={() => setShowControls(true)}
+      onMouseLeave={() => setShowControls(false)}
     >
       {isBuffering && !error && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 backdrop-blur-sm pointer-events-none">
@@ -466,12 +521,22 @@ export const VideoPlayer: React.FC = () => {
       <video
         ref={videoRef}
         className="w-full h-full"
+        style={{ filter: `brightness(${brightness})` }}
         controls
         playsInline
         autoPlay
         onWaiting={() => setIsBuffering(true)}
         onPlaying={() => setIsBuffering(false)}
       />
+
+      {/* Cyberpunk Watermark */}
+      <div className="absolute top-6 right-6 pointer-events-none z-20 opacity-80 select-none hidden md:block">
+        <img
+          src="/logo.png"
+          alt="WMD Streams"
+          className="h-7 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)]"
+        />
+      </div>
 
       {/* AI Live Translation Text Overlay */}
       {isAITranslateEnabled && liveTranslationText && (
@@ -487,10 +552,12 @@ export const VideoPlayer: React.FC = () => {
       {/* Custom Overlays & Controls */}
       <div
         className={cn(
-          "absolute top-0 inset-x-0 p-4 bg-gradient-to-b from-black/80 to-transparent transition-opacity duration-300 flex justify-between items-start pointer-events-none",
-          isHovering ? "opacity-100" : "opacity-0",
+          "absolute inset-0 transition-opacity duration-300 pointer-events-none z-30",
+          showControls || showCCMenu || showQuickSurf ? "opacity-100" : "opacity-0"
         )}
       >
+        {/* Top Header Controls */}
+        <div className="absolute top-0 inset-x-0 p-4 bg-gradient-to-b from-black/80 to-transparent flex justify-between items-start pointer-events-auto">
         <div className="px-3 py-1 text-xs font-mono font-medium text-white bg-red-600 rounded-md">
           LIVE
         </div>
@@ -520,7 +587,7 @@ export const VideoPlayer: React.FC = () => {
             </button>
 
             {showCCMenu && (
-              <div className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 min-w-[280px] shadow-2xl z-50">
+              <div className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 min-w-[280px] max-h-[60vh] overflow-y-auto shadow-2xl z-50">
                 {/* AI Live Translation Section */}
                 <div className="mb-4 pb-4 border-b border-slate-700/50">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
@@ -566,6 +633,22 @@ export const VideoPlayer: React.FC = () => {
                         ))}
                       </select>
                     </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mt-4 mb-2 px-1">
+                    <span className="text-xs font-bold text-slate-300">Read Translation Aloud</span>
+                    <button
+                      onClick={() => setIsAITranslateSpeakEnabled(!isAITranslateSpeakEnabled)}
+                      className={cn(
+                        "w-10 h-5 rounded-full relative transition-colors",
+                        isAITranslateSpeakEnabled ? "bg-blue-500" : "bg-slate-700"
+                      )}
+                    >
+                      <span className={cn(
+                        "absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform",
+                        isAITranslateSpeakEnabled ? "translate-x-5" : "translate-x-0"
+                      )}></span>
+                    </button>
                   </div>
 
                   <button
@@ -681,9 +764,9 @@ export const VideoPlayer: React.FC = () => {
             </button>
           )}
           <button
-            onClick={() => toggleTheaterMode()}
+            onClick={toggleFullScreen}
             className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
-            title={isTheaterMode ? "Exit Theater Mode" : "Theater Mode"}
+            title="Fullscreen"
           >
             <Maximize className="w-4 h-4" />
           </button>
@@ -701,6 +784,102 @@ export const VideoPlayer: React.FC = () => {
             >
               <ListVideo className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Slideshow style Next/Previous Buttons */}
+        <div className="absolute inset-y-0 left-0 flex items-center px-4 pointer-events-auto">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              playPreviousChannel();
+              handleUserActivity();
+            }}
+            className="p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-md transition-all hover:scale-110 hover:shadow-xl"
+            title="Previous Channel"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+        </div>
+        <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-auto">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              playNextChannel();
+              handleUserActivity();
+            }}
+            className="p-3 bg-black/40 hover:bg-black/80 text-white rounded-full backdrop-blur-md transition-all hover:scale-110 hover:shadow-xl"
+            title="Next Channel"
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+        </div>
+
+        {/* Bottom Channel Info Banner */}
+        <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex items-end justify-between pointer-events-auto">
+          <div className="flex items-center gap-4">
+            {currentChannel.logo ? (
+              <img
+                src={currentChannel.logo}
+                alt={currentChannel.name}
+                className="w-16 h-16 object-contain bg-white/10 rounded-xl shadow-lg backdrop-blur-sm p-1"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center text-xl font-black text-white shadow-lg border border-white/10">
+                {currentChannel.name.substring(0, 2).toUpperCase()}
+              </div>
+            )}
+            <div className="flex flex-col drop-shadow-md">
+              <span className="text-white text-3xl font-black tracking-tight">{currentChannel.name}</span>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wider">
+                  LIVE
+                </span>
+                {currentChannel.currentProgram && (
+                  <span className="text-slate-200 font-medium line-clamp-1">{currentChannel.currentProgram}</span>
+                )}
+                {!currentChannel.currentProgram && (
+                  <span className="text-slate-400 font-medium">Standard Programming</span>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Action Buttons Right Side */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 bg-slate-900/60 p-2 rounded-full border border-slate-700 backdrop-blur-sm group">
+              <Sun className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
+              <input
+                type="range"
+                min="0.2"
+                max="2"
+                step="0.1"
+                value={brightness}
+                onChange={(e) => setBrightness(parseFloat(e.target.value))}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="w-24 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500 pointer-events-auto"
+                title="Brightness"
+              />
+            </div>
+            <div className="flex items-center gap-2 bg-slate-900/60 p-2 rounded-full border border-slate-700 backdrop-blur-sm group">
+              <Volume2 className="w-4 h-4 text-slate-400 group-hover:text-white transition-colors" />
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={volume}
+                onChange={(e) => {
+                  setVolume(parseFloat(e.target.value));
+                }}
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={(e) => e.stopPropagation()}
+                className="w-24 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-500 pointer-events-auto"
+                title="Volume"
+              />
+            </div>
           </div>
         </div>
       </div>

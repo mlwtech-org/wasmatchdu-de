@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { fetchAndActivate, getBoolean } from "firebase/remote-config";
 import { remoteConfig } from "./lib/firebase";
 import { usePlayerStore } from "./store/usePlayerStore";
+import { AIAssistantOrb } from "./components/AIAssistantOrb";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -23,6 +24,12 @@ const GoLive = lazy(() =>
 const LivePlayer = lazy(() =>
   import("./components/LivePlayer").then((m) => ({ default: m.LivePlayer })),
 );
+const ProfileSelection = lazy(() =>
+  import("./components/ProfileSelection").then((m) => ({ default: m.ProfileSelection })),
+);
+const CreateProfile = lazy(() =>
+  import("./components/CreateProfile").then((m) => ({ default: m.CreateProfile })),
+);
 const ProtectedRoute = lazy(() =>
   import("./components/ProtectedRoute").then((m) => ({
     default: m.ProtectedRoute,
@@ -32,6 +39,14 @@ const AdminDashboard = lazy(() =>
   import("./components/AdminDashboard").then((m) => ({
     default: m.AdminDashboard,
   })),
+);
+const SportsHub = lazy(() =>
+  import("./components/SportsHub").then((m) => ({
+    default: m.SportsHub,
+  })),
+);
+const ManageProfiles = lazy(() =>
+  import("./components/ManageProfiles").then((m) => ({ default: m.ManageProfiles })),
 );
 
 const PageLoader = () => (
@@ -69,10 +84,44 @@ function App() {
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />
           <Route
+            path="/profile-selection"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ProfileSelection />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/create-profile"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <CreateProfile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/manage-profiles"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ManageProfiles />
+              </Suspense>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sports"
+            element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-black">
+                  <SportsHub />
+                </div>
               </ProtectedRoute>
             }
           />
@@ -102,6 +151,7 @@ function App() {
           />
         </Routes>
       </Suspense>
+      <AIAssistantOrb />
     </BrowserRouter>
   );
 }

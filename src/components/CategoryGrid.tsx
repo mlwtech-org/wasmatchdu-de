@@ -1,5 +1,5 @@
 import React from "react";
-import { Tv, Globe, Heart, BookOpen, Film, Trophy, Map } from "lucide-react";
+import { Tv, Globe, Heart, BookOpen, Film, Trophy, Map, Activity, Laugh, ShieldAlert, Rocket, TreePine } from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -15,6 +15,15 @@ const GEMEINWOHL_CATEGORIES = [
   "Kinder & Familie",
   "Lokal & Regional",
   "Unterhaltung",
+];
+
+const POPULAR_ZONES = [
+  "24/7 Sports",
+  "Romantic Comedy",
+  "Comedy",
+  "Crime",
+  "Sci-Fi",
+  "Nature Documentary",
 ];
 
 interface CategoryGridProps {
@@ -76,6 +85,43 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
         <Tv className="w-24 h-24 absolute right-8 top-8 opacity-20 text-red-300 transform rotate-12" />
       ),
     },
+    // POPULAR ZONES
+    "24/7 Sports": {
+      bgClass: "bg-gradient-to-br from-red-900 to-orange-900",
+      icon: (
+        <Activity className="w-24 h-24 absolute right-8 top-8 opacity-20 text-orange-300 transform -rotate-12" />
+      ),
+    },
+    "Romantic Comedy": {
+      bgClass: "bg-gradient-to-br from-pink-800 to-rose-700",
+      icon: (
+        <Heart className="w-24 h-24 absolute right-8 top-8 opacity-20 text-pink-300 transform rotate-12" />
+      ),
+    },
+    "Comedy": {
+      bgClass: "bg-gradient-to-br from-yellow-800 to-amber-700",
+      icon: (
+        <Laugh className="w-24 h-24 absolute right-8 top-8 opacity-20 text-yellow-300 transform -rotate-12" />
+      ),
+    },
+    "Crime": {
+      bgClass: "bg-gradient-to-br from-slate-900 to-zinc-900",
+      icon: (
+        <ShieldAlert className="w-24 h-24 absolute right-8 top-8 opacity-20 text-slate-400 transform rotate-6" />
+      ),
+    },
+    "Sci-Fi": {
+      bgClass: "bg-gradient-to-br from-cyan-900 to-blue-900",
+      icon: (
+        <Rocket className="w-24 h-24 absolute right-8 top-8 opacity-20 text-cyan-300 transform -rotate-45" />
+      ),
+    },
+    "Nature Documentary": {
+      bgClass: "bg-gradient-to-br from-emerald-900 to-green-800",
+      icon: (
+        <TreePine className="w-24 h-24 absolute right-8 top-8 opacity-20 text-green-300 transform rotate-6" />
+      ),
+    },
   };
 
   return (
@@ -109,6 +155,44 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
 
               {/* Title */}
               <h3 className="absolute bottom-6 left-6 right-6 text-2xl md:text-3xl font-black text-white drop-shadow-md leading-tight group-hover:text-blue-400 transition-colors">
+                {category}
+              </h3>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* POPULAR ZONES & GENRES SECTION */}
+      <h2 className="text-3xl md:text-4xl font-black text-white mt-16 mb-8 tracking-tight flex items-center gap-3">
+        <Activity className="w-8 h-8 text-pink-500" />
+        Popular Zones & Genres
+      </h2>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {POPULAR_ZONES.map((category) => {
+          const config = categoryConfig[category] || {
+            bgClass: "bg-slate-800",
+            icon: (
+              <Tv className="w-16 h-16 absolute right-4 top-4 opacity-20" />
+            ),
+          };
+
+          return (
+            <button
+              key={category}
+              onClick={() => onSelectCategory(category)}
+              className={cn(
+                "relative text-left aspect-[4/3] rounded-2xl overflow-hidden group transition-all duration-300 cursor-pointer shadow-lg hover:shadow-2xl hover:-translate-y-1",
+                config.bgClass,
+              )}
+            >
+              {config.icon}
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+
+              {/* Title */}
+              <h3 className="absolute bottom-4 left-4 right-4 text-xl md:text-2xl font-bold text-white drop-shadow-md leading-tight group-hover:text-pink-400 transition-colors">
                 {category}
               </h3>
             </button>
