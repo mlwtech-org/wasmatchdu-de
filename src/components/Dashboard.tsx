@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { HeroCarousel } from "./HeroCarousel";
+import { HeroBanner } from "./HeroBanner";
 import { ChannelRow } from "./ChannelRow";
 import { CategoryGrid } from "./CategoryGrid";
 import { CountryGrid } from "./CountryGrid";
@@ -13,7 +13,6 @@ import {
   Search,
   UserCircle,
   Loader2,
-  Maximize2,
   Shield,
   ShieldAlert,
   Menu,
@@ -48,7 +47,6 @@ export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { isInstallable, promptInstall } = usePWAInstall();
   const [currentTab, setCurrentTab] = useState("home");
-  const [isMiniPlayer, setIsMiniPlayer] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -107,19 +105,6 @@ export const Dashboard: React.FC = () => {
       }
     }
   };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Activate mini player when scrolled past the hero section (~300px)
-      if (window.scrollY > 300) {
-        setIsMiniPlayer(true);
-      } else {
-        setIsMiniPlayer(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const filteredChannels = useMemo(() => {
     return channels.filter((channel) => {
@@ -582,64 +567,13 @@ export const Dashboard: React.FC = () => {
         <RadioHub />
       ) : (
         <>
-          {/* Hero Section Placeholder (preserves space) */}
-          <div
-            className={cn(
-              "relative w-full transition-all duration-700 ease-in-out z-40 mt-16 bg-black max-w-[1600px] mx-auto",
-              isTheaterMode
-                ? "fixed inset-0 z-50 h-screen mt-0 max-w-none"
-                : "aspect-video md:h-[65vh] md:max-h-[800px] md:aspect-auto",
-            )}
-          >
-            {/* The Actual Video Player (morphs to mini-player) */}
-            <div
-              className={cn(
-                "transition-all duration-500 ease-in-out w-full h-full bg-black",
-                isMiniPlayer && currentChannel && !isTheaterMode
-                  ? "fixed bottom-24 lg:bottom-8 right-4 lg:right-8 w-[280px] md:w-[380px] aspect-video z-[60] rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] cursor-pointer group ring-2 ring-slate-700 hover:ring-blue-500"
-                  : "relative shadow-2xl",
-              )}
-              onClick={() => {
-                if (isMiniPlayer) {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }
-              }}
-            >
-              <HeroCarousel />
-
-              {/* Mini-Player Overlay */}
-              {isMiniPlayer && currentChannel && !isTheaterMode && (
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center pointer-events-none">
-                  <Maximize2 className="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-xl" />
-                </div>
-              )}
-            </div>
-
-            {!currentChannel && !isTheaterMode && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-900 pointer-events-none z-10">
-                <Tv className="w-24 h-24 text-slate-700 mb-6 drop-shadow-lg" />
-                <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-xl">
-                  {t("dashboard.selectChannel")}
-                </h2>
-                <p className="text-slate-400 mt-4 text-lg font-medium">
-                  Browse our premium catalog below
-                </p>
-              </div>
-            )}
-
-            {/* Bottom gradient to blend hero into rows */}
-            {!isTheaterMode && !isMiniPlayer && (
-              <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none z-10" />
-            )}
+          {/* Premium Hero Banner */}
+          <div className="relative w-full z-40 bg-black mt-16 max-w-[1600px] mx-auto shadow-2xl">
+            <HeroBanner />
           </div>
 
           {/* Main Content: Channel Shelves */}
-          <main
-            className={cn(
-              "relative z-30 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full",
-              currentChannel ? "-mt-8 md:-mt-24" : "mt-8",
-            )}
-          >
+          <main className="relative z-30 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full -mt-16 md:-mt-32">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20">
                 <Loader2 className="w-12 h-12 animate-spin text-blue-500 mb-4" />
@@ -654,7 +588,7 @@ export const Dashboard: React.FC = () => {
                 {/* Verified Reliable Channels */}
                 {!searchQuery && !kidsMode && (
                   <ChannelRow
-                    title="⭐ Verified 24/7 Channels (Always Work)"
+                    title="Top Picks for You"
                     channels={VERIFIED_RELIABLE_CHANNELS}
                   />
                 )}

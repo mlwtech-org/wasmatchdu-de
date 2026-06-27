@@ -86,11 +86,11 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                   }
                 }}
                 className={cn(
-                  "relative aspect-video bg-slate-900 rounded-xl overflow-hidden cursor-pointer group/card transition-all duration-300 transform",
+                  "relative aspect-video bg-[#0f172a] rounded-md overflow-hidden cursor-pointer group/card transition-all duration-300 transform",
                   isViewAll
                     ? "w-full"
                     : "flex-none w-[75vw] sm:w-[240px] md:w-[280px] lg:w-[320px] snap-start",
-                  "hover:scale-105 hover:z-10 hover:shadow-2xl hover:shadow-black/50 border border-slate-800 hover:border-slate-600",
+                  "hover:scale-110 hover:z-50 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-transparent",
                   isPlaying ? "ring-2 ring-blue-500 scale-[1.02]" : "",
                 )}
               >
@@ -138,8 +138,8 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                 </div>
 
                 {/* Overlays on Hover */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/card:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
-                  <PlayCircle className="w-14 h-14 text-white drop-shadow-2xl transform scale-75 group-hover/card:scale-100 transition-transform" />
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-20">
+                  <PlayCircle className="w-16 h-16 text-white drop-shadow-2xl transform scale-50 group-hover/card:scale-100 transition-all duration-300" />
                 </div>
 
                 {/* Favorite Toggle */}
