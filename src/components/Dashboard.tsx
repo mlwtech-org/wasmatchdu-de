@@ -101,6 +101,10 @@ export const Dashboard: React.FC = () => {
     } else {
       setKidsMode(false);
       setCurrentTab(tab);
+      if (tab === "home") {
+        setSearchQuery("");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
   };
 
@@ -736,7 +740,7 @@ export const Dashboard: React.FC = () => {
       )}
 
       {/* Mobile / Tablet Bottom Navigation */}
-      <MobileNav currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      <MobileNav currentTab={currentTab} setCurrentTab={handleTabSwitch} />
     </div>
   );
 };
