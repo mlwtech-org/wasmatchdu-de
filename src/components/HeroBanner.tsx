@@ -5,6 +5,7 @@ import { VERIFIED_RELIABLE_CHANNELS } from "../lib/constants";
 import { Channel } from "../types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
+import Hls from "hls.js";
 
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
@@ -20,17 +21,56 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const hlsRef = React.useRef<Hls | null>(null);
 
   // Auto-rotate the banner
   useEffect(() => {
     if (featuredChannels.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % featuredChannels.length);
-    }, 8000);
+    }, 12000); // Increased time to allow video to play longer
     return () => clearInterval(interval);
   }, [featuredChannels.length]);
 
   const activeChannel = featuredChannels[currentIndex];
+
+  useEffect(() => {
+    if (!activeChannel || !videoRef.current) return;
+
+    if (Hls.isSupported()) {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+      }
+
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 30,
+      });
+
+      hlsRef.current = hls;
+      hls.loadSource(activeChannel.url);
+      hls.attachMedia(videoRef.current);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        videoRef.current
+          ?.play()
+          .catch((e) => console.log("Hero playback blocked", e));
+      });
+    } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+      videoRef.current.src = activeChannel.url;
+      videoRef.current
+        .play()
+        .catch((e) => console.log("Hero playback blocked", e));
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [activeChannel]);
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -48,17 +88,28 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
   return (
     <div className="relative w-full h-[60vh] md:h-[75vh] min-h-[500px] max-h-[850px] group bg-black overflow-hidden select-none">
-      {/* Background Image / Blur Fallback */}
+      {/* Background Video / Image Fallback */}
       <div className="absolute inset-0 w-full h-full">
+        {/* The background video */}
+        <video
+          ref={videoRef}
+          className="absolute inset-0 w-full h-full object-cover scale-105 opacity-60"
+          muted
+          playsInline
+          loop
+          autoPlay
+          crossOrigin="anonymous"
+        />
+        {/* Image Fallback while video loads or if it fails */}
         {activeChannel.logo ? (
           <img
             key={activeChannel.logo} // force re-render for animation
             src={activeChannel.logo}
             alt={activeChannel.name}
-            className="w-full h-full object-cover opacity-50 md:opacity-40 scale-105 transform transition-transform duration-[15000ms] ease-out group-hover:scale-110 blur-xl"
+            className="w-full h-full object-cover opacity-30 md:opacity-20 scale-105 transform transition-transform duration-[15000ms] ease-out group-hover:scale-110 blur-2xl absolute inset-0 -z-10"
           />
         ) : (
-          <div className="w-full h-full bg-slate-900" />
+          <div className="w-full h-full bg-slate-900 absolute inset-0 -z-10" />
         )}
         {/* Gradients to blend into the dashboard background */}
         <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
