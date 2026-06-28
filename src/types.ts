@@ -30,7 +30,8 @@ export interface Channel {
 export interface PlayerState {
   currentChannel: Channel | null;
   currentPlaylist: Channel[];
-  channels: Channel[];
+  channels: Channel[]; // curated dashboard channels
+  globalChannels: Channel[]; // all public unverified channels
   favorites: string[];
   recentlyWatched: string[];
   isTheaterMode: boolean;

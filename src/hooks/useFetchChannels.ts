@@ -4,12 +4,18 @@ import { parseM3U } from "../utils/m3uParser";
 import { GLOBAL_PLAYLISTS, VERIFIED_RELIABLE_CHANNELS } from "../lib/constants";
 
 export const useFetchChannels = () => {
-  const { setChannels, setError, setIsLoading, customFeeds, channels } =
-    usePlayerStore();
+  const {
+    setChannels,
+    setGlobalChannels,
+    setError,
+    setIsLoading,
+    customFeeds,
+    globalChannels,
+  } = usePlayerStore();
 
   useEffect(() => {
-    // Only fetch if channels are empty to avoid double-fetching on navigation
-    if (channels.length > 0) return;
+    // Only fetch if globalChannels are empty to avoid double-fetching on navigation
+    if (globalChannels.length > 0) return;
 
     const fetchM3U = async () => {
       setIsLoading(true);
@@ -89,18 +95,11 @@ export const useFetchChannels = () => {
           }
         });
 
-        // Add Verified Reliable Channels at the very end to ensure they aren't overridden and are always available
-        VERIFIED_RELIABLE_CHANNELS.forEach((c) => {
-          if (!uniqueChannelsMap.has(c.url)) {
-            uniqueChannelsMap.set(c.url, c);
-          }
-        });
+        // The curated dashboard ALWAYS gets the verified list
+        setChannels(VERIFIED_RELIABLE_CHANNELS);
 
-        if (uniqueChannelsMap.size === 0) {
-          throw new Error("Failed to load any channels.");
-        }
-
-        setChannels(Array.from(uniqueChannelsMap.values()));
+        // The surf mode gets the global fallback channels
+        setGlobalChannels(Array.from(uniqueChannelsMap.values()));
         setError(null);
       } catch (err) {
         console.error("Error fetching M3U:", err);
@@ -111,5 +110,12 @@ export const useFetchChannels = () => {
     };
 
     fetchM3U();
-  }, [setChannels, setError, setIsLoading, customFeeds, channels.length]);
+  }, [
+    setChannels,
+    setGlobalChannels,
+    setError,
+    setIsLoading,
+    customFeeds,
+    globalChannels.length,
+  ]);
 };

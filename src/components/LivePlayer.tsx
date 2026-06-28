@@ -26,7 +26,7 @@ export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { channels, removeChannel } = usePlayerStore();
+  const { channels, globalChannels, removeChannel } = usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -90,10 +90,16 @@ export const LivePlayer: React.FC = () => {
 
   // Get current channel object from store
   const { showUnstableChannels } = usePlayerStore();
-  const currentChannelObj = channels.find((c) => c.id === streamId);
+  // Determine if we are in "Global Surf" mode by checking if the streamId is in globalChannels but NOT in curated channels
+  const isGlobalSurfMode =
+    !channels.find((c) => c.id === streamId) &&
+    globalChannels.some((c) => c.id === streamId);
+  const activeChannelList = isGlobalSurfMode ? globalChannels : channels;
+
+  const currentChannelObj = activeChannelList.find((c) => c.id === streamId);
 
   // Get visible channels based on filters
-  const visibleChannels = channels.filter((c) => {
+  const visibleChannels = activeChannelList.filter((c) => {
     if (!showUnstableChannels && c.isUnstable) return false;
     if (regionFilter === "ALL") return true;
     if (regionFilter === "REGIONAL") return c.isRegional;
@@ -147,24 +153,19 @@ export const LivePlayer: React.FC = () => {
           setIsBuffering(false);
           hls.destroy();
 
-          let errorMsg = "Stream is currently offline or unavailable.";
-          switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              errorMsg = "Stream offline or blocked by CORS.";
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              errorMsg = "Stream format is incompatible or broken.";
-              break;
-          }
-
-          if (nextChannel) {
-            // Silently remove the broken channel and instantly skip to the next
+          if (nextChannel && nextChannel.id !== streamId) {
+            // "Tuning..." logic: Instead of an ugly error, just show buffering/tuning animation
+            // and skip to the next channel seamlessly
+            setError("TUNING"); // Magic string to show the tuning UI instead of red error box
             removeChannel(streamId!);
             setTimeout(() => {
               navigate(`/live/${nextChannel.id}`, { replace: true });
-            }, 100);
+              setError(null);
+              setIsBuffering(true);
+            }, 1500); // 1.5s delay to simulate TV channel zapping
           } else {
-            setError(`${errorMsg} You may need a VPN or the channel is dead.`);
+            setError("TUNING");
+            setTimeout(() => navigate("/dashboard", { replace: true }), 2000);
           }
         }
       });
@@ -174,16 +175,17 @@ export const LivePlayer: React.FC = () => {
       video.addEventListener("loadedmetadata", () => video.play());
       video.addEventListener("error", () => {
         setIsBuffering(false);
-        if (nextChannel) {
-          // Silently remove the broken channel and instantly skip to the next
+        if (nextChannel && nextChannel.id !== streamId) {
+          setError("TUNING");
           removeChannel(streamId!);
           setTimeout(() => {
             navigate(`/live/${nextChannel.id}`, { replace: true });
-          }, 100);
+            setError(null);
+            setIsBuffering(true);
+          }, 1500);
         } else {
-          setError(
-            "Stream offline or blocked by CORS. You may need a VPN or the channel is dead.",
-          );
+          setError("TUNING");
+          setTimeout(() => navigate("/dashboard", { replace: true }), 2000);
         }
       });
     }
@@ -265,208 +267,215 @@ export const LivePlayer: React.FC = () => {
             ref={containerRef}
             className="relative bg-black rounded-xl overflow-hidden aspect-video shadow-2xl ring-1 ring-slate-800 group"
           >
-            {error ? (
-              <div className="absolute inset-0 flex items-center justify-center flex-col gap-4 text-slate-400 bg-slate-900/80 px-8 text-center">
-                <div className="w-20 h-20 rounded-full bg-slate-800/80 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-                  <Radio className="w-10 h-10 text-red-500/80 animate-pulse" />
-                </div>
-                <div>
-                  <p className="text-xl font-bold text-white mb-2">
-                    Stream Unavailable
-                  </p>
-                  <p className="text-sm max-w-md mx-auto text-red-300 bg-red-500/10 p-3 rounded border border-red-500/20">
-                    {error}
-                  </p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="mt-6 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors"
-                  >
-                    Try Again
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <video
-                  ref={videoRef}
-                  className="w-full h-full object-contain"
-                  onPlay={() => setIsPlaying(true)}
-                  onPause={() => setIsPlaying(false)}
-                  onWaiting={() => setIsBuffering(true)}
-                  onPlaying={() => setIsBuffering(false)}
-                />
-
-                {isBuffering && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none">
-                    <Loader2 className="w-12 h-12 text-white animate-spin" />
+            {/* Error / Tuning Overlay */}
+            {error && (
+              <div className="absolute inset-0 z-30 flex items-center justify-center bg-black">
+                {error === "TUNING" ? (
+                  <div className="flex flex-col items-center gap-6">
+                    <div className="relative w-32 h-32 md:w-48 md:h-48 overflow-hidden rounded-2xl ring-4 ring-white/10">
+                      {/* TV Static Noise Effect */}
+                      <div className="absolute inset-0 opacity-40 mix-blend-screen bg-[url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Static_noise.gif')] bg-cover" />
+                      <div className="absolute inset-0 bg-blue-500/20 mix-blend-overlay animate-pulse" />
+                    </div>
+                    <p className="text-white font-mono text-xl md:text-2xl tracking-[0.2em] animate-pulse">
+                      TUNING...
+                    </p>
                   </div>
-                )}
-
-                {/* Idle Warning Overlay */}
-                {showIdleWarning && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-50 p-6 text-center">
-                    <h2 className="text-3xl font-bold mb-4">
-                      Are you still watching?
-                    </h2>
-                    <p className="text-slate-300 mb-8 max-w-md">
-                      Playback has been paused to save data. Click the button
-                      below to resume the live stream.
+                ) : (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 md:p-8 max-w-md mx-auto text-center backdrop-blur-md">
+                    <p className="text-red-400 font-medium mb-6 leading-relaxed">
+                      {error}
                     </p>
                     <button
-                      onClick={() => {
-                        setShowIdleWarning(false);
-                        resetIdleTimer();
-                        if (videoRef.current) {
-                          videoRef.current.play();
-                          setIsPlaying(true);
-                        }
-                      }}
-                      className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full font-semibold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+                      onClick={() => window.location.reload()}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold transition-colors shadow-lg"
                     >
-                      Yes, keep watching
+                      Try Again
                     </button>
                   </div>
                 )}
+              </div>
+            )}
+            <>
+              <video
+                ref={videoRef}
+                className="w-full h-full object-contain"
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onWaiting={() => setIsBuffering(true)}
+                onPlaying={() => setIsBuffering(false)}
+              />
 
-                {/* Tipping Toast */}
-                {showTipThanks && (
-                  <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full shadow-2xl font-bold flex items-center gap-2 animate-bounce z-50 border border-white/20">
-                    <HeartHandshake className="w-5 h-5 text-yellow-300" />
-                    <span>$5.00 Tipped to Broadcaster! (Demo)</span>
+              {isBuffering && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none">
+                  <Loader2 className="w-12 h-12 text-white animate-spin" />
+                </div>
+              )}
+
+              {/* Idle Warning Overlay */}
+              {showIdleWarning && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-50 p-6 text-center">
+                  <h2 className="text-3xl font-bold mb-4">
+                    Are you still watching?
+                  </h2>
+                  <p className="text-slate-300 mb-8 max-w-md">
+                    Playback has been paused to save data. Click the button
+                    below to resume the live stream.
+                  </p>
+                  <button
+                    onClick={() => {
+                      setShowIdleWarning(false);
+                      resetIdleTimer();
+                      if (videoRef.current) {
+                        videoRef.current.play();
+                        setIsPlaying(true);
+                      }
+                    }}
+                    className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full font-semibold transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+                  >
+                    Yes, keep watching
+                  </button>
+                </div>
+              )}
+
+              {/* Tipping Toast */}
+              {showTipThanks && (
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 py-3 rounded-full shadow-2xl font-bold flex items-center gap-2 animate-bounce z-50 border border-white/20">
+                  <HeartHandshake className="w-5 h-5 text-yellow-300" />
+                  <span>$5.00 Tipped to Broadcaster! (Demo)</span>
+                </div>
+              )}
+
+              {/* Top Right Overlays */}
+              <div className="absolute top-4 right-4 flex items-center gap-4 z-10 transition-opacity duration-300">
+                {isMuted && (
+                  <div
+                    className="bg-black/50 p-2 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleMute();
+                    }}
+                  >
+                    <VolumeX className="w-6 h-6 text-white" />
                   </div>
                 )}
+                <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors">
+                  <PictureInPicture className="w-6 h-6 text-white" />
+                </div>
+              </div>
 
-                {/* Top Right Overlays */}
-                <div className="absolute top-4 right-4 flex items-center gap-4 z-10 transition-opacity duration-300">
-                  {isMuted && (
-                    <div
-                      className="bg-black/50 p-2 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors"
+              {/* Custom Controls Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end pointer-events-auto pb-2">
+                {/* Timeline / Progress Bar */}
+                <div className="px-6 w-full flex items-center gap-4 mb-2 group/timeline cursor-pointer">
+                  <div className="text-red-500 font-bold text-sm tracking-wider flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                    LIVE
+                  </div>
+
+                  <div className="flex-1 relative h-1.5 bg-white/20 rounded-full overflow-hidden group-hover/timeline:h-2 transition-all">
+                    <div className="absolute inset-y-0 left-0 w-full bg-red-500" />
+                    {/* Fake Chapter Markers */}
+                    <div className="absolute inset-0 flex justify-between items-center px-[20%]">
+                      <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
+                      <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
+                      <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
+                    </div>
+                  </div>
+
+                  <div className="text-white font-medium text-sm font-mono">
+                    -00:07
+                  </div>
+                </div>
+
+                {/* Controls Row */}
+                <div className="px-4 flex items-center justify-between">
+                  {/* Left Controls */}
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        togglePlay();
+                      }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                    >
+                      {isPlaying ? (
+                        <Pause className="w-6 h-6 text-white fill-white" />
+                      ) : (
+                        <Play className="w-6 h-6 text-white fill-white" />
+                      )}
+                    </button>
+
+                    <button className="relative flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors group/btn">
+                      <RotateCcw className="w-6 h-6 text-white" />
+                      <span className="absolute text-[9px] font-bold mt-1 text-white">
+                        10
+                      </span>
+                    </button>
+
+                    <button className="relative flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors group/btn">
+                      <RotateCw className="w-6 h-6 text-white" />
+                      <span className="absolute text-[9px] font-bold mt-1 text-white">
+                        10
+                      </span>
+                    </button>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (nextChannel) handleChannelChange(nextChannel.id);
+                      }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                      title="Next Channel"
+                    >
+                      <SkipForward className="w-6 h-6 text-white fill-white" />
+                    </button>
+
+                    <button
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleMute();
                       }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
                     >
-                      <VolumeX className="w-6 h-6 text-white" />
-                    </div>
-                  )}
-                  <div className="bg-black/50 p-2 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors">
-                    <PictureInPicture className="w-6 h-6 text-white" />
+                      {isMuted ? (
+                        <VolumeX className="w-6 h-6 text-white" />
+                      ) : (
+                        <Volume2 className="w-6 h-6 text-white" />
+                      )}
+                    </button>
                   </div>
-                </div>
 
-                {/* Custom Controls Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end pointer-events-auto pb-2">
-                  {/* Timeline / Progress Bar */}
-                  <div className="px-6 w-full flex items-center gap-4 mb-2 group/timeline cursor-pointer">
-                    <div className="text-red-500 font-bold text-sm tracking-wider flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      LIVE
-                    </div>
+                  {/* Right Controls */}
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                      <Share2 className="w-5 h-5 text-white" />
+                    </button>
 
-                    <div className="flex-1 relative h-1.5 bg-white/20 rounded-full overflow-hidden group-hover/timeline:h-2 transition-all">
-                      <div className="absolute inset-y-0 left-0 w-full bg-red-500" />
-                      {/* Fake Chapter Markers */}
-                      <div className="absolute inset-0 flex justify-between items-center px-[20%]">
-                        <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
-                        <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
-                        <div className="w-3 h-3 bg-white rounded-sm shadow border border-slate-300 z-10 hover:scale-150 transition-transform" />
+                    <button className="p-2 hover:bg-white/10 rounded-full transition-colors border-b-2 border-red-500 rounded-b-none">
+                      <Subtitles className="w-5 h-5 text-white" />
+                    </button>
+
+                    <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
+                      <Settings className="w-6 h-6 text-white" />
+                      <div className="absolute top-0 right-0 bg-red-600 text-[8px] font-bold px-1 rounded-sm text-white">
+                        HD
                       </div>
-                    </div>
+                    </button>
 
-                    <div className="text-white font-medium text-sm font-mono">
-                      -00:07
-                    </div>
-                  </div>
-
-                  {/* Controls Row */}
-                  <div className="px-4 flex items-center justify-between">
-                    {/* Left Controls */}
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          togglePlay();
-                        }}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                      >
-                        {isPlaying ? (
-                          <Pause className="w-6 h-6 text-white fill-white" />
-                        ) : (
-                          <Play className="w-6 h-6 text-white fill-white" />
-                        )}
-                      </button>
-
-                      <button className="relative flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors group/btn">
-                        <RotateCcw className="w-6 h-6 text-white" />
-                        <span className="absolute text-[9px] font-bold mt-1 text-white">
-                          10
-                        </span>
-                      </button>
-
-                      <button className="relative flex items-center justify-center p-2 hover:bg-white/10 rounded-full transition-colors group/btn">
-                        <RotateCw className="w-6 h-6 text-white" />
-                        <span className="absolute text-[9px] font-bold mt-1 text-white">
-                          10
-                        </span>
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (nextChannel) handleChannelChange(nextChannel.id);
-                        }}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                        title="Next Channel"
-                      >
-                        <SkipForward className="w-6 h-6 text-white fill-white" />
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleMute();
-                        }}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
-                      >
-                        {isMuted ? (
-                          <VolumeX className="w-6 h-6 text-white" />
-                        ) : (
-                          <Volume2 className="w-6 h-6 text-white" />
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Right Controls */}
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
-                        <Share2 className="w-5 h-5 text-white" />
-                      </button>
-
-                      <button className="p-2 hover:bg-white/10 rounded-full transition-colors border-b-2 border-red-500 rounded-b-none">
-                        <Subtitles className="w-5 h-5 text-white" />
-                      </button>
-
-                      <button className="relative p-2 hover:bg-white/10 rounded-full transition-colors">
-                        <Settings className="w-6 h-6 text-white" />
-                        <div className="absolute top-0 right-0 bg-red-600 text-[8px] font-bold px-1 rounded-sm text-white">
-                          HD
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFullScreen();
-                        }}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
-                      >
-                        <Maximize className="w-6 h-6 text-white" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFullScreen();
+                      }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
+                    >
+                      <Maximize className="w-6 h-6 text-white" />
+                    </button>
                   </div>
                 </div>
-              </>
-            )}
+              </div>
+            </>
           </div>
 
           {/* Bottom Info Section (Matching ARD Screenshot) */}

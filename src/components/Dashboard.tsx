@@ -53,6 +53,7 @@ export const Dashboard: React.FC = () => {
 
   const {
     channels,
+    globalChannels,
     currentChannel,
     searchQuery,
     setSearchQuery,
@@ -84,17 +85,12 @@ export const Dashboard: React.FC = () => {
     if (tab === "kids") {
       setKidsMode(true);
       setCurrentTab("home");
-    } else if (tab === "live") {
-      if (currentChannel) {
-        navigate(`/live/${currentChannel.id}`);
-      } else if (VERIFIED_RELIABLE_CHANNELS.length > 0) {
-        navigate(`/live/${VERIFIED_RELIABLE_CHANNELS[0].id}`);
-      } else if (channels.length > 0) {
-        navigate(`/live/${channels[0].id}`);
+    } else if (tab === "surf") {
+      if (globalChannels && globalChannels.length > 0) {
+        navigate(`/live/${globalChannels[0].id}`);
       } else {
         setKidsMode(false);
         setCurrentTab("home");
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else {
       setKidsMode(false);
@@ -418,17 +414,17 @@ export const Dashboard: React.FC = () => {
             <button
               data-focusable="true"
               onClick={() => {
-                handleTabSwitch("live");
+                handleTabSwitch("surf");
                 setIsSidebarOpen(false);
               }}
               className={cn(
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
-                currentTab === "live"
+                currentTab === "surf"
                   ? "bg-blue-600/10 text-blue-500"
                   : "text-slate-300 hover:bg-slate-900 hover:text-white",
               )}
             >
-              <MonitorPlay className="w-5 h-5" /> Live & TV
+              <MonitorPlay className="w-5 h-5" /> Global Surf
             </button>
           </div>
 

@@ -10,6 +10,7 @@ import {
 
 interface StoreState extends PlayerState, PlaylistState {
   setChannels: (channels: Channel[]) => void;
+  setGlobalChannels: (channels: Channel[]) => void;
   setCurrentChannel: (channel: Channel | null) => void;
   removeChannel: (channelId: string) => void;
   playNextChannel: () => void;
@@ -44,6 +45,7 @@ export const usePlayerStore = create<StoreState>()(
   persist(
     (set, get) => ({
       channels: [],
+      globalChannels: [],
       groups: [],
       currentChannel: null,
       currentPlaylist: [],
@@ -70,6 +72,7 @@ export const usePlayerStore = create<StoreState>()(
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
         set({ channels, groups: ["All", ...groups] });
       },
+      setGlobalChannels: (channels) => set({ globalChannels: channels }),
       removeChannel: (channelId) => {
         set((state) => {
           const newChannels = state.channels.filter((c) => c.id !== channelId);
