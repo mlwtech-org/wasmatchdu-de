@@ -100,11 +100,27 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent">
                   {channel.logo ? (
-                    <img
-                      src={channel.logo}
-                      alt={channel.name}
-                      className="w-20 h-20 object-contain drop-shadow-2xl transform transition-transform group-hover/card:scale-110 mb-2"
-                    />
+                    <>
+                      <img
+                        src={channel.logo}
+                        alt={channel.name}
+                        className="w-20 h-20 object-contain drop-shadow-2xl transform transition-transform group-hover/card:scale-110 mb-2"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                          if (e.currentTarget.nextElementSibling) {
+                            (
+                              e.currentTarget.nextElementSibling as HTMLElement
+                            ).style.display = "flex";
+                          }
+                        }}
+                      />
+                      <div
+                        className="hidden items-center justify-center mb-2"
+                        style={{ width: "5rem", height: "5rem" }}
+                      >
+                        <Tv className="w-16 h-16 text-slate-500" />
+                      </div>
+                    </>
                   ) : (
                     <Tv className="w-16 h-16 text-slate-500 mb-2" />
                   )}

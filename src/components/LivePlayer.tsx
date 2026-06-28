@@ -13,6 +13,7 @@ import {
   HeartHandshake,
   Tv,
   SkipForward,
+  SkipBack,
   RotateCcw,
   RotateCw,
   Share2,
@@ -112,6 +113,10 @@ export const LivePlayer: React.FC = () => {
     currentIndex !== -1 && currentIndex + 1 < visibleChannels.length
       ? visibleChannels[currentIndex + 1]
       : visibleChannels[0];
+  const prevChannel =
+    currentIndex !== -1 && currentIndex - 1 >= 0
+      ? visibleChannels[currentIndex - 1]
+      : visibleChannels[visibleChannels.length - 1];
 
   // Get other channels for the sidebar
   const otherChannels = visibleChannels
@@ -423,6 +428,17 @@ export const LivePlayer: React.FC = () => {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (prevChannel) handleChannelChange(prevChannel.id);
+                      }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                      title="Previous Channel"
+                    >
+                      <SkipBack className="w-6 h-6 text-white fill-white" />
+                    </button>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
                         if (nextChannel) handleChannelChange(nextChannel.id);
                       }}
                       className="p-2 hover:bg-white/10 rounded-full transition-colors"
@@ -482,11 +498,24 @@ export const LivePlayer: React.FC = () => {
           <div className="mt-4 flex gap-6 items-start bg-slate-900/40 p-6 rounded-xl border border-slate-800/50">
             <div className="w-20 h-20 shrink-0 bg-[#0f172a] rounded-lg flex items-center justify-center p-3 border border-slate-700">
               {currentChannelObj?.logo ? (
-                <img
-                  src={currentChannelObj.logo}
-                  alt=""
-                  className="w-full h-full object-contain"
-                />
+                <>
+                  <img
+                    src={currentChannelObj.logo}
+                    alt=""
+                    className="w-full h-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                      if (e.currentTarget.nextElementSibling) {
+                        (
+                          e.currentTarget.nextElementSibling as HTMLElement
+                        ).style.display = "flex";
+                      }
+                    }}
+                  />
+                  <div className="hidden items-center justify-center w-full h-full">
+                    <Tv className="w-8 h-8 text-slate-500" />
+                  </div>
+                </>
               ) : (
                 <Tv className="w-8 h-8 text-slate-500" />
               )}
@@ -603,12 +632,28 @@ export const LivePlayer: React.FC = () => {
                     }`}
                   >
                     {channel.logo ? (
-                      <img
-                        src={channel.logo}
-                        alt=""
-                        className="w-full h-full object-contain"
-                        loading="lazy"
-                      />
+                      <>
+                        <img
+                          src={channel.logo}
+                          alt=""
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                            if (e.currentTarget.nextElementSibling) {
+                              (
+                                e.currentTarget
+                                  .nextElementSibling as HTMLElement
+                              ).style.display = "flex";
+                            }
+                          }}
+                        />
+                        <div className="hidden items-center justify-center w-full h-full">
+                          <Tv
+                            className={`w-6 h-6 ${isActive ? "text-blue-400" : "text-slate-400"}`}
+                          />
+                        </div>
+                      </>
                     ) : (
                       <Tv
                         className={`w-6 h-6 ${isActive ? "text-blue-400" : "text-slate-400"}`}

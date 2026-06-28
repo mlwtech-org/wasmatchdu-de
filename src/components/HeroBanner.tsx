@@ -107,6 +107,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             src={activeChannel.logo}
             alt={activeChannel.name}
             className="w-full h-full object-cover opacity-30 md:opacity-20 scale-105 transform transition-transform duration-[15000ms] ease-out group-hover:scale-110 blur-2xl absolute inset-0 -z-10"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
           />
         ) : (
           <div className="w-full h-full bg-slate-900 absolute inset-0 -z-10" />
@@ -136,12 +139,19 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                 src={activeChannel.logo}
                 alt={activeChannel.name}
                 className="max-w-[280px] md:max-w-[360px] max-h-[140px] object-contain mb-6 drop-shadow-2xl"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                  const nextEl = e.currentTarget
+                    .nextElementSibling as HTMLElement;
+                  if (nextEl) nextEl.style.display = "block";
+                }}
               />
-            ) : (
-              <h1 className="text-5xl md:text-7xl font-black text-white mb-6 drop-shadow-2xl leading-tight tracking-tight">
-                {activeChannel.name}
-              </h1>
-            )}
+            ) : null}
+            <h1
+              className={`text-5xl md:text-7xl font-black text-white mb-6 leading-tight drop-shadow-2xl ${activeChannel.logo ? "hidden" : "block"}`}
+            >
+              {activeChannel.name}
+            </h1>
 
             <p className="text-lg md:text-xl text-slate-300 mb-8 line-clamp-3 leading-relaxed drop-shadow-md max-w-xl">
               {activeChannel.name} is streaming live now. Join the broadcast and
