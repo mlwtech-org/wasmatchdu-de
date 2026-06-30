@@ -25,10 +25,11 @@ async function checkStream(url) {
     const isHttps = url.startsWith('https');
     const client = isHttps ? https : http;
 
-    const req = client.request(url, { method: 'HEAD', timeout: TIMEOUT_MS }, (res) => {
+    const req = client.request(url, { method: 'GET', timeout: TIMEOUT_MS }, (res) => {
       // Check if it's successful and has CORS headers
       const cors = res.headers['access-control-allow-origin'];
-      if (res.statusCode >= 200 && res.statusCode < 400 && cors === '*') {
+      req.destroy(); // Abort the request so we don't download the stream
+      if (res.statusCode >= 200 && res.statusCode < 400 && cors) {
         resolve(true);
       } else {
         resolve(false);
@@ -54,7 +55,7 @@ async function validateStreams() {
   console.log(`Found ${channels.length} channels and ${streams.length} streams.`);
 
   // Combine and map
-  const activeStreams = streams.filter((s) => s.status === "online");
+  const activeStreams = streams.filter((s) => s.url && s.channel);
   
   // For a real production app, checking 10,000 streams takes time.
   // We'll process in batches.

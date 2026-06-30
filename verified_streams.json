@@ -1,1 +1,443 @@
-[]
+[
+  {
+    "id": "1AlmereTV.nl",
+    "name": "1AlmereTV",
+    "url": "https://d3472rjicrodic.cloudfront.net/nlpo/clr-nlpo/709d5260/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1KZNTV.za",
+    "name": "1KZN TV",
+    "url": "https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "1Plus1International.ua",
+    "name": "1+1 International",
+    "url": "https://dash2.antik.sk/live/test_one_plus_one_int_tizen/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1Plus1Marafon.ua",
+    "name": "1+1 Marafon",
+    "url": "https://dash2.antik.sk/live/1plus1_marathon/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1TV.ge",
+    "name": "1TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1TwenteTV.nl",
+    "name": "1Twente TV",
+    "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2GB.au",
+    "name": "2GB",
+    "url": "https://2gblive.akamaized.net/hls/live/2033805/2GB/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "2M.ma",
+    "name": "2M",
+    "url": "https://stream-lb.livemediama.com/2m-tnt/hls/master.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2M.ma",
+    "name": "2M",
+    "url": "http://185.9.2.18/chid_218/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2MMonde.ma",
+    "name": "2M Monde",
+    "url": "https://stream-lb.livemediama.com/2m/hls/master.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2Plus2.ua",
+    "name": "2+2",
+    "url": "http://315e5a5d.ottrast.com/iptv/MM4E93NGF5LADZ/6378/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2TV.ge",
+    "name": "2 TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
+    "url": "http://31.148.48.15/2x2/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
+    "url": "https://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNCanada.ca",
+    "name": "3ABN Canada",
+    "url": "https://3abn.bozztv.com/3abncanada/3ABN/master.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNEnglish.us",
+    "name": "3ABN English",
+    "url": "https://3abn.bozztv.com/3abn2/3abn_live/smil:3abn_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNFrench.us",
+    "name": "3ABN French",
+    "url": "https://3abn.bozztv.com/3abn2/Fre_live/smil:Fre_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNInternational.us",
+    "name": "3ABN International",
+    "url": "https://3abn.bozztv.com/3abn2/Int_live/smil:Int_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNKids.us",
+    "name": "3ABN Kids",
+    "url": "https://3abn.bozztv.com/3abn2/Kids_live/smil:Kids_live.smil/playlist.m3u8",
+    "group": "kids",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNLatino.us",
+    "name": "3ABN Latino",
+    "url": "https://3abn.bozztv.com/3abn2/Lat_live/smil:Lat_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNPraiseHimMusicNetwork.us",
+    "name": "3ABN Praise Him Music Network",
+    "url": "https://3abn.bozztv.com/3abn1/PraiseHim/smil:PraiseHim.smil/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNProclaimNetwork.us",
+    "name": "3ABN Proclaim! Network",
+    "url": "https://3abn.bozztv.com/3abn2/Pro_live/smil:Pro_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNRussia.ru",
+    "name": "3ABN Russia",
+    "url": "https://hls.tv.3angels.ru/stream.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNRussia.ru",
+    "name": "3ABN Russia",
+    "url": "https://3abn.bozztv.com/3abn2/Rus_live/smil:Rus_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3AW.au",
+    "name": "3AW",
+    "url": "https://3awlive.akamaized.net/hls/live/2032295/3AW/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "3CatCameresdeltemps.es",
+    "name": "3Cat Cameres del temps",
+    "url": "https://directes-tv-int.3catdirectes.cat/live-content/beauties-hls/master.m3u8",
+    "group": "public",
+    "isRegional": false
+  },
+  {
+    "id": "3CatInfo.es",
+    "name": "3CatInfo",
+    "url": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "3sat.de",
+    "name": "3sat",
+    "url": "http://41.223.30.230/3SAT/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "3sat.de",
+    "name": "3sat",
+    "url": "http://41.205.77.102/3SAT/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "3sat.de",
+    "name": "3sat",
+    "url": "https://zdf-hls-18.akamaized.net/hls/live/2016501/dach/high/master.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4everCinema.ua",
+    "name": "4ever Cinema",
+    "url": "https://iptv.prosto.tv/ch42/index.m3u8",
+    "group": "movies",
+    "isRegional": false
+  },
+  {
+    "id": "4everDrama.ua",
+    "name": "4ever Drama",
+    "url": "https://iptv.prosto.tv/ch49/index.m3u8",
+    "group": "series",
+    "isRegional": false
+  },
+  {
+    "id": "4everMusic.ua",
+    "name": "4ever Music",
+    "url": "https://iptv.prosto.tv/ch132/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4everTheater.ua",
+    "name": "4ever Theater",
+    "url": "https://iptv.prosto.tv/ch37/tracks-v2a1/mono.m3u8?21yo=0&e=1783680395&id=922996&ip=178.136.40.86&live=1&secret=yamxdzwl&st=OWDBi-vxSZADl0oF8lHHxw",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "4FunKids.pl",
+    "name": "4 Fun Kids",
+    "url": "https://stream.4fun.tv:8889/hls/4fk_high/index.m3u8",
+    "group": "kids",
+    "isRegional": false
+  },
+  {
+    "id": "4FunTV.pl",
+    "name": "4 Fun TV",
+    "url": "https://stream.4fun.tv:8888/hls/4f_high/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4FunTV.pl",
+    "name": "4 Fun TV",
+    "url": "https://stream.4fun.tv:8888/hls/4f.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4Kurd.fr",
+    "name": "4Kurd",
+    "url": "https://4kuhls.persiana.live/hls/stream.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4Music.fr",
+    "name": "4 Music",
+    "url": "https://musichls.persiana.live/hls/stream.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4seven.uk",
+    "name": "4seven",
+    "url": "https://adpnetworkhd-cmd.github.io/iptv/4Seven.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "4TVNews.in",
+    "name": "4TV News",
+    "url": "https://cdn-4.pishow.tv/live/1007/master.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "4UTV.tr",
+    "name": "4U TV",
+    "url": "https://hls.4utv.live/hls/stream.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5AABTV.ca",
+    "name": "5AAB TV",
+    "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5SELECT.uk",
+    "name": "5SELECT",
+    "url": "https://adpnetworkhd-cmd.github.io/iptv/5Select.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5STAR.uk",
+    "name": "5STAR",
+    "url": "https://adpnetworkhd-cmd.github.io/iptv/5Star.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "6PR.au",
+    "name": "6PR",
+    "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "6TVTelugu.in",
+    "name": "6 TV Telugu",
+    "url": "https://cdn-1.pishow.tv/live/232/master.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "6WiseTv.us",
+    "name": "6 Wise Tv",
+    "url": "https://live.enhdtv.com:8081/8150/index.m3u8",
+    "group": "family",
+    "isRegional": false
+  },
+  {
+    "id": "7Info.ci",
+    "name": "7 Info",
+    "url": "https://video1.getstreamhosting.com:1936/8042/8042/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "7RadioVisione.it",
+    "name": "7 RadioVisione",
+    "url": "https://stream10.xdevel.com/video1s976543-1932/stream/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "7SMusic.in",
+    "name": "7S Music",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H7SMUSIC/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "7TV.hu",
+    "name": "7.TV",
+    "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "7YOUME.it",
+    "name": "7 YOU & ME",
+    "url": "https://stream10.xdevel.com/video0s977798-2239/stream/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "8NTV.mx",
+    "name": "8NTV",
+    "url": "https://60417ddeaf0d9.streamlock.net/ntv/videontv/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "9XJalwa.in",
+    "name": "9X Jalwa",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJALWA/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
+    "url": "https://cdn-3.pishow.tv/live/6/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XM.in",
+    "name": "9XM",
+    "url": "https://9xjio.wiseplayout.com/9XM/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  }
+]
