@@ -1,17 +1,27 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Play, Plus, ChevronLeft, ChevronRight, Radio } from "lucide-react";
+import { usePlayerStore } from "../store/usePlayerStore";
 import { Channel } from "../types";
 import { FALLBACK_CHANNELS } from "../lib/constants";
 import Hls from "hls.js";
 
 // ─── Curated premium channels always shown in the hero ───────────────────────
 // These are hand-picked known-good channels with logos and descriptions.
-const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string; accentFrom: string; accentTo: string; textAccent: string }> = [
+const PREMIUM_FEATURED: Array<
+  Channel & {
+    headline: string;
+    description: string;
+    accentFrom: string;
+    accentTo: string;
+    textAccent: string;
+  }
+> = [
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-aljazeera")!,
     headline: "World News · Live",
-    description: "Breaking stories from across the globe — on-the-ground reporting from 70+ bureaus worldwide, 24 hours a day.",
+    description:
+      "Breaking stories from across the globe — on-the-ground reporting from 70+ bureaus worldwide, 24 hours a day.",
     accentFrom: "#1a2e4a",
     accentTo: "#0f172a",
     textAccent: "#38bdf8",
@@ -19,7 +29,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-dw")!,
     headline: "International · Live",
-    description: "Germany's international broadcaster delivering news, culture and politics from a European perspective.",
+    description:
+      "Germany's international broadcaster delivering news, culture and politics from a European perspective.",
     accentFrom: "#1a1f2e",
     accentTo: "#0f172a",
     textAccent: "#818cf8",
@@ -27,7 +38,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-redbull-tv")!,
     headline: "Sports & Action · Live",
-    description: "Motorsport, extreme sports, music festivals and live events — experience the rush of Red Bull TV.",
+    description:
+      "Motorsport, extreme sports, music festivals and live events — experience the rush of Red Bull TV.",
     accentFrom: "#2d1010",
     accentTo: "#0f172a",
     textAccent: "#f87171",
@@ -35,7 +47,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-france24-en")!,
     headline: "Global News · Live",
-    description: "International news in English with a French perspective — reporting from Paris to every corner of the world.",
+    description:
+      "International news in English with a French perspective — reporting from Paris to every corner of the world.",
     accentFrom: "#1a2a1a",
     accentTo: "#0f172a",
     textAccent: "#4ade80",
@@ -43,7 +56,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-nasa-tv")!,
     headline: "Science & Space · Live",
-    description: "NASA Television — launches, spacewalks, ISS operations, and discoveries from the frontiers of human exploration.",
+    description:
+      "NASA Television — launches, spacewalks, ISS operations, and discoveries from the frontiers of human exploration.",
     accentFrom: "#0d1a2e",
     accentTo: "#0f172a",
     textAccent: "#60a5fa",
@@ -51,7 +65,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-bloomberg")!,
     headline: "Business & Markets · Live",
-    description: "Real-time markets, finance news, and in-depth analysis of global economics and business trends.",
+    description:
+      "Real-time markets, finance news, and in-depth analysis of global economics and business trends.",
     accentFrom: "#1a2a20",
     accentTo: "#0f172a",
     textAccent: "#34d399",
@@ -59,7 +74,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-sky")!,
     headline: "Breaking News · Live",
-    description: "Sky News — trusted around-the-clock news coverage from the UK and around the world.",
+    description:
+      "Sky News — trusted around-the-clock news coverage from the UK and around the world.",
     accentFrom: "#1a1a2e",
     accentTo: "#0f172a",
     textAccent: "#a78bfa",
@@ -67,7 +83,8 @@ const PREMIUM_FEATURED: Array<Channel & { headline: string; description: string;
   {
     ...FALLBACK_CHANNELS.find((c) => c.id === "verified-euronews-en")!,
     headline: "Europe & World · Live",
-    description: "Europe's most watched international news channel — reporting in multiple languages across 160 countries.",
+    description:
+      "Europe's most watched international news channel — reporting in multiple languages across 160 countries.",
     accentFrom: "#2a1a10",
     accentTo: "#0f172a",
     textAccent: "#fb923c",
@@ -80,13 +97,14 @@ interface HeroBannerProps {
 
 const AUTO_ROTATE_MS = 10_000;
 
-export const HeroBanner: React.FC<HeroBannerProps> = ({
-  featuredChannels,
-}) => {
+export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
+  const setCurrentPlaylist = usePlayerStore(
+    (state) => state.setCurrentPlaylist,
+  );
   const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const rotateTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -94,7 +112,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   // Use premium curated channels first; fall back to passed channels if needed
-  const channels = PREMIUM_FEATURED.length >= 3 ? PREMIUM_FEATURED : (featuredChannels ?? FALLBACK_CHANNELS.slice(0, 5));
+  const channels =
+    PREMIUM_FEATURED.length >= 3
+      ? PREMIUM_FEATURED
+      : (featuredChannels ?? FALLBACK_CHANNELS.slice(0, 5));
 
   const goTo = useCallback(
     (idx: number) => {
@@ -106,7 +127,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         setIsTransitioning(false);
       }, 350);
     },
-    [isTransitioning]
+    [isTransitioning],
   );
 
   const goNext = useCallback(() => {
@@ -142,11 +163,19 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         hls.loadSource(channel.url);
         hls.attachMedia(videoRef.current);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          videoRef.current?.play().then(() => setIsVideoPlaying(true)).catch(() => setIsVideoPlaying(false));
+          videoRef.current
+            ?.play()
+            .then(() => setIsVideoPlaying(true))
+            .catch(() => setIsVideoPlaying(false));
         });
-      } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+      } else if (
+        videoRef.current.canPlayType("application/vnd.apple.mpegurl")
+      ) {
         videoRef.current.src = channel.url;
-        videoRef.current.play().then(() => setIsVideoPlaying(true)).catch(() => setIsVideoPlaying(false));
+        videoRef.current
+          .play()
+          .then(() => setIsVideoPlaying(true))
+          .catch(() => setIsVideoPlaying(false));
       }
     }
 
@@ -160,28 +189,34 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
     };
   }, [currentIndex]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const active = channels[currentIndex] as typeof PREMIUM_FEATURED[number];
+  const active = channels[currentIndex] as (typeof PREMIUM_FEATURED)[number];
   if (!active) return null;
 
   const accentFrom = active.accentFrom ?? "#1a2e4a";
   const accentTo = active.accentTo ?? "#0f172a";
   const textAccent = active.textAccent ?? "#38bdf8";
-  const headline = active.headline ?? (active.gemeinwohlCategory ?? "Live Now");
-  const description = active.description ?? `${active.name} is streaming live 24/7. Watch breaking news, analysis, and live events as they happen.`;
+  const headline = active.headline ?? active.gemeinwohlCategory ?? "Live Now";
+  const description =
+    active.description ??
+    `${active.name} is streaming live 24/7. Watch breaking news, analysis, and live events as they happen.`;
 
   return (
-    <div className="relative w-full overflow-hidden select-none" style={{ height: "clamp(420px, 62vh, 780px)" }}>
-
+    <div
+      className="relative w-full overflow-hidden select-none"
+      style={{ height: "clamp(420px, 62vh, 780px)" }}
+    >
       {/* ── Cinematic Background ─────────────────────────────────────── */}
       <div
-        className={`absolute inset-0 transition-all duration-700 ${isVideoPlaying ? 'opacity-0' : 'opacity-100'}`}
-        style={{ background: `linear-gradient(135deg, ${accentFrom} 0%, ${accentTo} 60%, #020617 100%)` }}
+        className={`absolute inset-0 transition-all duration-700 ${isVideoPlaying ? "opacity-0" : "opacity-100"}`}
+        style={{
+          background: `linear-gradient(135deg, ${accentFrom} 0%, ${accentTo} 60%, #020617 100%)`,
+        }}
       />
-      
+
       {/* Live Video Background */}
       <video
         ref={videoRef}
-        className={`absolute inset-0 w-full h-full object-cover scale-105 transition-opacity duration-1000 ${isVideoPlaying ? 'opacity-50' : 'opacity-0'}`}
+        className={`absolute inset-0 w-full h-full object-cover scale-105 transition-opacity duration-1000 ${isVideoPlaying ? "opacity-50" : "opacity-0"}`}
         muted
         playsInline
         autoPlay
@@ -217,7 +252,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       {/* ── Main Content ─────────────────────────────────────────────── */}
       <div className="relative z-20 h-full max-w-[1600px] mx-auto px-6 md:px-12 flex items-center">
         <div className="flex items-center w-full gap-8 lg:gap-16">
-
           {/* LEFT: Text content */}
           <div
             key={active.id}
@@ -232,7 +266,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               </span>
               <span
                 className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border"
-                style={{ color: textAccent, borderColor: `${textAccent}40`, background: `${textAccent}15` }}
+                style={{
+                  color: textAccent,
+                  borderColor: `${textAccent}40`,
+                  background: `${textAccent}15`,
+                }}
               >
                 <Radio className="w-3 h-3" />
                 {headline}
@@ -248,13 +286,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                   className="max-h-[70px] md:max-h-[90px] max-w-[260px] md:max-w-[340px] object-contain drop-shadow-2xl"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
-                    const fb = e.currentTarget.nextElementSibling as HTMLElement;
+                    const fb = e.currentTarget
+                      .nextElementSibling as HTMLElement;
                     if (fb) fb.style.display = "block";
                   }}
                 />
-                <h1
-                  className="hidden text-4xl md:text-6xl font-black text-white leading-tight mt-2"
-                >
+                <h1 className="hidden text-4xl md:text-6xl font-black text-white leading-tight mt-2">
                   {active.name}
                 </h1>
               </div>
@@ -272,15 +309,24 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
             {/* Action buttons */}
             <div className="flex items-center gap-3 flex-wrap">
               <button
-                onClick={() => navigate(`/live/${active.id}`)}
+                onClick={() => {
+                  setCurrentPlaylist([]);
+                  navigate(`/live/${active.id}`);
+                }}
                 className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm text-black transition-all hover:scale-105 active:scale-95 shadow-xl"
-                style={{ background: "white", boxShadow: "0 0 30px rgba(255,255,255,0.2)" }}
+                style={{
+                  background: "white",
+                  boxShadow: "0 0 30px rgba(255,255,255,0.2)",
+                }}
               >
                 <Play className="w-5 h-5 fill-black" />
                 Watch Now
               </button>
               <button
-                onClick={() => navigate(`/live/${active.id}`)}
+                onClick={() => {
+                  setCurrentPlaylist([]);
+                  navigate(`/live/${active.id}`);
+                }}
                 className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm text-white transition-all hover:scale-105 active:scale-95 border border-white/20 hover:border-white/40 backdrop-blur-md hover:bg-white/10"
                 style={{ background: "rgba(255,255,255,0.08)" }}
               >
@@ -313,7 +359,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
                     src={active.logo}
                     alt={active.name}
                     className="w-56 xl:w-72 max-h-44 object-contain drop-shadow-2xl"
-                    onError={(e) => { e.currentTarget.style.display = "none"; }}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
                   />
                 </div>
               </div>
@@ -324,7 +372,6 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
       {/* ── Bottom Controls ───────────────────────────────────────────── */}
       <div className="absolute bottom-6 left-0 right-0 z-20 max-w-[1600px] mx-auto px-6 md:px-12 flex items-end justify-between gap-4">
-
         {/* Slide indicators */}
         <div className="flex items-center gap-2">
           {channels.map((_, idx) => (
@@ -335,7 +382,8 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               style={{
                 width: idx === currentIndex ? 32 : 8,
                 height: 4,
-                background: idx === currentIndex ? textAccent : "rgba(255,255,255,0.25)",
+                background:
+                  idx === currentIndex ? textAccent : "rgba(255,255,255,0.25)",
               }}
               aria-label={`Slide ${idx + 1}`}
             >
@@ -343,7 +391,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
               {idx === currentIndex && (
                 <div
                   className="absolute inset-y-0 left-0 rounded-full transition-none"
-                  style={{ width: `${progress}%`, background: "rgba(255,255,255,0.5)" }}
+                  style={{
+                    width: `${progress}%`,
+                    background: "rgba(255,255,255,0.5)",
+                  }}
                 />
               )}
             </button>
