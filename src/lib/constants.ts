@@ -228,7 +228,7 @@ export const FALLBACK_CHANNELS: Channel[] = [
   {
     id: "verified-nasa-tv",
     name: "NASA TV",
-    url: "https://nasa-i.akamaihd.net/hls/live/253565/NASA-NHQ/master.m3u8",
+    url: "https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8",
     logo: "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/e/e5/NASA_logo.svg/1200px-NASA_logo.svg.png",
     group: "Science",
     gemeinwohlCategory: "Doku & Wissen",
