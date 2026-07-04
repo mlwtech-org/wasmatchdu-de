@@ -22,6 +22,7 @@ import {
   PictureInPicture,
 } from "lucide-react";
 import { usePlayerStore } from "../store/usePlayerStore";
+import { FALLBACK_CHANNELS } from "../lib/constants";
 
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
@@ -107,7 +108,8 @@ export const LivePlayer: React.FC = () => {
   const currentStoreChannel = usePlayerStore((state) => state.currentChannel);
   const currentChannelObj =
     activeChannelList.find((c) => c.id === streamId) ||
-    (currentStoreChannel?.id === streamId ? currentStoreChannel : undefined);
+    (currentStoreChannel?.id === streamId ? currentStoreChannel : undefined) ||
+    FALLBACK_CHANNELS.find((c) => c.id === streamId);
 
   // Get visible channels based on filters and active category alignment
   const getVisibleChannels = () => {
