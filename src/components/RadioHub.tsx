@@ -36,6 +36,7 @@ export const RadioHub: React.FC = () => {
   const {
     currentStation,
     isPlaying,
+    recentlyPlayed,
     setCurrentStation,
     setIsPlaying,
   } = useRadioStore();
@@ -81,7 +82,10 @@ export const RadioHub: React.FC = () => {
           filteredRadio = filteredRadio.filter((station) => {
             const nameLower = station.name.toLowerCase();
             const groupLower = (station.group || "").toLowerCase();
-            return keywords.some(keyword => nameLower.includes(keyword) || groupLower.includes(keyword));
+            return keywords.some(
+              (keyword) =>
+                nameLower.includes(keyword) || groupLower.includes(keyword),
+            );
           });
         }
 
@@ -89,7 +93,12 @@ export const RadioHub: React.FC = () => {
           // Strictly filter for kids radio content
           filteredRadio = filteredRadio.filter((station) => {
             const nameLower = station.name.toLowerCase();
-            return nameLower.includes("kids") || nameLower.includes("child") || nameLower.includes("disney") || nameLower.includes("cartoon");
+            return (
+              nameLower.includes("kids") ||
+              nameLower.includes("child") ||
+              nameLower.includes("disney") ||
+              nameLower.includes("cartoon")
+            );
           });
         }
 
@@ -188,9 +197,9 @@ export const RadioHub: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => {
-                       setCurrentStation(station);
-                       setIsPlaying(true);
-                       usePlayerStore.getState().setCurrentChannel(null); // Pause TV
+                      setCurrentStation(station);
+                      setIsPlaying(true);
+                      usePlayerStore.getState().setCurrentChannel(null); // Pause TV
                     }}
                     className={`flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 border ${
                       currentStation?.url === station.url
@@ -206,14 +215,15 @@ export const RadioHub: React.FC = () => {
                           className={`w-full h-full object-contain ${currentStation?.url === station.url && isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}`}
                           loading="lazy"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
+                            (e.target as HTMLImageElement).src =
+                              `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
                             (e.target as HTMLImageElement).onerror = null;
                           }}
                         />
                       ) : (
                         <Radio className="w-8 h-8 text-slate-600" />
                       )}
-                      
+
                       {/* Play overlay on hover */}
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-full backdrop-blur-sm">
                         {currentStation?.url === station.url && isPlaying ? (
@@ -235,46 +245,57 @@ export const RadioHub: React.FC = () => {
             )}
           </div>
 
-          {/* RIGHT SIDE: STATIONS GRID */}
+          {/* RIGHT SIDE: RECENTLY PLAYED */}
           <div className="w-full lg:w-2/3">
-            {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-12 h-12 text-pink-500 animate-spin" />
-              </div>
-            ) : error ? (
-              <div className="bg-red-500/10 text-red-400 p-6 rounded-2xl text-center border border-red-500/20">
-                <p className="font-semibold text-lg">
-                  Could not load radio stations
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+              <Play className="w-5 h-5 text-pink-500" /> Recently Played
+            </h2>
+            {recentlyPlayed.length === 0 ? (
+              <div className="bg-slate-900/50 p-8 rounded-2xl text-center border border-slate-800">
+                <p className="text-slate-400">
+                  No recently played stations yet.
                 </p>
-                <p className="text-sm mt-1">{error}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-                {filteredStations.slice(0, 100).map((station, idx) => (
+                {recentlyPlayed.map((station, idx) => (
                   <button
-                    key={idx}
-                    onClick={() => setCurrentStation(station)}
+                    key={`recent-${idx}`}
+                    onClick={() => {
+                      setCurrentStation(station);
+                      setIsPlaying(true);
+                      usePlayerStore.getState().setCurrentChannel(null); // Pause TV
+                    }}
                     className={`flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 border ${
                       currentStation?.url === station.url
-                        ? "bg-pink-500/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.15)]"
+                        ? "bg-pink-500/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.15)] ring-2 ring-pink-500"
                         : "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1"
                     }`}
                   >
-                    <div className="w-16 h-16 rounded-full bg-slate-950 flex items-center justify-center mb-4 overflow-hidden shadow-inner p-2">
+                    <div className="w-16 h-16 rounded-full bg-slate-950 flex items-center justify-center mb-4 overflow-hidden shadow-inner p-2 relative group">
                       {station.logo ? (
                         <img
                           src={station.logo}
                           alt=""
-                          className="w-full h-full object-contain"
+                          className={`w-full h-full object-contain ${currentStation?.url === station.url && isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}`}
                           loading="lazy"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
+                            (e.target as HTMLImageElement).src =
+                              `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
                             (e.target as HTMLImageElement).onerror = null;
                           }}
                         />
                       ) : (
                         <Radio className="w-8 h-8 text-slate-600" />
                       )}
+
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-full backdrop-blur-sm">
+                        {currentStation?.url === station.url && isPlaying ? (
+                          <Pause className="w-6 h-6 text-white" />
+                        ) : (
+                          <Play className="w-6 h-6 text-white ml-0.5" />
+                        )}
+                      </div>
                     </div>
                     <h3 className="font-semibold text-white line-clamp-2 leading-tight">
                       {station.name}
