@@ -97,12 +97,16 @@ export const LivePlayer: React.FC = () => {
   const isGlobalSurfMode =
     !channels.find((c) => c.id === streamId) &&
     globalChannels.some((c) => c.id === streamId);
-  const activeChannelList = currentPlaylist && currentPlaylist.length > 0 
-    ? currentPlaylist 
-    : (isGlobalSurfMode ? globalChannels : channels);
+  const activeChannelList =
+    currentPlaylist && currentPlaylist.length > 0
+      ? currentPlaylist
+      : isGlobalSurfMode
+        ? globalChannels
+        : channels;
 
   const currentStoreChannel = usePlayerStore((state) => state.currentChannel);
-  const currentChannelObj = activeChannelList.find((c) => c.id === streamId) || 
+  const currentChannelObj =
+    activeChannelList.find((c) => c.id === streamId) ||
     (currentStoreChannel?.id === streamId ? currentStoreChannel : undefined);
 
   // Get visible channels based on filters and active category alignment
@@ -114,12 +118,6 @@ export const LivePlayer: React.FC = () => {
       return true;
     });
 
-    if (currentChannelObj?.gemeinwohlCategory) {
-      const categoryList = list.filter((c) => c.gemeinwohlCategory === currentChannelObj.gemeinwohlCategory);
-      if (categoryList.length > 0) {
-        return categoryList;
-      }
-    }
     return list;
   };
 
