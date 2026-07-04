@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { FALLBACK_CHANNELS } from "../lib/constants";
+import { CategoryIcon } from "./CategoryIcon";
 
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
@@ -76,6 +77,7 @@ export const LivePlayer: React.FC = () => {
       if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
       events.forEach((e) => document.removeEventListener(e, handleActivity));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showIdleWarning]);
 
   // Check for successful tip redirect
@@ -572,12 +574,20 @@ export const LivePlayer: React.FC = () => {
                       }
                     }}
                   />
-                  <div className="hidden items-center justify-center w-full h-full">
-                    <Tv className="w-8 h-8 text-slate-500" />
+                  <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center shrink-0 shadow-inner">
+                    <CategoryIcon
+                      channel={currentChannelObj}
+                      className="w-6 h-6 text-slate-400"
+                    />
                   </div>
                 </>
               ) : (
-                <Tv className="w-8 h-8 text-slate-500" />
+                <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center shrink-0 shadow-inner">
+                  <CategoryIcon
+                    channel={currentChannelObj}
+                    className="w-6 h-6 text-slate-400"
+                  />
+                </div>
               )}
             </div>
             <div className="flex-1">
@@ -705,15 +715,21 @@ export const LivePlayer: React.FC = () => {
                           }}
                         />
                         <div className="hidden items-center justify-center w-full h-full">
-                          <Tv
-                            className={`w-6 h-6 ${isActive ? "text-blue-400" : "text-slate-400"}`}
-                          />
+                          <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner group-hover:bg-slate-700 transition-colors">
+                            <CategoryIcon
+                              channel={channel}
+                              className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`}
+                            />
+                          </div>
                         </div>
                       </>
                     ) : (
-                      <Tv
-                        className={`w-6 h-6 ${isActive ? "text-blue-400" : "text-slate-400"}`}
-                      />
+                      <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner group-hover:bg-slate-700 transition-colors">
+                        <CategoryIcon
+                          channel={channel}
+                          className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`}
+                        />
+                      </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col justify-center h-14">

@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Channel } from "../types";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { PlayCircle, Tv, Heart, Flame } from "lucide-react";
+import { CategoryIcon } from "./CategoryIcon";
+import { PlayCircle, Heart, Flame } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -102,16 +103,20 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                     "from-rose-900/40 via-pink-900/40 to-slate-900",
                     "from-amber-900/40 via-orange-900/40 to-slate-900",
                     "from-purple-900/40 via-fuchsia-900/40 to-slate-900",
-                    "from-cyan-900/40 via-blue-900/40 to-slate-900"
+                    "from-cyan-900/40 via-blue-900/40 to-slate-900",
                   ];
-                  const hash = channel.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                  const hash = channel.id
+                    .split("")
+                    .reduce((acc, char) => acc + char.charCodeAt(0), 0);
                   const gradient = gradients[hash % gradients.length];
-                  
+
                   return (
-                    <div className={cn(
-                      "absolute inset-0 bg-gradient-to-br transition-all duration-700 opacity-40 group-hover/card:opacity-80 scale-105 group-hover/card:scale-100",
-                      gradient
-                    )} />
+                    <div
+                      className={cn(
+                        "absolute inset-0 bg-gradient-to-br transition-all duration-700 opacity-40 group-hover/card:opacity-80 scale-105 group-hover/card:scale-100",
+                        gradient,
+                      )}
+                    />
                   );
                 })()}
 
@@ -136,11 +141,17 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                         className="hidden items-center justify-center mb-2"
                         style={{ width: "5rem", height: "5rem" }}
                       >
-                        <Tv className="w-16 h-16 text-slate-500" />
+                        <CategoryIcon
+                          channel={channel}
+                          className="w-16 h-16 text-slate-500"
+                        />
                       </div>
                     </>
                   ) : (
-                    <Tv className="w-16 h-16 text-slate-500 mb-2" />
+                    <CategoryIcon
+                      channel={channel}
+                      className="w-16 h-16 text-slate-500 mb-2"
+                    />
                   )}
 
                   <div className="absolute bottom-0 inset-x-0 p-4 translate-y-2 group-hover/card:translate-y-0 opacity-80 group-hover/card:opacity-100 transition-all">

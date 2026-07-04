@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { VideoPlayer } from "./VideoPlayer";
-import { ChevronLeft, ChevronRight, Tv } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { FALLBACK_CHANNELS } from "../lib/constants";
+import { CategoryIcon } from "./CategoryIcon";
 import { Channel } from "../types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -113,7 +114,10 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
                       />
                     ) : (
                       <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner">
-                        <Tv className="w-6 h-6 text-slate-400" />
+                        <CategoryIcon
+                          channel={channel}
+                          className="w-6 h-6 text-slate-400"
+                        />
                       </div>
                     )}
 
