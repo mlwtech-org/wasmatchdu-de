@@ -118,6 +118,18 @@ export const LivePlayer: React.FC = () => {
       return true;
     });
 
+    // If not playing a specific user playlist, restrict to related channels for consistent recommendations
+    if (!currentPlaylist || currentPlaylist.length === 0) {
+      const category =
+        currentChannelObj?.gemeinwohlCategory || currentChannelObj?.group;
+      if (category) {
+        const relatedList = list.filter(
+          (c) => c.gemeinwohlCategory === category || c.group === category,
+        );
+        if (relatedList.length > 0) return relatedList;
+      }
+    }
+
     return list;
   };
 
@@ -575,14 +587,10 @@ export const LivePlayer: React.FC = () => {
                   <h2 className="text-2xl font-bold text-white leading-tight">
                     {currentChannelObj.currentProgram}
                   </h2>
-                  {currentChannelObj.nextProgram && (
-                    <p className="text-slate-400 mt-3 text-sm">
-                      <span className="font-semibold text-slate-500">
-                        NEXT:
-                      </span>{" "}
-                      {currentChannelObj.nextProgram}
-                    </p>
-                  )}
+                  <p className="text-sm text-slate-400 mt-2 truncate">
+                    <span className="font-semibold text-slate-500">NEXT:</span>{" "}
+                    {currentChannelObj?.nextProgram || "Upcoming Program"}
+                  </p>
                 </>
               ) : (
                 <h2 className="text-xl font-bold text-white">
