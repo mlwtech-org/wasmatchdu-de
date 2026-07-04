@@ -154,9 +154,7 @@ export const Dashboard: React.FC = () => {
       !hasAutoPlayed.current &&
       !isLoading &&
       !currentChannel &&
-      FALLBACK_CHANNELS.length > 0 &&
-      (!currentChannel ||
-        !currentPlaylist.find((c) => c.id === currentChannel.id))
+      FALLBACK_CHANNELS.length > 0
     ) {
       hasAutoPlayed.current = true;
       setCurrentPlaylist(FALLBACK_CHANNELS);
@@ -168,7 +166,7 @@ export const Dashboard: React.FC = () => {
     currentTab,
     setCurrentChannel,
     setCurrentPlaylist,
-    currentPlaylist
+    currentPlaylist,
   ]);
 
   return (
@@ -191,7 +189,7 @@ export const Dashboard: React.FC = () => {
             >
               <Menu className="w-6 h-6 md:w-7 md:h-7" />
             </button>
-            <div 
+            <div
               className="flex items-center gap-2 text-white font-black text-xl tracking-tight cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
               onClick={() => handleTabSwitch("home")}
             >
@@ -202,7 +200,9 @@ export const Dashboard: React.FC = () => {
                   className="w-full h-full object-contain rounded drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]"
                 />
               </div>
-              <span className="drop-shadow-md">WasMatch<span className="text-cyan-400 font-light">Du</span></span>
+              <span className="drop-shadow-md">
+                WasMatch<span className="text-cyan-400 font-light">Du</span>
+              </span>
             </div>
           </div>
 
@@ -223,9 +223,7 @@ export const Dashboard: React.FC = () => {
               data-focusable="true"
               onClick={() => {
                 const liveChannel =
-                  liveEventsChannels[0] ||
-                  channels[0] ||
-                  FALLBACK_CHANNELS[0];
+                  liveEventsChannels[0] || channels[0] || FALLBACK_CHANNELS[0];
                 if (liveChannel) {
                   navigate(`/live/${liveChannel.id}`);
                 }
@@ -395,7 +393,9 @@ export const Dashboard: React.FC = () => {
               }}
               className={cn(
                 "w-full flex items-center transition-all duration-300",
-                isSidebarCollapsed ? "justify-center p-2.5 rounded-xl" : "gap-3 px-3 py-2.5 rounded-xl font-bold",
+                isSidebarCollapsed
+                  ? "justify-center p-2.5 rounded-xl"
+                  : "gap-3 px-3 py-2.5 rounded-xl font-bold",
                 currentTab === "radio"
                   ? "bg-pink-500/10 text-pink-400 shadow-[inset_4px_0_0_0_rgba(236,72,153,1),0_0_10px_rgba(236,72,153,0.1)]"
                   : "text-slate-300 hover:bg-slate-900/80 hover:text-white border-l-4 border-transparent hover:border-slate-700",
