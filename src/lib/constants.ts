@@ -140,7 +140,7 @@ export const FALLBACK_CHANNELS: Channel[] = [
   {
     id: "verified-aljazeera",
     name: "Al Jazeera English",
-    url: "https://live-hls-web-aje.getaj.net/AJE/index.m3u8",
+    url: "https://live-hls-apps-aje-fa.getaj.net/AJE/index.m3u8",
     logo: "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/en/thumb/f/f2/Al_Jazeera_English_logo.svg/1200px-Al_Jazeera_English_logo.svg.png",
     group: "News",
     gemeinwohlCategory: "Nachrichten & Info",
