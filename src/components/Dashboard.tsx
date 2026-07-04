@@ -6,10 +6,9 @@ import { ChannelRow } from "./ChannelRow";
 import { CategoryGrid } from "./CategoryGrid";
 import { CountryGrid } from "./CountryGrid";
 import { RadioHub } from "./RadioHub";
+import { GlobalRadioPlayer } from "./GlobalRadioPlayer";
 import { MobileNav } from "./MobileNav";
 import {
-  Tv,
-  Radio,
   Search,
   UserCircle,
   Loader2,
@@ -25,6 +24,7 @@ import {
   Settings,
   Download,
   AlertTriangle,
+  Radio,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -38,16 +38,14 @@ const cn = (...inputs: (string | undefined | null | false)[]) =>
 
 // Replaced LANGUAGE_TO_M3U_MAP with IP detection
 
-import {
-  VERIFIED_RELIABLE_CHANNELS,
-  GEMEINWOHL_CATEGORIES,
-} from "../lib/constants";
+import { FALLBACK_CHANNELS, GEMEINWOHL_CATEGORIES } from "../lib/constants";
 
 export const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { isInstallable, promptInstall } = usePWAInstall();
   const [currentTab, setCurrentTab] = useState("home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed] = useState(false);
 
   const navigate = useNavigate();
 
@@ -70,6 +68,7 @@ export const Dashboard: React.FC = () => {
     trendingEnabled,
     setCurrentChannel,
     setCurrentPlaylist,
+    currentPlaylist,
     profiles,
     activeProfileId,
   } = usePlayerStore();
@@ -155,12 +154,13 @@ export const Dashboard: React.FC = () => {
       !hasAutoPlayed.current &&
       !isLoading &&
       !currentChannel &&
-      VERIFIED_RELIABLE_CHANNELS.length > 0 &&
-      currentTab === "home"
+      FALLBACK_CHANNELS.length > 0 &&
+      (!currentChannel ||
+        !currentPlaylist.find((c) => c.id === currentChannel.id))
     ) {
       hasAutoPlayed.current = true;
-      setCurrentPlaylist(VERIFIED_RELIABLE_CHANNELS);
-      setCurrentChannel(VERIFIED_RELIABLE_CHANNELS[0]);
+      setCurrentPlaylist(FALLBACK_CHANNELS);
+      setCurrentChannel(FALLBACK_CHANNELS[0]);
     }
   }, [
     isLoading,
@@ -168,6 +168,7 @@ export const Dashboard: React.FC = () => {
     currentTab,
     setCurrentChannel,
     setCurrentPlaylist,
+    currentPlaylist
   ]);
 
   return (
@@ -190,13 +191,18 @@ export const Dashboard: React.FC = () => {
             >
               <Menu className="w-6 h-6 md:w-7 md:h-7" />
             </button>
-            <div className="flex items-center gap-3">
-              <img
-                src="/logo.png"
-                alt="WMD Streams Logo"
-                className="h-6 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)] opacity-90 hover:opacity-100 transition-opacity cursor-pointer"
-                onClick={() => handleTabSwitch("home")}
-              />
+            <div 
+              className="flex items-center gap-2 text-white font-black text-xl tracking-tight cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
+              onClick={() => handleTabSwitch("home")}
+            >
+              <div className="relative w-7 h-7">
+                <img
+                  src="/icon.png"
+                  alt="WasMatchDu Logo"
+                  className="w-full h-full object-contain rounded drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]"
+                />
+              </div>
+              <span className="drop-shadow-md">WasMatch<span className="text-cyan-400 font-light">Du</span></span>
             </div>
           </div>
 
@@ -219,7 +225,7 @@ export const Dashboard: React.FC = () => {
                 const liveChannel =
                   liveEventsChannels[0] ||
                   channels[0] ||
-                  VERIFIED_RELIABLE_CHANNELS[0];
+                  FALLBACK_CHANNELS[0];
                 if (liveChannel) {
                   navigate(`/live/${liveChannel.id}`);
                 }
@@ -321,8 +327,8 @@ export const Dashboard: React.FC = () => {
                 onClick={() => navigate("/sports")}
                 className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-medium transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)]"
               >
-                <Tv className="w-5 h-5" />
-                Regional Sports
+                <Grid className="w-5 h-5 shrink-0" />
+                {!isSidebarCollapsed && "Categories"}
               </button>
               <button
                 data-focusable="true"
@@ -388,13 +394,16 @@ export const Dashboard: React.FC = () => {
                 setIsSidebarOpen(false);
               }}
               className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold transition-colors",
+                "w-full flex items-center transition-all duration-300",
+                isSidebarCollapsed ? "justify-center p-2.5 rounded-xl" : "gap-3 px-3 py-2.5 rounded-xl font-bold",
                 currentTab === "radio"
-                  ? "bg-blue-600/10 text-blue-500"
-                  : "text-slate-300 hover:bg-slate-900 hover:text-white",
+                  ? "bg-pink-500/10 text-pink-400 shadow-[inset_4px_0_0_0_rgba(236,72,153,1),0_0_10px_rgba(236,72,153,0.1)]"
+                  : "text-slate-300 hover:bg-slate-900/80 hover:text-white border-l-4 border-transparent hover:border-slate-700",
               )}
+              title={isSidebarCollapsed ? "Radio Hub" : undefined}
             >
-              <Radio className="w-5 h-5" /> Radio Hub
+              <Radio className="w-5 h-5 shrink-0" />
+              {!isSidebarCollapsed && "Radio Hub"}
             </button>
             <button
               data-focusable="true"
@@ -535,14 +544,20 @@ export const Dashboard: React.FC = () => {
       </aside>
 
       {currentTab === "categories" ? (
-        <CategoryGrid
-          onSelectCategory={(cat) => {
-            setSearchQuery("");
-            setKidsMode(false);
-            setSearchQuery(cat);
-            setCurrentTab("home");
-          }}
-        />
+        <div className="flex-1 lg:ml-72 bg-slate-950 overflow-y-auto">
+          <CategoryGrid
+            channels={filteredChannels}
+            onSelectCategory={(cat) => {
+              setSearchQuery("");
+              if (!activeProfile?.isKidsMode) {
+                setKidsMode(false);
+              }
+              setSearchQuery(cat);
+              handleTabSwitch("home");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
+        </div>
       ) : currentTab === "regions" ? (
         <div className="flex-1 lg:ml-64 bg-slate-950 p-4 lg:p-8">
           <div className="max-w-7xl mx-auto mt-16 lg:mt-0">
@@ -585,7 +600,7 @@ export const Dashboard: React.FC = () => {
                 {!searchQuery && !kidsMode && (
                   <ChannelRow
                     title="Top Picks for You"
-                    channels={VERIFIED_RELIABLE_CHANNELS}
+                    channels={FALLBACK_CHANNELS}
                   />
                 )}
 
@@ -669,8 +684,11 @@ export const Dashboard: React.FC = () => {
         </>
       )}
 
-      {/* Mobile / Tablet Bottom Navigation */}
+      {/* Mobile Navigation */}
       <MobileNav currentTab={currentTab} setCurrentTab={handleTabSwitch} />
+
+      {/* Persistent Global Radio Player */}
+      <GlobalRadioPlayer />
     </div>
   );
 };

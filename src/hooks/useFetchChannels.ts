@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { parseM3U } from "../utils/m3uParser";
-import { GLOBAL_PLAYLISTS, VERIFIED_RELIABLE_CHANNELS } from "../lib/constants";
+import { FALLBACK_CHANNELS } from "../lib/constants";
+import { Channel } from "../types";
 
 export const useFetchChannels = () => {
   const {
@@ -9,113 +9,95 @@ export const useFetchChannels = () => {
     setGlobalChannels,
     setError,
     setIsLoading,
-    customFeeds,
     globalChannels,
+    watchHistory,
+    recentlyWatched,
+    activeProfileId,
+    profiles,
   } = usePlayerStore();
 
+  const activeProfile = profiles.find((p) => p.id === activeProfileId);
+  const regionLock = activeProfile?.regionLock || "none";
+  const lastLoadedRegion = useRef<string | null>(null);
+
   useEffect(() => {
-    // Only fetch if globalChannels are empty to avoid double-fetching on navigation
-    if (globalChannels.length > 0) return;
+    if (regionLock === lastLoadedRegion.current && globalChannels.length > 0) return;
 
-    const fetchM3U = async () => {
+    const fetchOptimizedFeeds = async () => {
       setIsLoading(true);
+      setChannels([]);
       try {
-        let countryCode = "de"; // Fallback to Germany
-        try {
-          const geoRes = await fetch("https://get.geojs.io/v1/ip/country.json");
-          if (geoRes.ok) {
-            const geoData = await geoRes.json();
-            if (geoData.country) {
-              countryCode = geoData.country.toLowerCase();
-            }
-          }
-        } catch (e) {
-          console.warn("Geo-IP failed, falling back to default.", e);
-        }
-
-        // Primary validated stream URL (updated via GitHub Actions every 12h)
-        const verifiedPlaylist = `https://raw.githubusercontent.com/mlwtech-org/wasmatchdu-de/validated-streams/verified_streams.m3u`;
-        const primaryPlaylist = `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
-
-        const texts: string[] = [];
-        const verifiedRes = await fetch(verifiedPlaylist).catch(() => null);
-
-        if (verifiedRes && verifiedRes.ok) {
-          console.log("Using GitHub Actions verified streams");
-          texts.push(await verifiedRes.text());
+        let allChannels: Channel[] = [];
+        
+        // Fetch pre-aggregated static JSON for instant load
+        const res = await fetch("/channels.json");
+        if (res.ok) {
+           allChannels = await res.json();
         } else {
-          console.warn(
-            "Verified streams not found. Falling back to raw public feeds.",
-          );
-          const primaryRes = await fetch(primaryPlaylist).catch(() => null);
-          if (primaryRes && primaryRes.ok) {
-            texts.push(await primaryRes.text());
-          } else {
-            const fallback = await fetch(
-              "https://iptv-org.github.io/iptv/countries/de.m3u",
-            ).catch(() => null);
-            if (fallback && fallback.ok) texts.push(await fallback.text());
-          }
-
-          // Load global fallback playlists if we don't have verified streams
-          const globalResponses = await Promise.all(
-            GLOBAL_PLAYLISTS.map((u) => fetch(u).catch(() => null)),
-          );
-          for (const res of globalResponses) {
-            if (res && res.ok) texts.push(await res.text());
-          }
+           console.warn("Failed to fetch channels.json, ensure aggregate script is run.");
         }
 
-        // Always load custom user feeds
-        if (customFeeds.length > 0) {
-          const customResponses = await Promise.all(
-            customFeeds.map((u) => fetch(u).catch(() => null)),
-          );
-          for (const res of customResponses) {
-            if (res && res.ok) texts.push(await res.text());
-          }
-        }
+        const dashboardCandidates = allChannels.filter(c => 
+          c.url.startsWith("https") && 
+          !c.url.match(/\d+\.\d+\.\d+\.\d+/) && 
+          c.logo && 
+          !c.isUnstable
+        );
 
-        if (texts.length === 0) {
-          console.warn(
-            "Failed to fetch playlists from remote. Loading local verified channels.",
-          );
-        }
+        // Sorting Logic (Personalization)
+        // 1. Identify top 2 categories from watch history
+        const sortedHistory = Object.entries(watchHistory || {})
+          .sort(([, a], [, b]) => b - a)
+          .map(([category]) => category);
+        const topCategories = sortedHistory.slice(0, 2);
 
-        let allChannels: import("../types").Channel[] = [];
-        texts.forEach((text) => {
-          allChannels = [...allChannels, ...parseM3U(text)];
+        // 2. Sort candidates
+        const sortedChannels = [...dashboardCandidates].sort((a, b) => {
+          // Boost recently watched
+          const aRecentIdx = recentlyWatched ? recentlyWatched.indexOf(a.id) : -1;
+          const bRecentIdx = recentlyWatched ? recentlyWatched.indexOf(b.id) : -1;
+          
+          if (aRecentIdx !== -1 && bRecentIdx === -1) return -1;
+          if (bRecentIdx !== -1 && aRecentIdx === -1) return 1;
+          if (aRecentIdx !== -1 && bRecentIdx !== -1) return aRecentIdx - bRecentIdx;
+
+          // Boost top categories
+          const aInTop = topCategories.includes(a.gemeinwohlCategory);
+          const bInTop = topCategories.includes(b.gemeinwohlCategory);
+
+          if (aInTop && !bInTop) return -1;
+          if (!aInTop && bInTop) return 1;
+
+          // Alphabetical fallback
+          return a.name.localeCompare(b.name);
         });
 
-        // Deduplicate channels by URL so we don't show the same stream twice
-        const uniqueChannelsMap = new Map();
-        allChannels.forEach((c) => {
-          if (!uniqueChannelsMap.has(c.url)) {
-            uniqueChannelsMap.set(c.url, c);
-          }
-        });
+        const dynamicDashboardChannels = regionLock === "none"
+          ? [
+              ...FALLBACK_CHANNELS,
+              ...sortedChannels
+            ]
+          : sortedChannels; 
 
-        // The curated dashboard ALWAYS gets the verified list
-        setChannels(VERIFIED_RELIABLE_CHANNELS);
-
-        // The surf mode gets the global fallback channels
-        setGlobalChannels(Array.from(uniqueChannelsMap.values()));
+        setChannels(dynamicDashboardChannels);
+        setGlobalChannels(allChannels);
+        lastLoadedRegion.current = regionLock;
         setError(null);
       } catch (err) {
-        console.error("Error fetching M3U:", err);
+        console.error("Error fetching channels:", err);
         setError("Failed to load channel list. Please try again later.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchM3U();
+    fetchOptimizedFeeds();
   }, [
     setChannels,
     setGlobalChannels,
     setError,
     setIsLoading,
-    customFeeds,
     globalChannels.length,
+    regionLock,
   ]);
 };

@@ -29,6 +29,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
   }
   
   /* Disable pull-to-refresh on mobile app view */
@@ -70,4 +71,42 @@
   transform: scale(1.05);
   box-shadow: 0 0 0 4px #3b82f6, 0 10px 25px -5px rgba(59, 130, 246, 0.5);
   z-index: 10;
+}
+
+/* Neural Network Cybernetic Theme */
+.neural-bg {
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 0% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='15' cy='15' r='1' fill='rgba(34,211,238,0.15)'/%3E%3Cpath d='M15 15L30 0M15 15L0 30' stroke='rgba(34,211,238,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 }

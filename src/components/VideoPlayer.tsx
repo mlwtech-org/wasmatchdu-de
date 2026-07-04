@@ -67,6 +67,7 @@ export const VideoPlayer: React.FC = () => {
     playPreviousChannel,
     setCurrentChannel,
     setCurrentPlaylist,
+    updateWatchHistory,
   } = usePlayerStore();
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(false);
@@ -111,6 +112,22 @@ export const VideoPlayer: React.FC = () => {
 
   const retryCount = useRef(0);
   const skipTimerRef = useRef<number | null>(null);
+
+  // Track Watch History
+  useEffect(() => {
+    if (!currentChannel || !currentChannel.gemeinwohlCategory) return;
+    
+    const startTime = Date.now();
+    const category = currentChannel.gemeinwohlCategory;
+
+    return () => {
+      const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
+      // Only log if watched for more than 10 seconds to avoid zap spam
+      if (durationSeconds > 10) {
+        updateWatchHistory(category, durationSeconds);
+      }
+    };
+  }, [currentChannel, updateWatchHistory]);
 
   // Keyboard controls for channel surfing
   useEffect(() => {
@@ -530,13 +547,16 @@ export const VideoPlayer: React.FC = () => {
       />
 
       {/* Cyberpunk Watermark */}
-      <div className="absolute top-6 right-6 pointer-events-none z-20 opacity-80 select-none hidden md:block">
-        <img
-          src="/logo.png"
-          alt="WMD Streams"
-          className="h-7 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)]"
-        />
-      </div>
+        <div className="absolute top-6 right-6 z-20 flex items-center gap-3 pointer-events-none">
+          <img
+            src="/logo.png"
+            alt="WasMatchDu Icon"
+            className="w-10 md:w-12 h-10 md:h-12 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
+          />
+          <span className="text-xl md:text-2xl font-black tracking-tighter text-white drop-shadow-md">
+            WasMatch<span className="text-cyan-400 font-light">Du</span>
+          </span>
+        </div>
 
       {/* AI Live Translation Text Overlay */}
       {isAITranslateEnabled && liveTranslationText && (

@@ -4,13 +4,7 @@ import { Play, MapPin, Tv, Loader2, Globe, ArrowLeft } from 'lucide-react';
 import { usePlayerStore } from '../store/usePlayerStore';
 import { useNavigate } from 'react-router-dom';
 
-interface Channel {
-  id: string;
-  name: string;
-  url: string;
-  logo?: string;
-  group?: string;
-}
+import { Channel } from '../types';
 
 export function SportsHub() {
   const setCurrentChannel = usePlayerStore((state) => state.setCurrentChannel);
@@ -101,8 +95,9 @@ export function SportsHub() {
               key={`${channel.id}-${idx}`}
               className="group relative overflow-hidden rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.02] border border-white/10 hover:border-blue-500/50 transition-all duration-300 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] cursor-pointer"
               onClick={() => {
-                setCurrentChannel(channel as any);
-                navigate('/dashboard');
+                usePlayerStore.getState().setCurrentPlaylist(channels);
+                setCurrentChannel(channel);
+                navigate(`/live/${channel.id}`);
               }}
             >
               <div className="aspect-video bg-black/40 p-6 flex flex-col items-center justify-center relative">
@@ -118,7 +113,8 @@ export function SportsHub() {
                     alt={channel.name}
                     className="h-20 w-auto object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Tv_icon.svg/200px-Tv_icon.svg.png';
+                      (e.target as HTMLImageElement).onerror = null; // Prevent infinite loop if fallback fails
                     }}
                   />
                 ) : (

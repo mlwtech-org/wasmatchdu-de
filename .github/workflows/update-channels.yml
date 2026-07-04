@@ -1,0 +1,44 @@
+name: Update Channels JSON
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-channels:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./wasmatch-du
+
+    - name: Run aggregation script
+      run: node scripts/aggregate_channels.js
+      working-directory: ./wasmatch-du
+
+    - name: Check for changes
+      id: git-check
+      run: |
+        git diff --exit-code public/channels.json || echo "changes=true" >> $GITHUB_OUTPUT
+      working-directory: ./wasmatch-du
+
+    - name: Commit and push changes
+      if: steps.git-check.outputs.changes == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add public/channels.json
+        git commit -m "chore: auto-update channels.json feed"
+        git push
+      working-directory: ./wasmatch-du

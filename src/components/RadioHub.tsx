@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { Radio, Play, Pause, Volume2, Search, Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Radio, Play, Pause, Search, Loader2 } from "lucide-react";
 import { Channel } from "../types";
 import { parseM3U } from "../utils/m3uParser";
 import { useRadioStore } from "../store/useRadioStore";
-import Hls from "hls.js";
+import { usePlayerStore } from "../store/usePlayerStore";
+import { FALLBACK_RADIO_M3U } from "../lib/radioFallback";
 
 const POPULAR_RADIO_ZONES = [
   "Pop",
@@ -13,6 +14,11 @@ const POPULAR_RADIO_ZONES = [
   "Electronic",
   "Jazz",
   "Local",
+  "Hindi",
+  "Telugu",
+  "Tamil",
+  "Bengali",
+  "Punjabi",
 ];
 
 export const RadioHub: React.FC = () => {
@@ -22,16 +28,17 @@ export const RadioHub: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
 
+  const { activeProfileId, profiles } = usePlayerStore();
+  const activeProfile = profiles.find((p) => p.id === activeProfileId);
+  const regionLock = activeProfile?.regionLock || "none";
+  const kidsMode = activeProfile?.isKidsMode || false;
+
   const {
     currentStation,
     isPlaying,
-    volume,
     setCurrentStation,
     setIsPlaying,
-    setVolume,
   } = useRadioStore();
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const hlsRef = useRef<Hls | null>(null);
 
   useEffect(() => {
     const fetchRadio = async () => {
@@ -41,16 +48,52 @@ export const RadioHub: React.FC = () => {
 
         let res = await fetch(verifiedPlaylist).catch(() => null);
         if (!res || !res.ok) {
-          res = await fetch(fallbackPlaylist);
+          res = await fetch(fallbackPlaylist).catch(() => null);
         }
 
-        if (!res.ok) throw new Error("Failed to load radio stations");
+        let text = "";
+        if (!res || !res.ok) {
+          text = FALLBACK_RADIO_M3U;
+        } else {
+          text = await res.text();
+        }
 
-        const text = await res.text();
-        const parsed = parseM3U(text);
+        let parsed = parseM3U(text);
+        if (parsed.length === 0) {
+          parsed = parseM3U(FALLBACK_RADIO_M3U);
+        }
 
-        // Some feeds have too many, limit to 200 for performance if needed, or keep all
-        setStations(parsed);
+        // Apply strict viewer policy constraints to radio stations
+        let filteredRadio = parsed;
+
+        if (regionLock !== "none") {
+          const regionMap: Record<string, string[]> = {
+            tel: ["telugu"],
+            tam: ["tamil"],
+            hin: ["hindi"],
+            ben: ["bengali"],
+            pan: ["punjabi"],
+            pl: ["poland", "polska"],
+            de: ["deutsch", "germany"],
+            us: ["usa", "america", "united states"],
+          };
+          const keywords = regionMap[regionLock] || [];
+          filteredRadio = filteredRadio.filter((station) => {
+            const nameLower = station.name.toLowerCase();
+            const groupLower = (station.group || "").toLowerCase();
+            return keywords.some(keyword => nameLower.includes(keyword) || groupLower.includes(keyword));
+          });
+        }
+
+        if (kidsMode) {
+          // Strictly filter for kids radio content
+          filteredRadio = filteredRadio.filter((station) => {
+            const nameLower = station.name.toLowerCase();
+            return nameLower.includes("kids") || nameLower.includes("child") || nameLower.includes("disney") || nameLower.includes("cartoon");
+          });
+        }
+
+        setStations(filteredRadio);
       } catch (err: unknown) {
         setError((err as Error).message || "Failed to fetch radio");
       } finally {
@@ -58,56 +101,7 @@ export const RadioHub: React.FC = () => {
       }
     };
     fetchRadio();
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current && currentStation) {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-      }
-
-      if (currentStation.url.includes(".m3u8")) {
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(currentStation.url);
-          hls.attachMedia(audioRef.current);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            if (isPlaying) audioRef.current?.play();
-          });
-          hlsRef.current = hls;
-        } else if (
-          audioRef.current.canPlayType("application/vnd.apple.mpegurl")
-        ) {
-          audioRef.current.src = currentStation.url;
-          if (isPlaying) audioRef.current.play();
-        }
-      } else {
-        audioRef.current.src = currentStation.url;
-        if (isPlaying) audioRef.current.play();
-      }
-    }
-  }, [currentStation, isPlaying]);
-
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch(() => setIsPlaying(false));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying, setIsPlaying]);
-
-  const togglePlay = useCallback(
-    () => setIsPlaying(!isPlaying),
-    [isPlaying, setIsPlaying],
-  );
-
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
+  }, [regionLock, kidsMode]);
 
   const filteredStations = stations.filter((s) => {
     const matchesSearch = s.name
@@ -174,108 +168,126 @@ export const RadioHub: React.FC = () => {
           ))}
         </div>
 
-        {/* ACTIVE PLAYER BAR */}
-        {currentStation && (
-          <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 shadow-2xl border border-slate-700/50">
-            <div
-              className={`w-24 h-24 rounded-full bg-slate-950 flex items-center justify-center overflow-hidden border-4 border-slate-800 shadow-xl ${isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}`}
-            >
-              {currentStation.logo ? (
-                <img
-                  src={currentStation.logo}
-                  alt=""
-                  className="w-16 h-16 object-contain"
-                />
-              ) : (
-                <Radio className="w-10 h-10 text-slate-600" />
-              )}
-            </div>
-
-            <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-white mb-1">
-                {currentStation.name}
-              </h2>
-              <p className="text-pink-400 font-medium">
-                {currentStation.group || "Live Radio"}
-              </p>
-            </div>
-
-            <div className="flex items-center gap-6">
-              <button
-                onClick={togglePlay}
-                className="w-16 h-16 rounded-full bg-pink-500 hover:bg-pink-600 flex items-center justify-center text-white transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-pink-500/20"
-              >
-                {isPlaying ? (
-                  <Pause className="w-8 h-8 fill-current" />
-                ) : (
-                  <Play className="w-8 h-8 fill-current ml-1" />
-                )}
-              </button>
-
-              <div className="hidden md:flex items-center gap-3 bg-slate-950/50 px-4 py-2 rounded-full">
-                <Volume2 className="w-5 h-5 text-slate-400" />
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.01"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
-                  className="w-24 accent-pink-500"
-                />
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* STATIONS GRID */}
+          <div className="w-full">
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-12 h-12 text-pink-500 animate-spin" />
               </div>
-            </div>
-
-            <audio ref={audioRef} />
-          </div>
-        )}
-
-        {/* STATIONS GRID */}
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-12 h-12 text-pink-500 animate-spin" />
-          </div>
-        ) : error ? (
-          <div className="bg-red-500/10 text-red-400 p-6 rounded-2xl text-center border border-red-500/20">
-            <p className="font-semibold text-lg">
-              Could not load radio stations
-            </p>
-            <p className="text-sm mt-1">{error}</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredStations.slice(0, 100).map((station, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentStation(station)}
-                className={`flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 border ${
-                  currentStation?.url === station.url
-                    ? "bg-pink-500/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.15)]"
-                    : "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1"
-                }`}
-              >
-                <div className="w-16 h-16 rounded-full bg-slate-950 flex items-center justify-center mb-4 overflow-hidden shadow-inner p-2">
-                  {station.logo ? (
-                    <img
-                      src={station.logo}
-                      alt=""
-                      className="w-full h-full object-contain"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <Radio className="w-8 h-8 text-slate-600" />
-                  )}
-                </div>
-                <h3 className="font-semibold text-white line-clamp-2 leading-tight">
-                  {station.name}
-                </h3>
-                <p className="text-xs text-slate-400 mt-2 line-clamp-1">
-                  {station.group || "Radio"}
+            ) : error ? (
+              <div className="bg-red-500/10 text-red-400 p-6 rounded-2xl text-center border border-red-500/20">
+                <p className="font-semibold text-lg">
+                  Could not load radio stations
                 </p>
-              </button>
-            ))}
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                {filteredStations.slice(0, 100).map((station, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                       setCurrentStation(station);
+                       setIsPlaying(true);
+                       usePlayerStore.getState().setCurrentChannel(null); // Pause TV
+                    }}
+                    className={`flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 border ${
+                      currentStation?.url === station.url
+                        ? "bg-pink-500/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.15)] ring-2 ring-pink-500"
+                        : "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1"
+                    }`}
+                  >
+                    <div className="w-16 h-16 rounded-full bg-slate-950 flex items-center justify-center mb-4 overflow-hidden shadow-inner p-2 relative group">
+                      {station.logo ? (
+                        <img
+                          src={station.logo}
+                          alt=""
+                          className={`w-full h-full object-contain ${currentStation?.url === station.url && isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}`}
+                          loading="lazy"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
+                            (e.target as HTMLImageElement).onerror = null;
+                          }}
+                        />
+                      ) : (
+                        <Radio className="w-8 h-8 text-slate-600" />
+                      )}
+                      
+                      {/* Play overlay on hover */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-full backdrop-blur-sm">
+                        {currentStation?.url === station.url && isPlaying ? (
+                          <Pause className="w-6 h-6 text-white" />
+                        ) : (
+                          <Play className="w-6 h-6 text-white ml-0.5" />
+                        )}
+                      </div>
+                    </div>
+                    <h3 className="font-semibold text-white line-clamp-2 leading-tight text-sm">
+                      {station.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-1">
+                      {station.group || "Radio"}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+
+          {/* RIGHT SIDE: STATIONS GRID */}
+          <div className="w-full lg:w-2/3">
+            {loading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-12 h-12 text-pink-500 animate-spin" />
+              </div>
+            ) : error ? (
+              <div className="bg-red-500/10 text-red-400 p-6 rounded-2xl text-center border border-red-500/20">
+                <p className="font-semibold text-lg">
+                  Could not load radio stations
+                </p>
+                <p className="text-sm mt-1">{error}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+                {filteredStations.slice(0, 100).map((station, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentStation(station)}
+                    className={`flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 border ${
+                      currentStation?.url === station.url
+                        ? "bg-pink-500/10 border-pink-500/50 shadow-[0_0_15px_rgba(236,72,153,0.15)]"
+                        : "bg-slate-900 border-slate-800 hover:bg-slate-800 hover:border-slate-700 hover:-translate-y-1"
+                    }`}
+                  >
+                    <div className="w-16 h-16 rounded-full bg-slate-950 flex items-center justify-center mb-4 overflow-hidden shadow-inner p-2">
+                      {station.logo ? (
+                        <img
+                          src={station.logo}
+                          alt=""
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(station.name)}&background=1e293b&color=ec4899&size=200&font-size=0.33`;
+                            (e.target as HTMLImageElement).onerror = null;
+                          }}
+                        />
+                      ) : (
+                        <Radio className="w-8 h-8 text-slate-600" />
+                      )}
+                    </div>
+                    <h3 className="font-semibold text-white line-clamp-2 leading-tight">
+                      {station.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-2 line-clamp-1">
+                      {station.group || "Radio"}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

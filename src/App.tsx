@@ -55,6 +55,14 @@ const ManageProfiles = lazy(() =>
     default: m.ManageProfiles,
   })),
 );
+const EarthCamViewer = lazy(() =>
+  import("./components/EarthCamViewer").then((m) => ({
+    default: m.EarthCamViewer,
+  })),
+);
+const Legal = lazy(() =>
+  import("./components/Legal").then((m) => ({ default: m.Legal })),
+);
 
 const PageLoader = () => (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -135,6 +143,14 @@ function App() {
             }
           />
           <Route
+            path="/earthcams"
+            element={
+              <ProtectedRoute>
+                <EarthCamViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/go-live"
             element={
               <ProtectedRoute>
@@ -153,11 +169,12 @@ function App() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "dev"]}>
                 <AdminDashboard />
               </ProtectedRoute>
             }
           />
+          <Route path="/legal" element={<Legal />} />
         </Routes>
       </Suspense>
       <AIAssistantOrb />

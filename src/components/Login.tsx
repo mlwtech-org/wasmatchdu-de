@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
 import {
   sendSignInLinkToEmail,
@@ -10,6 +10,7 @@ import { auth } from "../lib/firebase";
 import { Loader2, Info, CheckCircle2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { UserRole } from "../types";
 
 export const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -20,6 +21,9 @@ export const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const setUser = usePlayerStore((state) => state.setUser);
+  const addProfile = usePlayerStore((state) => state.addProfile);
+  const setActiveProfile = usePlayerStore((state) => state.setActiveProfile);
+  const loadUserDataFromFirebase = usePlayerStore((state) => state.loadUserDataFromFirebase);
 
   // Handle returning from a magic link
   useEffect(() => {
@@ -35,9 +39,13 @@ export const Login: React.FC = () => {
       if (savedEmail) {
         setStatus("loading");
         signInWithEmailLink(auth, savedEmail, window.location.href)
-          .then((result) => {
+          .then(async (result) => {
             window.localStorage.removeItem("emailForSignIn");
-            setUser({ email: result.user.email || "", uid: result.user.uid });
+            setUser({ email: result.user.email || "", uid: result.user.uid, role: "user" });
+            
+            // Sync cross-device watch history and premium status
+            await loadUserDataFromFirebase(result.user.uid);
+            
             navigate("/dashboard");
           })
           .catch((error) => {
@@ -70,7 +78,7 @@ export const Login: React.FC = () => {
           "Firebase is not configured yet. Using Dev Mode bypass...",
         );
         setTimeout(() => {
-          simulateLogin();
+          simulateLogin("user");
         }, 1500);
       } else {
         setErrorMessage(
@@ -80,8 +88,19 @@ export const Login: React.FC = () => {
     }
   };
 
-  const simulateLogin = () => {
-    setUser({ email: email || "senior@gemeinwohl.de", uid: "dev-user-123" });
+  const simulateLogin = (role: UserRole, isPremium: boolean = false) => {
+    setUser({ email: `${role}@example.com`, uid: `dev-${role}`, role, isPremium });
+    
+    // Auto-create a profile to bypass the Create Profile screen
+    const profileId = `profile-${Date.now()}`;
+    addProfile({
+      id: profileId,
+      name: `${role.charAt(0).toUpperCase() + role.slice(1)} Profile`,
+      avatarUrl: "cat", // fallback avatar id
+      isKidsMode: false,
+    });
+    setActiveProfile(profileId);
+
     navigate("/dashboard");
   };
 
@@ -94,12 +113,17 @@ export const Login: React.FC = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-4">
         {/* Logo */}
         <div className="flex justify-center mb-10 mt-4">
-          <div className="relative group">
-            <img
-              src="/logo.png"
-              alt="WMD Streams Logo"
-              className="h-16 w-auto drop-shadow-[0_0_20px_rgba(255,20,147,0.8)] hover:drop-shadow-[0_0_30px_rgba(255,20,147,1)] transition-all duration-500"
-            />
+          <div className="flex justify-center mb-8">
+            <div className="p-3 md:p-4 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] hover:bg-white/10 transition-colors flex items-center gap-4">
+              <img
+                src="/logo.png"
+                alt="WasMatchDu Icon"
+                className="w-16 md:w-20 h-16 md:h-20 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] object-contain"
+              />
+              <span className="text-3xl md:text-4xl font-black tracking-tighter text-white drop-shadow-md pr-4">
+                WasMatch<span className="text-cyan-400 font-light">Du</span>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -190,57 +214,48 @@ export const Login: React.FC = () => {
             </div>
 
             <div className="mt-8 flex flex-col gap-3">
-              <button
-                onClick={simulateLogin}
-                className="w-full flex items-center justify-center relative py-[14px] px-4 border border-slate-800 rounded text-[15px] font-bold text-white bg-transparent hover:bg-slate-900/50 transition-colors focus:outline-none"
-              >
-                <span className="absolute left-4 font-black">FIFA</span>
-                <span>Continue with FIFA ID</span>
-              </button>
-
-              <button
-                onClick={simulateLogin}
-                className="w-full flex items-center justify-center relative py-[14px] px-4 border border-slate-800 rounded text-[15px] font-bold text-white bg-transparent hover:bg-slate-900/50 transition-colors focus:outline-none"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475656/google-color.svg"
-                  alt="Google"
-                  className="absolute left-4 w-5 h-5"
-                />
-                <span>Continue with Google</span>
-              </button>
-
-              <button
-                onClick={simulateLogin}
-                className="w-full flex items-center justify-center relative py-[14px] px-4 border border-slate-800 rounded text-[15px] font-bold text-white bg-transparent hover:bg-slate-900/50 transition-colors focus:outline-none"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/475647/facebook-color.svg"
-                  alt="Facebook"
-                  className="absolute left-4 w-5 h-5"
-                />
-                <span>Continue with Facebook</span>
-              </button>
-
-              <button
-                onClick={simulateLogin}
-                className="w-full flex items-center justify-center relative py-[14px] px-4 border border-slate-800 rounded text-[15px] font-bold text-white bg-transparent hover:bg-slate-900/50 transition-colors focus:outline-none"
-              >
-                <img
-                  src="https://www.svgrepo.com/show/511330/apple-173.svg"
-                  alt="Apple"
-                  className="absolute left-4 w-5 h-5 invert"
-                />
-                <span>Continue with Apple</span>
-              </button>
-
-              <button
-                onClick={simulateLogin}
-                className="w-full flex items-center justify-center relative py-[14px] px-4 border border-slate-800 border-dashed rounded text-[15px] font-bold text-slate-400 bg-transparent hover:bg-slate-900/50 hover:text-white transition-colors focus:outline-none mt-2"
-              >
-                <span>Dev Login (Bypass Auth)</span>
-              </button>
+              <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 text-center">Developer Toolkit</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  <button
+                    onClick={() => simulateLogin("user")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 border border-slate-700 rounded-lg text-sm font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white transition-colors focus:outline-none"
+                  >
+                    <span>👤 User</span>
+                  </button>
+                  <button
+                    onClick={() => simulateLogin("user", true)}
+                    className="flex items-center justify-center gap-2 py-3 px-4 border border-amber-900/50 rounded-lg text-sm font-bold text-amber-400 bg-amber-950/30 hover:bg-amber-900/50 hover:text-amber-300 transition-colors focus:outline-none"
+                  >
+                    <span>👑 Premium</span>
+                  </button>
+                  <button
+                    onClick={() => simulateLogin("operator")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 border border-indigo-900/50 rounded-lg text-sm font-bold text-indigo-400 bg-indigo-950/30 hover:bg-indigo-900/50 hover:text-indigo-300 transition-colors focus:outline-none"
+                  >
+                    <span>⚙️ Operator</span>
+                  </button>
+                  <button
+                    onClick={() => simulateLogin("admin")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 border border-emerald-900/50 rounded-lg text-sm font-bold text-emerald-400 bg-emerald-950/30 hover:bg-emerald-900/50 hover:text-emerald-300 transition-colors focus:outline-none"
+                  >
+                    <span>🛡️ Admin</span>
+                  </button>
+                  <button
+                    onClick={() => simulateLogin("dev")}
+                    className="flex items-center justify-center gap-2 py-3 px-4 border border-rose-900/50 rounded-lg text-sm font-bold text-rose-400 bg-rose-950/30 hover:bg-rose-900/50 hover:text-rose-300 transition-colors focus:outline-none"
+                  >
+                    <span>🧑‍💻 Dev</span>
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          <div className="mt-8 text-center">
+            <Link to="/legal" className="text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors">
+              Legal & DMCA Policy
+            </Link>
           </div>
         </div>
       </div>

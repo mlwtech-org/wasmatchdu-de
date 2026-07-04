@@ -4,6 +4,13 @@ import './index.css'
 import App from './App.tsx'
 import './lib/i18n';
 
+// Auto-reload page when service worker updates and takes control
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    window.location.reload();
+  });
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

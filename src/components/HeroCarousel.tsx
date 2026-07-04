@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { VideoPlayer } from "./VideoPlayer";
 import { ChevronLeft, ChevronRight, Tv } from "lucide-react";
-import { VERIFIED_RELIABLE_CHANNELS } from "../lib/constants";
+import { FALLBACK_CHANNELS } from "../lib/constants";
 import { Channel } from "../types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -15,7 +15,7 @@ interface HeroCarouselProps {
 }
 
 // Ensure we have a default list even if somehow missing
-const defaultFeatured = VERIFIED_RELIABLE_CHANNELS.slice(0, 4);
+const defaultFeatured = FALLBACK_CHANNELS.slice(0, 5);
 
 export const HeroCarousel: React.FC<HeroCarouselProps> = ({
   featuredChannels = defaultFeatured,

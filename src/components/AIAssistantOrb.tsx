@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Mic, MicOff, Key, X, Loader2, Play } from 'lucide-react';
+import { Mic, Bot, Key, X, Loader2, Play } from 'lucide-react';
 import { useAIAssistantStore } from '../store/useAIAssistantStore';
 import { usePlayerStore } from '../store/usePlayerStore';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -232,7 +232,9 @@ export const AIAssistantOrb: React.FC = () => {
           ) : isSpeaking ? (
             <Play className="w-6 h-6 text-white fill-white animate-pulse" />
           ) : (
-            <MicOff className="w-6 h-6 text-white/80 group-hover:text-white" />
+            <div title="AI Assistant">
+              <Bot className="w-6 h-6 text-white/80 group-hover:text-white transition-colors" />
+            </div>
           )}
         </button>
       </div>

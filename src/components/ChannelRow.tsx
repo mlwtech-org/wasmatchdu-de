@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Channel } from "../types";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { PlayCircle, Tv, Heart, Flame, Users } from "lucide-react";
+import { PlayCircle, Tv, Heart, Flame } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -94,8 +94,26 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                   isPlaying ? "ring-2 ring-blue-500 scale-[1.02]" : "",
                 )}
               >
-                {/* Fallback pattern or dynamic image */}
-                <div className="absolute inset-0 opacity-20 group-hover/card:opacity-40 transition-opacity bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-700 via-slate-900 to-black"></div>
+                {/* Stylized CSS category preview background */}
+                {(() => {
+                  const gradients = [
+                    "from-blue-900/40 via-indigo-900/40 to-slate-900",
+                    "from-emerald-900/40 via-teal-900/40 to-slate-900",
+                    "from-rose-900/40 via-pink-900/40 to-slate-900",
+                    "from-amber-900/40 via-orange-900/40 to-slate-900",
+                    "from-purple-900/40 via-fuchsia-900/40 to-slate-900",
+                    "from-cyan-900/40 via-blue-900/40 to-slate-900"
+                  ];
+                  const hash = channel.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                  const gradient = gradients[hash % gradients.length];
+                  
+                  return (
+                    <div className={cn(
+                      "absolute inset-0 bg-gradient-to-br transition-all duration-700 opacity-40 group-hover/card:opacity-80 scale-105 group-hover/card:scale-100",
+                      gradient
+                    )} />
+                  );
+                })()}
 
                 {/* Content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent">
@@ -176,27 +194,31 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                   </button>
                 )}
 
-                {/* Live Indicator */}
-                {isPlaying && (
+                {/* Live Indicator / Viewer Count */}
+                {isPlaying ? (
                   <div className="absolute top-3 left-3 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-wider rounded flex items-center gap-1 shadow-lg">
                     <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
                     Live
+                  </div>
+                ) : (
+                  <div className="absolute top-3 left-3 px-2 py-1 bg-red-600/90 backdrop-blur-sm text-white text-[10px] font-bold rounded flex items-center gap-1 shadow-lg border border-red-500/50">
+                    <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                    {(viewerCount / 1000).toFixed(1)}k
                   </div>
                 )}
 
                 {/* Trending Badge */}
                 {isTrending && !isPlaying && (
-                  <div className="absolute top-3 left-3 px-2 py-1 bg-orange-600/90 backdrop-blur-sm text-white text-xs font-bold rounded flex items-center gap-1 shadow-lg border border-orange-500/50">
+                  <div className="absolute top-3 right-3 px-2 py-1 bg-orange-600/90 backdrop-blur-sm text-white text-xs font-bold rounded flex items-center gap-1 shadow-lg border border-orange-500/50">
                     <Flame className="w-3 h-3 text-yellow-300" />
                     Trending
                   </div>
                 )}
 
-                {/* Viewer Count overlay for trending items */}
-                {isTrending && (
-                  <div className="absolute top-3 right-3 px-2 py-1 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold rounded flex items-center gap-1 shadow-lg border border-white/10">
-                    <Users className="w-3 h-3 text-slate-300" />
-                    {(viewerCount / 1000).toFixed(1)}k
+                {/* Provider Badge */}
+                {channel.provider && (
+                  <div className="absolute top-3 right-12 md:right-14 px-2.5 py-1 bg-gradient-to-r from-blue-600/90 to-indigo-600/90 backdrop-blur-md text-white text-[9px] sm:text-[10px] font-black tracking-widest uppercase rounded-full flex items-center gap-1 shadow-lg border border-white/20 transform hover:scale-105 transition-transform z-10">
+                    {channel.provider}
                   </div>
                 )}
               </div>

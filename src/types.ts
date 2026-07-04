@@ -1,7 +1,10 @@
+export type UserRole = "user" | "operator" | "admin" | "dev";
+
 export interface User {
   uid: string;
   email: string;
   isPremium?: boolean;
+  role: UserRole;
 }
 
 export interface UserProfile {
@@ -10,6 +13,8 @@ export interface UserProfile {
   avatarUrl: string;
   isKidsMode: boolean;
   pin?: string;
+  regionLock?: string;
+  contentRating?: string;
 }
 
 export interface Channel {
@@ -25,6 +30,7 @@ export interface Channel {
   currentProgramTime?: string;
   nextProgram?: string;
   nextProgramTime?: string;
+  provider?: string;
 }
 
 export interface PlayerState {
@@ -34,6 +40,7 @@ export interface PlayerState {
   globalChannels: Channel[]; // all public unverified channels
   favorites: string[];
   recentlyWatched: string[];
+  watchHistory: Record<string, number>;
   isTheaterMode: boolean;
   accessibilityMode: boolean;
   kidsMode: boolean;
@@ -42,9 +49,18 @@ export interface PlayerState {
   playNextChannel: () => void;
   setChannels: (channels: Channel[]) => void;
   toggleFavorite: (channelId: string) => void;
+  updateWatchHistory: (category: string, durationSeconds: number) => void;
   toggleTheaterMode: () => void;
   setAccessibilityMode: (mode: boolean) => void;
   setKidsMode: (mode: boolean) => void;
+}
+
+export interface FeedConfiguration {
+  id: string;
+  name: string;
+  url: string;
+  type: "global" | "regional";
+  allowedRoles: UserRole[];
 }
 
 export interface PlaylistState {

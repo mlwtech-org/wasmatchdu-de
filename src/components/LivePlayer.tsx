@@ -30,8 +30,10 @@ export const LivePlayer: React.FC = () => {
   const { channels, globalChannels, removeChannel } = usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(1);
+
   const [error, setError] = useState<string | null>(null);
   const [isBuffering, setIsBuffering] = useState(true);
   const [showIdleWarning, setShowIdleWarning] = useState(false);
@@ -90,23 +92,38 @@ export const LivePlayer: React.FC = () => {
   // and blocking the TS build.
 
   // Get current channel object from store
-  const { showUnstableChannels } = usePlayerStore();
+  const { showUnstableChannels, currentPlaylist } = usePlayerStore();
   // Determine if we are in "Global Surf" mode by checking if the streamId is in globalChannels but NOT in curated channels
   const isGlobalSurfMode =
     !channels.find((c) => c.id === streamId) &&
     globalChannels.some((c) => c.id === streamId);
-  const activeChannelList = isGlobalSurfMode ? globalChannels : channels;
+  const activeChannelList = currentPlaylist && currentPlaylist.length > 0 
+    ? currentPlaylist 
+    : (isGlobalSurfMode ? globalChannels : channels);
 
-  const currentChannelObj = activeChannelList.find((c) => c.id === streamId);
+  const currentStoreChannel = usePlayerStore((state) => state.currentChannel);
+  const currentChannelObj = activeChannelList.find((c) => c.id === streamId) || 
+    (currentStoreChannel?.id === streamId ? currentStoreChannel : undefined);
 
-  // Get visible channels based on filters
-  const visibleChannels = activeChannelList.filter((c) => {
-    if (!showUnstableChannels && c.isUnstable) return false;
-    if (regionFilter === "ALL") return true;
-    if (regionFilter === "REGIONAL") return c.isRegional;
-    if (regionFilter === "GLOBAL") return !c.isRegional;
-    return true;
-  });
+  // Get visible channels based on filters and active category alignment
+  const getVisibleChannels = () => {
+    const list = activeChannelList.filter((c) => {
+      if (!showUnstableChannels && c.isUnstable) return false;
+      if (regionFilter === "REGIONAL" && !c.isRegional) return false;
+      if (regionFilter === "GLOBAL" && c.isRegional) return false;
+      return true;
+    });
+
+    if (currentChannelObj?.gemeinwohlCategory) {
+      const categoryList = list.filter((c) => c.gemeinwohlCategory === currentChannelObj.gemeinwohlCategory);
+      if (categoryList.length > 0) {
+        return categoryList;
+      }
+    }
+    return list;
+  };
+
+  const visibleChannels = getVisibleChannels();
 
   const currentIndex = visibleChannels.findIndex((c) => c.id === streamId);
   const nextChannel =
@@ -216,6 +233,10 @@ export const LivePlayer: React.FC = () => {
     if (!videoRef.current) return;
     videoRef.current.muted = !videoRef.current.muted;
     setIsMuted(videoRef.current.muted);
+    if (!videoRef.current.muted && volume === 0) {
+      setVolume(1);
+      videoRef.current.volume = 1;
+    }
   };
 
   const toggleFullScreen = () => {
@@ -228,7 +249,7 @@ export const LivePlayer: React.FC = () => {
   };
 
   const handleChannelChange = (channelId: string) => {
-    navigate(`/live/${channelId}`, { replace: true });
+    navigate(`/live/${channelId}`, { replace: true, state: null });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -303,6 +324,7 @@ export const LivePlayer: React.FC = () => {
             )}
             <>
               <video
+                key={streamId}
                 ref={videoRef}
                 className="w-full h-full object-contain"
                 onPlay={() => setIsPlaying(true)}
@@ -447,19 +469,45 @@ export const LivePlayer: React.FC = () => {
                       <SkipForward className="w-6 h-6 text-white fill-white" />
                     </button>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleMute();
-                      }}
-                      className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
-                    >
-                      {isMuted ? (
-                        <VolumeX className="w-6 h-6 text-white" />
-                      ) : (
-                        <Volume2 className="w-6 h-6 text-white" />
-                      )}
-                    </button>
+                    <div className="flex items-center group">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleMute();
+                        }}
+                        className="p-2 hover:bg-white/10 rounded-full transition-colors ml-1 sm:ml-2"
+                      >
+                        {isMuted || volume === 0 ? (
+                          <VolumeX className="w-6 h-6 text-white" />
+                        ) : (
+                          <Volume2 className="w-6 h-6 text-white" />
+                        )}
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.05"
+                        value={isMuted ? 0 : volume}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const newVol = parseFloat(e.target.value);
+                          setVolume(newVol);
+                          if (videoRef.current) {
+                            videoRef.current.volume = newVol;
+                            if (newVol > 0 && isMuted) {
+                              videoRef.current.muted = false;
+                              setIsMuted(false);
+                            } else if (newVol === 0 && !isMuted) {
+                              videoRef.current.muted = true;
+                              setIsMuted(true);
+                            }
+                          }
+                        }}
+                        className="w-0 overflow-hidden group-hover:w-20 md:group-hover:w-24 transition-all duration-300 ml-1 cursor-pointer accent-white"
+                        title="Volume"
+                      />
+                    </div>
                   </div>
 
                   {/* Right Controls */}

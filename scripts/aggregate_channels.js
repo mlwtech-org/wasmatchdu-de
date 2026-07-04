@@ -1,0 +1,113 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const FAST_SOURCES = [
+  { id: "pluto-us", name: "Pluto TV (US)", url: "https://i.mjh.nz/PlutoTV/us.m3u8", provider: "Pluto TV" },
+  { id: "samsung-us", name: "Samsung TV Plus (US)", url: "https://i.mjh.nz/SamsungTVPlus/us.m3u8", provider: "Samsung TV+" },
+  { id: "plex-us", name: "Plex Live TV", url: "https://i.mjh.nz/Plex/us.m3u8", provider: "Plex" },
+  { id: "roku-us", name: "Roku Channel", url: "https://i.mjh.nz/Roku/us.m3u8", provider: "Roku" },
+  { id: "tubi-us", name: "Tubi Live", url: "https://i.mjh.nz/Tubi/us.m3u8", provider: "Tubi" },
+  { id: "iptv-de", name: "Live TV (DE)", url: "https://iptv-org.github.io/iptv/countries/de.m3u", provider: "Public IPTV" }
+];
+
+const targetDir = path.join(__dirname, '..', 'public');
+
+if (!fs.existsSync(targetDir)) {
+  fs.mkdirSync(targetDir, { recursive: true });
+}
+
+const generateId = (str) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return `ch-${Math.abs(hash).toString(36)}`;
+};
+
+const NSFW_TERMS = ["xxx", "porn", "adult", "18+", "onlyfans", "playboy", "hustler", "x-rated", "nsfw"];
+
+const parseM3U = (m3uContent, providerName) => {
+  const lines = m3uContent.split("\n");
+  const channels = [];
+  let currentChannel = {};
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (line.startsWith("#EXTINF:")) {
+      const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+      const groupMatch = line.match(/group-title="([^"]+)"/);
+      const nameMatch = line.match(/,(.+)$/);
+
+      const name = nameMatch ? nameMatch[1].trim() : "Unknown Channel";
+      const group = groupMatch ? groupMatch[1] : "Uncategorized";
+      const nameAndGroup = `${name} ${group}`.toLowerCase();
+
+      if (NSFW_TERMS.some((term) => nameAndGroup.includes(term))) {
+        currentChannel = {}; 
+        continue;
+      }
+
+      let gemeinwohlCategory = "Unterhaltung";
+      if (group.toLowerCase().includes("news")) gemeinwohlCategory = "Nachrichten & Info";
+      else if (group.toLowerCase().includes("movie") || group.toLowerCase().includes("film")) gemeinwohlCategory = "Filme & Serien";
+      else if (group.toLowerCase().includes("sport")) gemeinwohlCategory = "Sport & Action";
+      else if (group.toLowerCase().includes("music")) gemeinwohlCategory = "Musik & Kultur";
+      else if (group.toLowerCase().includes("docu") || group.toLowerCase().includes("wissen")) gemeinwohlCategory = "Doku & Wissen";
+      else if (group.toLowerCase().includes("kids")) gemeinwohlCategory = "Kinder & Familie";
+
+      currentChannel = {
+        logo: logoMatch ? logoMatch[1] : "",
+        group,
+        name,
+        isRegional: false,
+        gemeinwohlCategory,
+        isUnstable: false,
+        provider: providerName,
+      };
+    } else if (line.startsWith("http") && currentChannel.name) {
+      currentChannel.url = line;
+      currentChannel.id = generateId(line);
+
+      channels.push({ ...currentChannel });
+      currentChannel = {};
+    }
+  }
+  return channels;
+};
+
+async function aggregateFeeds() {
+  console.log("Downloading and aggregating feeds...");
+  let allChannels = [];
+  const uniqueUrls = new Set();
+
+  for (const source of FAST_SOURCES) {
+    try {
+      const res = await fetch(source.url);
+      if (!res.ok) continue;
+      const text = await res.text();
+      const parsedChannels = parseM3U(text, source.provider);
+      
+      for (const ch of parsedChannels) {
+        if (!uniqueUrls.has(ch.url)) {
+          uniqueUrls.add(ch.url);
+          allChannels.push(ch);
+        }
+      }
+      console.log(`Parsed ${parsedChannels.length} channels from ${source.name}`);
+    } catch (e) {
+      console.error(`Error with ${source.name}:`, e.message);
+    }
+  }
+
+  console.log(`Writing ${allChannels.length} total channels to public/channels.json`);
+  fs.writeFileSync(path.join(targetDir, 'channels.json'), JSON.stringify(allChannels, null, 2));
+}
+
+aggregateFeeds();

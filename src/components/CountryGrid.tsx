@@ -12,23 +12,39 @@ interface CountryGridProps {
   onSelectCountry: () => void;
 }
 
-const COUNTRIES = [
-  { code: "us", name: "United States", emoji: "🇺🇸" },
-  { code: "gb", name: "United Kingdom", emoji: "🇬🇧" },
-  { code: "de", name: "Germany", emoji: "🇩🇪" },
-  { code: "in", name: "India", emoji: "🇮🇳" },
-  { code: "es", name: "Spain", emoji: "🇪🇸" },
-  { code: "fr", name: "France", emoji: "🇫🇷" },
-  { code: "it", name: "Italy", emoji: "🇮🇹" },
-  { code: "br", name: "Brazil", emoji: "🇧🇷" },
-  { code: "mx", name: "Mexico", emoji: "🇲🇽" },
-  { code: "jp", name: "Japan", emoji: "🇯🇵" },
-  { code: "kr", name: "South Korea", emoji: "🇰🇷" },
-  { code: "au", name: "Australia", emoji: "🇦🇺" },
-  { code: "ca", name: "Canada", emoji: "🇨🇦" },
-  { code: "tr", name: "Turkey", emoji: "🇹🇷" },
-  { code: "ru", name: "Russia", emoji: "🇷🇺" },
-  { code: "za", name: "South Africa", emoji: "🇿🇦" },
+interface RegionInfo {
+  code: string;
+  name: string;
+  emoji: string;
+  type: "country" | "language";
+}
+
+const REGIONS: RegionInfo[] = [
+  // Countries
+  { code: "us", name: "United States", emoji: "🇺🇸", type: "country" },
+  { code: "gb", name: "United Kingdom", emoji: "🇬🇧", type: "country" },
+  { code: "de", name: "Germany", emoji: "🇩🇪", type: "country" },
+  { code: "in", name: "India", emoji: "🇮🇳", type: "country" },
+  { code: "pl", name: "Poland", emoji: "🇵🇱", type: "country" },
+  { code: "es", name: "Spain", emoji: "🇪🇸", type: "country" },
+  { code: "fr", name: "France", emoji: "🇫🇷", type: "country" },
+  { code: "it", name: "Italy", emoji: "🇮🇹", type: "country" },
+  { code: "br", name: "Brazil", emoji: "🇧🇷", type: "country" },
+  { code: "mx", name: "Mexico", emoji: "🇲🇽", type: "country" },
+  { code: "jp", name: "Japan", emoji: "🇯🇵", type: "country" },
+  { code: "kr", name: "South Korea", emoji: "🇰🇷", type: "country" },
+  { code: "au", name: "Australia", emoji: "🇦🇺", type: "country" },
+  { code: "ca", name: "Canada", emoji: "🇨🇦", type: "country" },
+  { code: "tr", name: "Turkey", emoji: "🇹🇷", type: "country" },
+  { code: "ru", name: "Russia", emoji: "🇷🇺", type: "country" },
+  { code: "za", name: "South Africa", emoji: "🇿🇦", type: "country" },
+  
+  // Languages (Regional)
+  { code: "hin", name: "Hindi", emoji: "🕉️", type: "language" },
+  { code: "tel", name: "Telugu", emoji: "🛕", type: "language" },
+  { code: "tam", name: "Tamil", emoji: "🎬", type: "language" },
+  { code: "ben", name: "Bengali", emoji: "🐅", type: "language" },
+  { code: "pan", name: "Punjabi", emoji: "🌾", type: "language" },
 ];
 
 export const CountryGrid: React.FC<CountryGridProps> = ({
@@ -37,15 +53,17 @@ export const CountryGrid: React.FC<CountryGridProps> = ({
   const { setChannels, setIsLoading, setError, channels } = usePlayerStore();
   const [loadingCountry, setLoadingCountry] = useState<string | null>(null);
 
-  const fetchCountryChannels = async (code: string) => {
-    setLoadingCountry(code);
+  const fetchRegionChannels = async (region: RegionInfo) => {
+    setLoadingCountry(region.code);
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `https://iptv-org.github.io/iptv/countries/${code}.m3u`,
-      );
-      if (!response.ok) throw new Error("Failed to load country playlist");
+      const endpoint = region.type === "language" 
+        ? `https://iptv-org.github.io/iptv/languages/${region.code}.m3u`
+        : `https://iptv-org.github.io/iptv/countries/${region.code}.m3u`;
+        
+      const response = await fetch(endpoint);
+      if (!response.ok) throw new Error("Failed to load regional playlist");
 
       const text = await response.text();
       const parsedChannels = parseM3U(text);
@@ -79,37 +97,35 @@ export const CountryGrid: React.FC<CountryGridProps> = ({
           Regional Explorer
         </h2>
         <p className="text-slate-400 text-lg max-w-2xl font-medium">
-          Select a country to instantly load its local broadcast channels, news,
+          Select a country or language to instantly load local broadcast channels, news,
           and entertainment.
         </p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 pb-24">
-        {COUNTRIES.map((country) => (
+        {REGIONS.map((region) => (
           <button
-            key={country.code}
-            onClick={() => fetchCountryChannels(country.code)}
+            key={`${region.type}-${region.code}`}
+            onClick={() => fetchRegionChannels(region)}
             disabled={loadingCountry !== null}
             className={cn(
               "group relative flex flex-col items-center p-6 bg-slate-900 rounded-2xl border border-slate-800 transition-all duration-300",
               "hover:bg-slate-800 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 hover:border-blue-500/50",
-              loadingCountry === country.code &&
+              loadingCountry === region.code &&
                 "animate-pulse ring-2 ring-blue-500",
             )}
           >
             <div className="text-6xl mb-4 transform transition-transform group-hover:scale-110 group-hover:-rotate-3 drop-shadow-2xl">
-              {country.emoji}
+              {region.emoji}
             </div>
-
-            <h3 className="text-lg font-bold text-white text-center mb-1">
-              {country.name}
-            </h3>
-
-            <p className="text-xs text-slate-500 font-mono uppercase tracking-widest">
-              {country.code}
-            </p>
-
-            {loadingCountry === country.code ? (
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-white mb-1">
+                {region.name}
+              </h3>
+              <span className="text-sm font-medium text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors">
+                {region.code.toUpperCase()} • {region.type === 'language' ? 'LANG' : 'GEO'}
+              </span>
+            </div> {loadingCountry === region.code ? (
               <div className="absolute top-4 right-4 bg-blue-500/20 p-2 rounded-full backdrop-blur-md">
                 <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
               </div>

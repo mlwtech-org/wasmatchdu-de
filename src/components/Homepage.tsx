@@ -4,7 +4,8 @@ import { Heart, ShieldCheck, Users, PlayCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { usePWAInstall } from "../hooks/usePWAInstall";
-import { Download } from "lucide-react";
+import { Download, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
+import { FALLBACK_CHANNELS } from "../lib/constants";
 
 export const Homepage: React.FC = () => {
   const { t } = useTranslation();
@@ -98,6 +99,88 @@ export const Homepage: React.FC = () => {
         </div>
       </main>
 
+      {/* Live Channels Marquee Preview */}
+      <section className="relative -mt-20 z-20 pb-20 overflow-hidden">
+        <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none"></div>
+        <div className="flex w-[200%] animate-marquee">
+          {/* Double the array for seamless infinite scrolling */}
+          {[...FALLBACK_CHANNELS, ...FALLBACK_CHANNELS].map((channel, i) => (
+            <div key={i} className="flex-none w-72 mx-3 group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 transition-transform hover:scale-105 hover:z-30">
+              <div className="aspect-video relative bg-black">
+                <img src={channel.logo} alt={channel.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
+                <div className="absolute top-3 right-3 bg-red-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
+                  LIVE
+                </div>
+              </div>
+              <div className="p-4 absolute bottom-0 left-0 w-full">
+                <h4 className="font-bold text-white truncate">{channel.name}</h4>
+                <p className="text-xs text-slate-400 truncate">{channel.currentProgram}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Watch Anywhere - Device Ecosystem */}
+      <section className="py-24 bg-slate-950 relative overflow-hidden border-t border-slate-900">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black mb-4">Watch Anywhere</h2>
+            <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">One seamless experience across all your screens. Pick up right where you left off.</p>
+          </div>
+          
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+            {/* Devices Mockup Visual */}
+            <div className="relative w-full max-w-2xl">
+              <div className="absolute -inset-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl rounded-full"></div>
+              
+              {/* Fake UI Image representing Dashboard */}
+              <div className="relative rounded-xl overflow-hidden border border-slate-700 shadow-2xl shadow-blue-900/50">
+                <div className="bg-slate-800 h-6 w-full flex items-center px-4 gap-2">
+                  <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                </div>
+                <img src="/mockup-ui.png" alt="Platform UI Mockup" className="w-full h-auto" />
+              </div>
+            </div>
+            
+            <div className="space-y-8 flex-1 max-w-md">
+              <div className="flex gap-4 items-start">
+                <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800 flex-shrink-0">
+                  <Monitor className="text-cyan-400" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-1">Smart TVs</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">Built with a 10-foot spatial navigation system. Full remote control support.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800 flex-shrink-0">
+                  <Tablet className="text-purple-400" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-1">Tablets</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">Touch-optimized grids and PiP (Picture in Picture) for true multitasking.</p>
+                </div>
+              </div>
+              <div className="flex gap-4 items-start">
+                <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800 flex-shrink-0">
+                  <Smartphone className="text-blue-400" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-1">Mobile Native</h4>
+                  <p className="text-slate-400 text-sm leading-relaxed">Install as a PWA directly to your home screen for an app-like experience without the App Store.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
       <section
         id="features"
@@ -135,6 +218,42 @@ export const Homepage: React.FC = () => {
             <p className="text-slate-400 leading-relaxed">
               {t("homepage.localRegionalDesc")}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Mission Section */}
+      <section id="about" className="container mx-auto px-6 py-24 border-t border-slate-800/50 relative overflow-hidden">
+        {/* Glow Effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-cyan-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+        
+        <div className="max-w-4xl mx-auto relative z-10 text-center">
+          <h2 className="text-3xl md:text-5xl font-black mb-8 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+            Our Mission: Best-In-Class Community Service
+          </h2>
+          <p className="text-xl md:text-2xl text-slate-300 leading-relaxed mb-12 font-light">
+            We believe that free, open access to high-quality information and entertainment is a fundamental digital right. Our platform is built on the principle of <span className="font-bold text-white">democratizing broadcasting</span>.
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-8 text-left">
+            <div className="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-xl">
+              <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-6">
+                <ShieldCheck className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-white">Verified & Safe</h3>
+              <p className="text-slate-400 leading-relaxed">
+                We combat broken links and misinformation by aggressively curating and validating public streams. Our built-in Kids Mode and Senior-Safe UI ensure a secure environment for every generation.
+              </p>
+            </div>
+            <div className="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-xl">
+              <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
+                <Globe className="w-6 h-6 text-blue-400" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-white">Global & Regional</h3>
+              <p className="text-slate-400 leading-relaxed">
+                From local news broadcasts to the NASA ISS live feed, we bridge the gap between global events and your local community without hidden fees, subscriptions, or invasive tracking.
+              </p>
+            </div>
           </div>
         </div>
       </section>
