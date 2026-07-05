@@ -130,7 +130,10 @@ export const LivePlayer: React.FC = () => {
         const relatedList = list.filter(
           (c) => c.gemeinwohlCategory === category || c.group === category,
         );
-        if (relatedList.length > 0) return relatedList;
+        // Ensure we have actual recommendations (more than just the current channel)
+        if (relatedList.length > 1) {
+          return relatedList;
+        }
       }
     }
 
