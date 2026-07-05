@@ -371,7 +371,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
       </div>
 
       {/* ── Bottom Controls ───────────────────────────────────────────── */}
-      <div className="absolute bottom-6 left-0 right-0 z-20 max-w-[1600px] mx-auto px-6 md:px-12 flex items-end justify-between gap-4">
+      <div className="absolute bottom-24 md:bottom-36 left-0 right-0 z-20 max-w-[1600px] mx-auto px-6 md:px-12 flex items-end justify-between gap-4">
         {/* Slide indicators */}
         <div className="flex items-center gap-2">
           {channels.map((_, idx) => (
