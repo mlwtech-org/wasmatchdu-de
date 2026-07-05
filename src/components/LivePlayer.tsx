@@ -20,6 +20,7 @@ import {
   Subtitles,
   Settings,
   PictureInPicture,
+  Heart,
 } from "lucide-react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { FALLBACK_CHANNELS } from "../lib/constants";
@@ -95,7 +96,8 @@ export const LivePlayer: React.FC = () => {
   // and blocking the TS build.
 
   // Get current channel object from store
-  const { showUnstableChannels, currentPlaylist } = usePlayerStore();
+  const { showUnstableChannels, currentPlaylist, favorites, toggleFavorite } =
+    usePlayerStore();
   // Determine if we are in "Global Surf" mode by checking if the streamId is in globalChannels but NOT in curated channels
   const isGlobalSurfMode =
     !channels.find((c) => c.id === streamId) &&
@@ -529,6 +531,25 @@ export const LivePlayer: React.FC = () => {
 
                   {/* Right Controls */}
                   <div className="flex items-center gap-1 sm:gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (currentChannelObj)
+                          toggleFavorite(currentChannelObj.id);
+                      }}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                      title="Toggle Favorite"
+                    >
+                      <Heart
+                        className={`w-5 h-5 transition-colors ${
+                          currentChannelObj &&
+                          favorites.includes(currentChannelObj.id)
+                            ? "fill-red-500 text-red-500"
+                            : "text-white"
+                        }`}
+                      />
+                    </button>
+
                     <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
                       <Share2 className="w-5 h-5 text-white" />
                     </button>

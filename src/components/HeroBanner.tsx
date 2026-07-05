@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play, Plus, ChevronLeft, ChevronRight, Radio } from "lucide-react";
+import { Play, ChevronLeft, ChevronRight, Radio, Heart } from "lucide-react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { Channel } from "../types";
 import { FALLBACK_CHANNELS } from "../lib/constants";
@@ -102,9 +102,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [progress, setProgress] = useState(0);
-  const setCurrentPlaylist = usePlayerStore(
-    (state) => state.setCurrentPlaylist,
-  );
+  const { setCurrentPlaylist, favorites, toggleFavorite } = usePlayerStore();
   const progressInterval = useRef<ReturnType<typeof setInterval> | null>(null);
   const rotateTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -323,15 +321,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
                 Watch Now
               </button>
               <button
-                onClick={() => {
-                  setCurrentPlaylist([]);
-                  navigate(`/live/${active.id}`);
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(active.id);
                 }}
                 className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl font-bold text-sm text-white transition-all hover:scale-105 active:scale-95 border border-white/20 hover:border-white/40 backdrop-blur-md hover:bg-white/10"
                 style={{ background: "rgba(255,255,255,0.08)" }}
               >
-                <Plus className="w-5 h-5" />
-                My List
+                <Heart
+                  className={`w-5 h-5 ${favorites.includes(active.id) ? "fill-red-500 text-red-500" : "text-white"}`}
+                />
+                {favorites.includes(active.id) ? "Favorited" : "My List"}
               </button>
             </div>
           </div>
