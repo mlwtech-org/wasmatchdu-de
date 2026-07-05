@@ -15,12 +15,15 @@ export const Homepage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-primary/30">
       {/* Header */}
       <header className="container mx-auto px-6 py-6 flex justify-between items-center relative z-10">
-        <div className="flex items-center gap-2 text-2xl font-black tracking-tighter text-white">
+        <div className="flex items-center gap-2 text-2xl md:text-3xl font-black tracking-tighter text-white">
           <img
             src="/logo.png"
-            alt="WMD Streams Logo"
-            className="h-8 w-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.8)]"
+            alt="WasMatchDu Logo"
+            className="h-8 md:h-10 w-auto drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
           />
+          <span className="tracking-tighter text-white drop-shadow-md">
+            WasMatch<span className="text-cyan-400 font-light">Du</span>
+          </span>
         </div>
         <nav className="hidden md:flex items-center gap-8 font-medium text-slate-300">
           <a href="#features" className="hover:text-white transition-colors">
@@ -106,9 +109,16 @@ export const Homepage: React.FC = () => {
         <div className="flex w-[200%] animate-marquee">
           {/* Double the array for seamless infinite scrolling */}
           {[...FALLBACK_CHANNELS, ...FALLBACK_CHANNELS].map((channel, i) => (
-            <div key={i} className="flex-none w-72 mx-3 group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 transition-transform hover:scale-105 hover:z-30">
+            <div
+              key={i}
+              className="flex-none w-72 mx-3 group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-900 border border-slate-800 transition-transform hover:scale-105 hover:z-30"
+            >
               <div className="aspect-video relative bg-black">
-                <img src={channel.logo} alt={channel.name} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" />
+                <img
+                  src={channel.logo}
+                  alt={channel.name}
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
                 <div className="absolute top-3 right-3 bg-red-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
@@ -116,8 +126,12 @@ export const Homepage: React.FC = () => {
                 </div>
               </div>
               <div className="p-4 absolute bottom-0 left-0 w-full">
-                <h4 className="font-bold text-white truncate">{channel.name}</h4>
-                <p className="text-xs text-slate-400 truncate">{channel.currentProgram}</p>
+                <h4 className="font-bold text-white truncate">
+                  {channel.name}
+                </h4>
+                <p className="text-xs text-slate-400 truncate">
+                  {channel.currentProgram}
+                </p>
               </div>
             </div>
           ))}
@@ -128,15 +142,20 @@ export const Homepage: React.FC = () => {
       <section className="py-24 bg-slate-950 relative overflow-hidden border-t border-slate-900">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black mb-4">Watch Anywhere</h2>
-            <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">One seamless experience across all your screens. Pick up right where you left off.</p>
+            <h2 className="text-3xl md:text-5xl font-black mb-4">
+              Watch Anywhere
+            </h2>
+            <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
+              One seamless experience across all your screens. Pick up right
+              where you left off.
+            </p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
             {/* Devices Mockup Visual */}
             <div className="relative w-full max-w-2xl">
               <div className="absolute -inset-10 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-3xl rounded-full"></div>
-              
+
               {/* Fake UI Image representing Dashboard */}
               <div className="relative rounded-xl overflow-hidden border border-slate-700 shadow-2xl shadow-blue-900/50">
                 <div className="bg-slate-800 h-6 w-full flex items-center px-4 gap-2">
@@ -144,10 +163,14 @@ export const Homepage: React.FC = () => {
                   <div className="w-2 h-2 rounded-full bg-amber-500"></div>
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
                 </div>
-                <img src="/mockup-ui.png" alt="Platform UI Mockup" className="w-full h-auto" />
+                <img
+                  src="/mockup-ui.png"
+                  alt="Platform UI Mockup"
+                  className="w-full h-auto"
+                />
               </div>
             </div>
-            
+
             <div className="space-y-8 flex-1 max-w-md">
               <div className="flex gap-4 items-start">
                 <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center border border-slate-800 flex-shrink-0">
@@ -155,7 +178,10 @@ export const Homepage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold mb-1">Smart TVs</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">Built with a 10-foot spatial navigation system. Full remote control support.</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Built with a 10-foot spatial navigation system. Full remote
+                    control support.
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
@@ -164,7 +190,10 @@ export const Homepage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold mb-1">Tablets</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">Touch-optimized grids and PiP (Picture in Picture) for true multitasking.</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Touch-optimized grids and PiP (Picture in Picture) for true
+                    multitasking.
+                  </p>
                 </div>
               </div>
               <div className="flex gap-4 items-start">
@@ -173,7 +202,10 @@ export const Homepage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-xl font-bold mb-1">Mobile Native</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">Install as a PWA directly to your home screen for an app-like experience without the App Store.</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                    Install as a PWA directly to your home screen for an
+                    app-like experience without the App Store.
+                  </p>
                 </div>
               </div>
             </div>
@@ -223,35 +255,53 @@ export const Homepage: React.FC = () => {
       </section>
 
       {/* Our Mission Section */}
-      <section id="about" className="container mx-auto px-6 py-24 border-t border-slate-800/50 relative overflow-hidden">
+      <section
+        id="about"
+        className="container mx-auto px-6 py-24 border-t border-slate-800/50 relative overflow-hidden"
+      >
         {/* Glow Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-cyan-600/10 blur-[100px] rounded-full pointer-events-none"></div>
-        
+
         <div className="max-w-4xl mx-auto relative z-10 text-center">
           <h2 className="text-3xl md:text-5xl font-black mb-8 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
             Our Mission: Best-In-Class Community Service
           </h2>
           <p className="text-xl md:text-2xl text-slate-300 leading-relaxed mb-12 font-light">
-            We believe that free, open access to high-quality information and entertainment is a fundamental digital right. Our platform is built on the principle of <span className="font-bold text-white">democratizing broadcasting</span>.
+            We believe that free, open access to high-quality information and
+            entertainment is a fundamental digital right. Our platform is built
+            on the principle of{" "}
+            <span className="font-bold text-white">
+              democratizing broadcasting
+            </span>
+            .
           </p>
-          
+
           <div className="grid md:grid-cols-2 gap-8 text-left">
             <div className="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-xl">
               <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center mb-6">
                 <ShieldCheck className="w-6 h-6 text-cyan-400" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-white">Verified & Safe</h3>
+              <h3 className="text-xl font-bold mb-3 text-white">
+                Verified & Safe
+              </h3>
               <p className="text-slate-400 leading-relaxed">
-                We combat broken links and misinformation by aggressively curating and validating public streams. Our built-in Kids Mode and Senior-Safe UI ensure a secure environment for every generation.
+                We combat broken links and misinformation by aggressively
+                curating and validating public streams. Our built-in Kids Mode
+                and Senior-Safe UI ensure a secure environment for every
+                generation.
               </p>
             </div>
             <div className="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 shadow-xl">
               <div className="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mb-6">
                 <Globe className="w-6 h-6 text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-white">Global & Regional</h3>
+              <h3 className="text-xl font-bold mb-3 text-white">
+                Global & Regional
+              </h3>
               <p className="text-slate-400 leading-relaxed">
-                From local news broadcasts to the NASA ISS live feed, we bridge the gap between global events and your local community without hidden fees, subscriptions, or invasive tracking.
+                From local news broadcasts to the NASA ISS live feed, we bridge
+                the gap between global events and your local community without
+                hidden fees, subscriptions, or invasive tracking.
               </p>
             </div>
           </div>
