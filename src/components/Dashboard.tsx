@@ -46,6 +46,8 @@ export const Dashboard: React.FC = () => {
   const [currentTab, setCurrentTab] = useState("home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarCollapsed] = useState(false);
+  const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+  const [isProUpgradeModalOpen, setIsProUpgradeModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -321,13 +323,34 @@ export const Dashboard: React.FC = () => {
                   </div>
                 </>
               )}
-              <button
-                onClick={() => navigate("/sports")}
-                className="hidden lg:flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-medium transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-              >
-                <Grid className="w-5 h-5 shrink-0" />
-                {!isSidebarCollapsed && "Categories"}
-              </button>
+              <div className="hidden lg:flex w-full flex-col gap-2 px-1">
+                <button
+                  onClick={() => setIsRegionModalOpen(true)}
+                  className="flex items-center justify-between w-full px-3 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition-colors border border-slate-700/50"
+                >
+                  <div className="flex items-center gap-2">
+                    <Globe2 className="w-4 h-4 text-blue-400" />
+                    {!isSidebarCollapsed && <span>Region</span>}
+                  </div>
+                  {!isSidebarCollapsed && (
+                    <span className="text-xs text-slate-400">Global</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setIsProUpgradeModalOpen(true)}
+                  className="flex items-center justify-between w-full px-3 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition-colors border border-slate-700/50 group"
+                >
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
+                    {!isSidebarCollapsed && <span>VPN</span>}
+                  </div>
+                  {!isSidebarCollapsed && (
+                    <span className="text-[10px] font-bold bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded uppercase tracking-wider border border-amber-500/30">
+                      Pro
+                    </span>
+                  )}
+                </button>
+              </div>
               <button
                 data-focusable="true"
                 onClick={() => navigate("/profile-selection")}
@@ -689,6 +712,96 @@ export const Dashboard: React.FC = () => {
 
       {/* Persistent Global Radio Player */}
       <GlobalRadioPlayer />
+
+      {/* Region Selection Modal */}
+      {isRegionModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 w-full max-w-md relative shadow-2xl">
+            <button
+              onClick={() => setIsRegionModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-3 mb-6">
+              <Globe2 className="w-8 h-8 text-blue-500" />
+              <h2 className="text-2xl font-black text-white tracking-tight">
+                Select Region
+              </h2>
+            </div>
+            <div className="space-y-3">
+              {["Global (Auto)", "Europe", "North America", "Asia Pacific"].map(
+                (region, i) => (
+                  <button
+                    key={region}
+                    onClick={() => setIsRegionModalOpen(false)}
+                    className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${
+                      i === 0
+                        ? "bg-blue-600/20 border-blue-500 text-white"
+                        : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:border-slate-600"
+                    }`}
+                  >
+                    <span className="font-medium">{region}</span>
+                    {i === 0 && (
+                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                    )}
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pro Upgrade Modal */}
+      {isProUpgradeModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-8 w-full max-w-lg relative shadow-2xl overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none"></div>
+
+            <button
+              onClick={() => setIsProUpgradeModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-full transition-colors z-10"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(245,158,11,0.3)]">
+                <Shield className="w-10 h-10 text-slate-950" />
+              </div>
+
+              <h2 className="text-3xl font-black text-white tracking-tight mb-2">
+                Secure VPN Access
+              </h2>
+              <p className="text-amber-400 font-bold tracking-widest uppercase text-sm mb-6">
+                Pro Feature
+              </p>
+
+              <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+                Bypass geo-restrictions and ISP throttling instantly. Upgrade to
+                Pro for high-speed, encrypted streaming on all channels.
+              </p>
+
+              <div className="w-full space-y-3">
+                <button
+                  onClick={() => setIsProUpgradeModalOpen(false)}
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-lg px-8 py-4 rounded-xl transition-all shadow-lg transform hover:scale-[1.02]"
+                >
+                  Upgrade to Pro
+                </button>
+                <button
+                  onClick={() => setIsProUpgradeModalOpen(false)}
+                  className="w-full bg-transparent hover:bg-slate-800 text-slate-400 font-medium px-8 py-4 rounded-xl transition-colors"
+                >
+                  Maybe Later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
