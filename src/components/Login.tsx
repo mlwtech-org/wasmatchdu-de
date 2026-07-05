@@ -1,106 +1,119 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
 import {
-  sendSignInLinkToEmail,
-  isSignInWithEmailLink,
-  signInWithEmailLink,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../lib/firebase";
-import { Loader2, Info, CheckCircle2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { auth, db } from "../lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { Loader2, Info } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { UserRole } from "../types";
 
+const ADMIN_EMAILS = [
+  "anilkumaraero@gmail.com",
+  "anilkumardeu@gmail.com",
+  "bobkiowsky@gmail.com",
+];
+
 export const Login: React.FC = () => {
-  const { t } = useTranslation();
+  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
   const setUser = usePlayerStore((state) => state.setUser);
   const addProfile = usePlayerStore((state) => state.addProfile);
   const setActiveProfile = usePlayerStore((state) => state.setActiveProfile);
-  const loadUserDataFromFirebase = usePlayerStore((state) => state.loadUserDataFromFirebase);
+  const loadUserDataFromFirebase = usePlayerStore(
+    (state) => state.loadUserDataFromFirebase,
+  );
 
-  // Handle returning from a magic link
-  useEffect(() => {
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      let savedEmail = window.localStorage.getItem("emailForSignIn");
-      if (!savedEmail) {
-        // Fallback for when they open the link on a different device
-        savedEmail = window.prompt(
-          "Please provide your email for confirmation",
-        );
-      }
-
-      if (savedEmail) {
-        setStatus("loading");
-        signInWithEmailLink(auth, savedEmail, window.location.href)
-          .then(async (result) => {
-            window.localStorage.removeItem("emailForSignIn");
-            setUser({ email: result.user.email || "", uid: result.user.uid, role: "user" });
-            
-            // Sync cross-device watch history and premium status
-            await loadUserDataFromFirebase(result.user.uid);
-            
-            navigate("/dashboard");
-          })
-          .catch((error) => {
-            console.error(error);
-            setStatus("error");
-            setErrorMessage("Invalid or expired link. Please try again.");
-          });
-      }
-    }
-  }, [navigate, setUser]);
-
-  const handleMagicLinkSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-
-    const actionCodeSettings = {
-      url: window.location.origin + "/login",
-      handleCodeInApp: true,
-    };
+    setErrorMessage("");
 
     try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      window.localStorage.setItem("emailForSignIn", email);
+      if (isSignUp) {
+        // Register new user
+        const result = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password,
+        );
+        const newRole = ADMIN_EMAILS.includes(email) ? "admin" : "user";
+
+        // Save initial role to Firestore
+        await setDoc(
+          doc(db, "users", result.user.uid),
+          {
+            role: newRole,
+            isPremium: false,
+            createdAt: new Date().toISOString(),
+          },
+          { merge: true },
+        );
+
+        setUser({
+          email: result.user.email || "",
+          uid: result.user.uid,
+          role: newRole as UserRole,
+        });
+      } else {
+        // Sign in existing user
+        const result = await signInWithEmailAndPassword(auth, email, password);
+        // Temporarily set as 'user', loadUserDataFromFirebase will fetch actual role
+        setUser({
+          email: result.user.email || "",
+          uid: result.user.uid,
+          role: "user",
+        });
+        await loadUserDataFromFirebase(result.user.uid);
+      }
+
       setStatus("success");
+      navigate("/dashboard");
     } catch (err: unknown) {
       setStatus("error");
       const error = err as { code?: string; message?: string };
-      if (error.code === "auth/invalid-api-key") {
+      if (
+        error.code === "auth/invalid-api-key" ||
+        error.code === "auth/network-request-failed"
+      ) {
         setErrorMessage(
-          "Firebase is not configured yet. Using Dev Mode bypass...",
+          "Firebase is not configured or offline. Using Dev Mode bypass...",
         );
-        setTimeout(() => {
-          simulateLogin("user");
-        }, 1500);
+        setTimeout(() => simulateLogin("user"), 1500);
       } else {
         setErrorMessage(
-          error.message || "Something went wrong. Please try again.",
+          error.message || "Invalid credentials. Please try again.",
         );
       }
     }
   };
 
   const simulateLogin = (role: UserRole, isPremium: boolean = false) => {
-    setUser({ email: `${role}@example.com`, uid: `dev-${role}`, role, isPremium });
-    
-    // Auto-create a profile to bypass the Create Profile screen
+    setUser({
+      email: `${role}@example.com`,
+      uid: `dev-${role}`,
+      role,
+      isPremium,
+    });
+
     const profileId = `profile-${Date.now()}`;
     addProfile({
       id: profileId,
       name: `${role.charAt(0).toUpperCase() + role.slice(1)} Profile`,
-      avatarUrl: "cat", // fallback avatar id
+      avatarUrl: "cat",
       isKidsMode: false,
     });
     setActiveProfile(profileId);
-
     navigate("/dashboard");
   };
 
@@ -128,7 +141,7 @@ export const Login: React.FC = () => {
         </div>
 
         <h2 className="mt-6 text-center text-3xl font-bold text-white tracking-tight">
-          Log in or sign up
+          {isSignUp ? "Create an account" : "Log in to your account"}
         </h2>
         <p className="mt-4 text-center text-[15px] text-slate-300 font-medium px-4 leading-relaxed">
           Get access to live sports, highlights, shows,
@@ -139,67 +152,68 @@ export const Login: React.FC = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[440px] relative z-10 px-4">
         <div className="bg-transparent py-4">
-          {status === "success" ? (
-            <div className="text-center py-6 animate-in fade-in zoom-in duration-500">
-              <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/30">
-                <CheckCircle2 className="w-10 h-10 text-green-400" />
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="appearance-none block w-full px-4 py-[18px] bg-transparent border border-slate-700 rounded text-white focus:outline-none focus:border-white sm:text-base transition-colors mb-4"
+                placeholder="Email address"
+              />
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete={isSignUp ? "new-password" : "current-password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none block w-full px-4 py-[18px] bg-transparent border border-slate-700 rounded text-white focus:outline-none focus:border-white sm:text-base transition-colors"
+                placeholder="Password"
+                minLength={6}
+              />
+            </div>
+
+            {errorMessage && (
+              <div className="text-red-400 text-sm font-medium bg-red-950/30 p-3 rounded flex items-start gap-2 border border-red-900/50">
+                <Info className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{errorMessage}</span>
               </div>
-              <h3 className="text-2xl font-black text-white mb-3">
-                {t("login.checkEmail")}
-              </h3>
-              <p className="text-slate-300 text-lg">
-                {t("login.magicLinkSent")}{" "}
-                <strong className="text-white bg-slate-800 px-2 py-1 rounded-md ml-1">
-                  {email}
-                </strong>
-                .
-              </p>
-              <p className="text-slate-400 mt-2">{t("login.clickToSignIn")}</p>
+            )}
+
+            <div className="pt-2">
               <button
-                onClick={() => setStatus("idle")}
-                className="mt-8 text-blue-400 font-bold hover:text-blue-300 transition-colors flex items-center justify-center gap-2 mx-auto"
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full flex justify-center items-center py-[14px] px-4 rounded text-[15px] font-bold text-black bg-white hover:bg-slate-200 focus:outline-none transition-colors disabled:opacity-50"
               >
-                {t("login.tryDifferentEmail")}
+                {status === "loading" ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : isSignUp ? (
+                  "Sign Up"
+                ) : (
+                  "Log In"
+                )}
               </button>
             </div>
-          ) : (
-            <form className="space-y-4" onSubmit={handleMagicLinkSubmit}>
-              <div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-4 py-[18px] bg-transparent border border-slate-700 rounded text-white focus:outline-none focus:border-white sm:text-base transition-colors"
-                  placeholder="Email"
-                />
-              </div>
 
-              {errorMessage && (
-                <div className="text-red-400 text-sm font-medium bg-red-950/30 p-3 rounded flex items-start gap-2 border border-red-900/50">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                  <span>{errorMessage}</span>
-                </div>
-              )}
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={status === "loading"}
-                  className="w-full flex justify-center items-center py-[14px] px-4 rounded text-[15px] font-bold text-black bg-white hover:bg-slate-200 focus:outline-none transition-colors disabled:opacity-50"
-                >
-                  {status === "loading" ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    "Continue"
-                  )}
-                </button>
-              </div>
-            </form>
-          )}
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-slate-400 hover:text-white transition-colors text-sm"
+              >
+                {isSignUp
+                  ? "Already have an account? Log in"
+                  : "Don't have an account? Sign up"}
+              </button>
+            </div>
+          </form>
 
           <div className="mt-8">
             <div className="relative">
@@ -215,7 +229,9 @@ export const Login: React.FC = () => {
 
             <div className="mt-8 flex flex-col gap-3">
               <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
-                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 text-center">Developer Toolkit</h4>
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 text-center">
+                  Developer Toolkit
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   <button
                     onClick={() => simulateLogin("user")}
@@ -251,9 +267,12 @@ export const Login: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="mt-8 text-center">
-            <Link to="/legal" className="text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors">
+            <Link
+              to="/legal"
+              className="text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors"
+            >
               Legal & DMCA Policy
             </Link>
           </div>

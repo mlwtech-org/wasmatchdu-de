@@ -2,11 +2,30 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+    function isAdminEmail(email) {
+      return email == 'anilkumaraero@gmail.com' || 
+             email == 'anilkumardeu@gmail.com' || 
+             email == 'bobkiowsky@gmail.com';
+    }
+
     // Secure user profiles
     match /users/{userId} {
-      // A user can only read or write their own document.
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // A user can read their own document.
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Creating a new user document is allowed if they set role to 'user', 
+      // or if they are an admin email they can set 'admin'.
+      allow create: if request.auth != null && request.auth.uid == userId && (
+        request.resource.data.role == 'user' || 
+        (isAdminEmail(request.auth.token.email) && request.resource.data.role == 'admin')
+      );
+      
+      // Updating a document is allowed as long as they don't change 'role' or 'isPremium',
+      // unless they are one of the hardcoded admin emails.
+      allow update: if request.auth != null && request.auth.uid == userId && (
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isPremium'])) || 
+        isAdminEmail(request.auth.token.email)
+      );
     }
     
     // Default deny for everything else

@@ -80,7 +80,7 @@ export const usePlayerStore = create<StoreState>()(
           url: "https://iptv-org.github.io/iptv/index.m3u",
           type: "global",
           allowedRoles: ["user", "operator", "admin", "dev"],
-        }
+        },
       ],
 
       setChannels: (channels) => {
@@ -123,7 +123,7 @@ export const usePlayerStore = create<StoreState>()(
             setDoc(
               doc(db, "users", state.user.uid),
               { watchHistory: newHistory },
-              { merge: true }
+              { merge: true },
             ).catch((err) => console.error("Firebase sync failed:", err));
           }
 
@@ -139,20 +139,24 @@ export const usePlayerStore = create<StoreState>()(
           const { db } = await import("../lib/firebase");
           const docRef = doc(db, "users", userId);
           const docSnap = await getDoc(docRef);
-          
+
           if (docSnap.exists()) {
             const data = docSnap.data();
             set((state) => {
               // Update watch history
-              const newWatchHistory = data.watchHistory 
-                ? { ...state.watchHistory, ...data.watchHistory } 
+              const newWatchHistory = data.watchHistory
+                ? { ...state.watchHistory, ...data.watchHistory }
                 : state.watchHistory;
-                
-              // Update user object with premium status if available
-              const updatedUser = state.user 
-                ? { ...state.user, isPremium: !!data.isPremium } 
+
+              // Update user object with premium status and role if available
+              const updatedUser = state.user
+                ? {
+                    ...state.user,
+                    isPremium: !!data.isPremium,
+                    role: data.role || state.user.role,
+                  }
                 : state.user;
-                
+
               return {
                 watchHistory: newWatchHistory,
                 user: updatedUser,
@@ -241,7 +245,7 @@ export const usePlayerStore = create<StoreState>()(
       setTrendingEnabled: (trendingEnabled) => set({ trendingEnabled }),
       addConfiguredFeed: (feed) =>
         set((state) => {
-          if (!state.configuredFeeds.find(f => f.id === feed.id)) {
+          if (!state.configuredFeeds.find((f) => f.id === feed.id)) {
             return { configuredFeeds: [...state.configuredFeeds, feed] };
           }
           return state;
