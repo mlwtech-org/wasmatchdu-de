@@ -174,10 +174,12 @@ export const parseM3U = (m3uContent: string): Channel[] => {
         urlLower.includes("rakuten") ||
         urlLower.includes("samsung");
 
-      // Filter out explicitly geo-blocked channels
+      // Filter out explicitly geo-blocked or not 24/7 channels
       if (
         currentChannel.name &&
-        currentChannel.name.toLowerCase().includes("geo-blocked")
+        (currentChannel.name.toLowerCase().includes("geo-blocked") ||
+          currentChannel.name.toLowerCase().includes("not 24/7") ||
+          currentChannel.name.toLowerCase().includes("unstable"))
       ) {
         isBlocked = true;
       }
