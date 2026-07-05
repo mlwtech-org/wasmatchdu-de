@@ -74,6 +74,25 @@ const parseM3U = (m3uContent, providerName) => {
     } else if (line.startsWith("http") && currentChannel.name) {
       currentChannel.url = line;
       currentChannel.id = generateId(line);
+      
+      const urlLower = line.toLowerCase();
+      let isBlocked =
+        urlLower.includes("pluto.tv") ||
+        urlLower.includes("pluto") ||
+        urlLower.includes("dazn") ||
+        urlLower.includes("rakuten") ||
+        urlLower.includes("samsung");
+        
+      if (
+        currentChannel.name &&
+        (currentChannel.name.toLowerCase().includes("geo-blocked") ||
+         currentChannel.name.toLowerCase().includes("not 24/7") ||
+         currentChannel.name.toLowerCase().includes("unstable"))
+      ) {
+        isBlocked = true;
+      }
+      
+      currentChannel.isUnstable = isBlocked;
 
       channels.push({ ...currentChannel });
       currentChannel = {};

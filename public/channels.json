@@ -16,7 +16,7 @@
     "name": "3sat (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://zdf-hls-18.akamaized.net/hls/live/2016501/dach/high/master.m3u8",
     "id": "ch-58p8k"
@@ -159,7 +159,7 @@
     "name": "ARTE (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://artesimulcast.akamaized.net/hls/live/2030993/artelive_de/index.m3u8",
     "id": "ch-91qdut"
@@ -236,7 +236,7 @@
     "name": "Baden TV (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://badentv-stream2.siebnich.info/rtplive/btv.stream/live.m3u8",
     "id": "ch-vs3odw"
@@ -544,7 +544,7 @@
     "name": "DMF (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://d-m-f.iptv-playoutcenter.de/dmf/dmf1/playlist.m3u8",
     "id": "ch-ngbtnd"
@@ -577,7 +577,7 @@
     "name": "Dresden Fernsehen (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://dresden.iptv-playoutcenter.de/dresden/dresdenfernsehen.stream_1/playlist.m3u8",
     "id": "ch-iiyde6"
@@ -676,7 +676,7 @@
     "name": "Finest TV (288p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://media.finest.tv/hls/live.m3u8",
     "id": "ch-b5oexk"
@@ -698,7 +698,7 @@
     "name": "Franken Fernsehen (Nürnberg) (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://frankentv.iptv-playoutcenter.de/frankentv/frankentv.stream_1/playlist.m3u8",
     "id": "ch-armwqe"
@@ -742,7 +742,7 @@
     "name": "Grjngo Western Movies (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://amogonetworx-grjngo-3-dk.samsung.wurl.tv/playlist.m3u8",
     "id": "ch-bq7z1n"
@@ -764,7 +764,7 @@
     "name": "Handystar (404p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://sparhandytv.cdn.ses-ps.com/live/channel01/hls/index.m3u8",
     "id": "ch-53k8uy"
@@ -874,7 +874,7 @@
     "name": "iSTUFF (720p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://relay2.cdn.fem-net.de/hls/loop/istuff_live/istuff_live-720p.m3u8",
     "id": "ch-qhfjuc"
@@ -907,7 +907,7 @@
     "name": "Kanal12 Spremberg TV (404p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://58de7a369a9c4.streamlock.net/sprembergtv/live/playlist.m3u8",
     "id": "ch-9rir6r"
@@ -929,7 +929,7 @@
     "name": "KiKA (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://kikahls.akamaized.net/hls/live/2022690/livetvkika_ww/master.m3u8",
     "id": "ch-ktx40p"
@@ -1006,7 +1006,7 @@
     "name": "Light Channel (576p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://streamer1.streamhost.org:1935/salive/lctvde/playlist.m3u8",
     "id": "ch-kgswao"
@@ -1017,7 +1017,7 @@
     "name": "Love The Planet DE (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Doku & Wissen",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://amg01821-amg01821c12-rlaxx-gb-10461.playouts.now.amagi.tv/playlist.m3u8",
     "id": "ch-kgtyc9"
@@ -1072,7 +1072,7 @@
     "name": "MDR Fernsehen Sachsen (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://mdrtvsnhls.akamaized.net/hls/live/2016928/mdrtvsn/index.m3u8",
     "id": "ch-en0sqt"
@@ -1083,7 +1083,7 @@
     "name": "MDR Fernsehen Sachsen-Anhalt (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://mdrtvsahls.akamaized.net/hls/live/2016879/mdrtvsa/index.m3u8",
     "id": "ch-863278"
@@ -1094,7 +1094,7 @@
     "name": "MDR Fernsehen Thüringen (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://mdrtvthhls.akamaized.net/hls/live/2016880/mdrtvth/index.m3u8",
     "id": "ch-2pw2wy"
@@ -1127,7 +1127,7 @@
     "name": "Motorvision.tv (French)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://d39g1vxj2ef6in.cloudfront.net/v1/master/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/master.m3u8?ads.xumo_channelId=88883047",
     "id": "ch-knlzwv"
@@ -1237,7 +1237,7 @@
     "name": "München TV (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://muenchentv.iptv-playoutcenter.de/muenchentv/muenchentv.stream_1/playlist.m3u8",
     "id": "ch-bqi7ow"
@@ -1259,7 +1259,7 @@
     "name": "Nachrichten 360 (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Nachrichten & Info",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01821-lovetvfast-nachrichten360-samsungde/playlist.m3u8",
     "id": "ch-g9cwfl"
@@ -1336,7 +1336,7 @@
     "name": "Nick Germany (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://0d26a00dfbb1.airspace-cdn.cbsivideo.com/nick1999/master/nick1999.m3u8",
     "id": "ch-iluhyk"
@@ -1490,7 +1490,7 @@
     "name": "OK4 (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/abr_ok4/live/playlist.m3u8",
     "id": "ch-mzsi6s"
@@ -1501,7 +1501,7 @@
     "name": "OK54 (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/ott/webstream/tv/webstream_720p/playlist.m3u8",
     "id": "ch-l8znkn"
@@ -1512,7 +1512,7 @@
     "name": "OK Dessau (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://58bd5b7a98e04.streamlock.net/medienasa-live/ok-dessau_high/playlist.m3u8",
     "id": "ch-p2js0j"
@@ -1534,7 +1534,7 @@
     "name": "OK Kaiserslautern (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/abr_okkl/webstream/playlist.m3u8",
     "id": "ch-pfe8tn"
@@ -1545,7 +1545,7 @@
     "name": "OK Kassel (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/mok-ks/kassel/playlist.m3u8",
     "id": "ch-rh2wwh"
@@ -1578,7 +1578,7 @@
     "name": "OK Merseburg-Querfurt (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://58bd5b7a98e04.streamlock.net/medienasa-live/ok-merseburg_high/playlist.m3u8",
     "id": "ch-ihfph4"
@@ -1589,7 +1589,7 @@
     "name": "OK Rhein-Main (576p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/mok-rm/mok-rm/playlist.m3u8",
     "id": "ch-58z1vk"
@@ -1600,7 +1600,7 @@
     "name": "OK Salzwedel (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://58bd5b7a98e04.streamlock.net/medienasa-live/ok-salzwedel_high/playlist.m3u8",
     "id": "ch-8ih4rv"
@@ -1622,7 +1622,7 @@
     "name": "OK Trier (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/ott/webstream/playlist.m3u8",
     "id": "ch-j0cyxx"
@@ -1633,7 +1633,7 @@
     "name": "OK Weinstraße (Neustadt) (432p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/okweinstrasse/okweinstrasse/playlist.m3u8",
     "id": "ch-x4kb4i"
@@ -1655,7 +1655,7 @@
     "name": "OK-TV Ludwigshafen (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://s.ok54.de/oklu/livestream/playlist.m3u8",
     "id": "ch-4quwvt"
@@ -1699,7 +1699,7 @@
     "name": "Parlamentsfernsehen 1 (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://cldf-hlsgw.r53.cdn.tv1.eu/1000153copo/hk1.m3u8",
     "id": "ch-o5bqbo"
@@ -1710,7 +1710,7 @@
     "name": "Parlamentsfernsehen 2 (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://bttv-live-z.r53.cdn.tv1.eu/13014bundestag-hk2/_definst_/live/video/hk2_de.smil/playlist.m3u8",
     "id": "ch-yxc8my"
@@ -1721,7 +1721,7 @@
     "name": "Parlamentsfernsehen 3 (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://bttv-live-z.r53.cdn.tv1.eu/13014bundestag-hk3/_definst_/live/video/hk3_de.smil/playlist.m3u8",
     "id": "ch-ilal6"
@@ -1732,7 +1732,7 @@
     "name": "Parlamentsfernsehen 4 (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://bttv-live-z.r53.cdn.tv1.eu/13014bundestag-hk4/_definst_/live/video/hk4_de.smil/playlist.m3u8",
     "id": "ch-xw5ngm"
@@ -1754,7 +1754,7 @@
     "name": "Phoenix (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://zdf-hls-19.akamaized.net/hls/live/2016502/de/high/master.m3u8",
     "id": "ch-ufe1ln"
@@ -2249,7 +2249,7 @@
     "name": "PUNKTum Fernsehen (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://58bd5b7a98e04.streamlock.net/medienasa-live/punktum_high/playlist.m3u8",
     "id": "ch-9bwhu1"
@@ -2304,7 +2304,7 @@
     "name": "Radio Bremen Fernsehen (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rbhlslive.akamaized.net/hls/live/2020435/rbfs/master.m3u8",
     "id": "ch-48k4ak"
@@ -2392,7 +2392,7 @@
     "name": "RBB Berlin (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rbb-hls-berlin.akamaized.net/hls/live/2017824/rbb_berlin/index.m3u8",
     "id": "ch-jheho2"
@@ -2403,7 +2403,7 @@
     "name": "RBB Brandenburg (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rbb-hls-brandenburg.akamaized.net/hls/live/2017825/rbb_brandenburg/master.m3u8",
     "id": "ch-rmgb95"
@@ -2535,7 +2535,7 @@
     "name": "Rock Antenne [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://stream.rockantenne.de/rockantenne/stream/mp3",
     "id": "ch-wrc0y9"
@@ -2546,7 +2546,7 @@
     "name": "Rockland TV (480p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://live.creacast.com/rockland-radio/smil:rockland-radio.smil/playlist.m3u8",
     "id": "ch-axzyvs"
@@ -2557,7 +2557,7 @@
     "name": "RT DE (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Nachrichten & Info",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rt-ger.rttv.com/dvr/rtdeutsch/playlist.m3u8",
     "id": "ch-wae4xn"
@@ -2579,7 +2579,7 @@
     "name": "Saarland Fernsehen 2 (720p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://saarland2.iptv-playoutcenter.de/saarland2/saarland2.stream_2/playlist.m3u8",
     "id": "ch-kquk3a"
@@ -2678,7 +2678,7 @@
     "name": "Sonus FM TV (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "http://www.sonus.fm:1935/public/stream_source/playlist.m3u8",
     "id": "ch-ga5n19"
@@ -2898,7 +2898,7 @@
     "name": "Strongman Champions League (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Sport & Action",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rightsboosterltd-scl-2-eu.rakuten.wurl.tv/playlist.m3u8",
     "id": "ch-ou4ehf"
@@ -2942,7 +2942,7 @@
     "name": "SWR Fernsehen Baden-Württemberg (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://swrbwd-hls.akamaized.net/hls/live/2018672/swrbwd/master.m3u8",
     "id": "ch-fdmu0k"
@@ -2953,7 +2953,7 @@
     "name": "SWR Fernsehen Rheinland-Pfalz (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://swrrpd-hls.akamaized.net/hls/live/2018676/swrrpd/master.m3u8",
     "id": "ch-b8q7cm"
@@ -2997,7 +2997,7 @@
     "name": "Tastemade (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rakutenaa-tm-germany-rakuten-ger-8jboz.amagi.tv/playlist/rakutenAA-tm-germany-rakuten-ger/playlist.m3u8",
     "id": "ch-rwq5n2"
@@ -3030,7 +3030,7 @@
     "name": "The Graham Norton Show (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://amg00654-itv-amg00654c35-rakuten-gb-7598.playouts.now.amagi.tv/playlist.m3u8",
     "id": "ch-q6okz8"
@@ -3063,7 +3063,7 @@
     "name": "tiviTÜRK (720p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://stream.tiviturk.de/live/tiviturk.m3u8",
     "id": "ch-c1lo8j"
@@ -3107,7 +3107,7 @@
     "name": "TV Mainfranken (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://tvtouringw.iptv-playoutcenter.de/tvtouringw/tvtouringw.stream_1/playlist.m3u8",
     "id": "ch-w49mhu"
@@ -3118,7 +3118,7 @@
     "name": "TV Oberfranken (TVO) (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://tvoberfranken.iptv-playoutcenter.de/tvoberfranken/tvoberfranken.stream_1/playlist.m3u8",
     "id": "ch-7wtipq"
@@ -3129,7 +3129,7 @@
     "name": "TVA (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://tvaktuellr.iptv-playoutcenter.de/tvaktuellr/tvaktuellr.stream_1/playlist.m3u8",
     "id": "ch-mu0lkn"
@@ -3162,7 +3162,7 @@
     "name": "Unserding (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://srde.akamaized.net/hls/live/2031842/visualradio-unserding/index.m3u8",
     "id": "ch-qavr11"
@@ -3206,7 +3206,7 @@
     "name": "WDR Fernsehen Aachen (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018019-b/wdrlz_aachen/master.m3u8",
     "id": "ch-xvuq2e"
@@ -3217,7 +3217,7 @@
     "name": "WDR Fernsehen Bielefeld (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018026-b/wdrlz_bielefeld/master.m3u8",
     "id": "ch-jpt83e"
@@ -3228,7 +3228,7 @@
     "name": "WDR Fernsehen Bonn (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018021-b/wdrlz_bonn/master.m3u8",
     "id": "ch-fzq7g2"
@@ -3239,7 +3239,7 @@
     "name": "WDR Fernsehen Dortmund (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018022-b/wdrlz_dortmund/master.m3u8",
     "id": "ch-farkb5"
@@ -3250,7 +3250,7 @@
     "name": "WDR Fernsehen Duisburg (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018024-b/wdrlz_duisburg/master.m3u8",
     "id": "ch-15ebut"
@@ -3261,7 +3261,7 @@
     "name": "WDR Fernsehen Düsseldorf (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018023-b/wdrlz_duesseldorf/master.m3u8",
     "id": "ch-fa7t19"
@@ -3272,7 +3272,7 @@
     "name": "WDR Fernsehen Essen (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018027-b/wdrlz_essen/master.m3u8",
     "id": "ch-z7girp"
@@ -3283,7 +3283,7 @@
     "name": "WDR Fernsehen Münster (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018025-b/wdrlz_muensterland/master.m3u8",
     "id": "ch-wyid1x"
@@ -3294,7 +3294,7 @@
     "name": "WDR Fernsehen Siegen (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018020-b/wdrlz_siegen/master.m3u8",
     "id": "ch-211509"
@@ -3305,7 +3305,7 @@
     "name": "WDR Fernsehen Wuppertal (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://wdrlokalzeit.akamaized.net/hls/live/2018028-b/wdrlz_wuppertal/master.m3u8",
     "id": "ch-c8rzsu"
@@ -3327,7 +3327,7 @@
     "name": "World of Freesports (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Sport & Action",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://mainstreammedia-worldoffreesportsintl-rakuten.amagi.tv/playlist.m3u8",
     "id": "ch-p0tzeu"
@@ -3360,7 +3360,7 @@
     "name": "ZDF (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8",
     "id": "ch-t4czwb"
@@ -3371,7 +3371,7 @@
     "name": "ZDFinfo (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://zdf-hls-17.akamaized.net/hls/live/2016500/de/high/master.m3u8",
     "id": "ch-8662sl"
@@ -3382,7 +3382,7 @@
     "name": "ZDFneo (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
+    "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8",
     "id": "ch-cwl13v"
