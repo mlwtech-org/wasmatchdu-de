@@ -253,10 +253,10 @@ export const AIAssistantOrb: React.FC = () => {
       )}
 
       {/* Floating Orb Container */}
-      <div className="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4 pointer-events-none">
+      <div className="fixed top-1/2 -translate-y-1/2 right-4 z-50 flex flex-row-reverse items-center gap-4 pointer-events-none">
         {/* Discovery Overlay / Chat UI */}
         {isDiscoveryOpen && (
-          <div className="bg-slate-900/95 border border-slate-700 p-5 rounded-3xl shadow-2xl backdrop-blur-xl w-[90vw] sm:w-[400px] pointer-events-auto transition-all duration-300 transform origin-bottom animate-in zoom-in-95">
+          <div className="bg-slate-900/95 border border-slate-700 p-5 rounded-3xl shadow-2xl backdrop-blur-xl w-[90vw] sm:w-[400px] pointer-events-auto transition-all duration-300 transform origin-right animate-in fade-in slide-in-from-right-8">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
