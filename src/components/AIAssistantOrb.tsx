@@ -227,8 +227,10 @@ export const AIAssistantOrb: React.FC = () => {
         );
         setShowKeyModal(true);
       } else {
-        setAiResponse("Sorry, I had trouble understanding that.");
-        speakText("Sorry, I had trouble understanding that.");
+        const rawError = error?.message || "Unknown error";
+        console.error("Full AI Error Object:", error);
+        setAiResponse(`Debug Error: ${rawError}`);
+        speakText("I encountered an error.");
       }
     } finally {
       setProcessing(false);
