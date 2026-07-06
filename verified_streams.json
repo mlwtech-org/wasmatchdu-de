@@ -70,13 +70,6 @@
     "isRegional": false
   },
   {
-    "id": "2STV.sn",
-    "name": "2STV",
-    "url": "http://69.64.57.208/2stv/playlist.m3u8",
-    "group": "culture",
-    "isRegional": false
-  },
-  {
     "id": "2TV.ge",
     "name": "2 TV",
     "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
@@ -256,6 +249,13 @@
     "name": "4 Music",
     "url": "https://musichls.persiana.live/hls/stream.m3u8",
     "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4TVNews.in",
+    "name": "4TV News",
+    "url": "https://cdn-4.pishow.tv/live/1007/master.m3u8",
+    "group": "news",
     "isRegional": false
   },
   {
