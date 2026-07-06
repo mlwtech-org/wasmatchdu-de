@@ -93,6 +93,11 @@ export const LivePlayer: React.FC = () => {
     }
   }, []);
 
+  // Ensure page scrolls to top when navigating to player
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [streamId]);
+
   // Function temporarily removed because it is unused
   // and blocking the TS build.
 
