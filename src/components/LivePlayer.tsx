@@ -381,10 +381,12 @@ export const LivePlayer: React.FC = () => {
                   <video
                     key={streamId + "-preroll"}
                     autoPlay
+                    muted
                     playsInline
                     className="w-full h-full object-cover"
                     src={preRollUrl}
                     onEnded={() => setIsPreRollPlaying(false)}
+                    onError={() => setIsPreRollPlaying(false)}
                   />
                   <button
                     onClick={() => setIsPreRollPlaying(false)}
