@@ -125,9 +125,18 @@ export const AIAssistantOrb: React.FC = () => {
   };
 
   const handleVoiceCommand = async (command: string) => {
+    if (!apiKey) {
+      setTranscript(command);
+      setAiResponse(
+        "Please configure your Gemini API Key to use the AI Assistant.",
+      );
+      setShowKeyModal(true);
+      return;
+    }
+
     setProcessing(true);
     try {
-      const genAI = new GoogleGenerativeAI(apiKey!);
+      const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
       const channelNames = channels
