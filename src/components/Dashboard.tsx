@@ -8,8 +8,10 @@ import { CountryGrid } from "./CountryGrid";
 import { RadioHub } from "./RadioHub";
 import { GlobalRadioPlayer } from "./GlobalRadioPlayer";
 import { MobileNav } from "./MobileNav";
+import { VoiceOverlay } from "./VoiceOverlay";
 import {
   Search,
+  Mic,
   UserCircle,
   Loader2,
   Shield,
@@ -48,6 +50,7 @@ export const Dashboard: React.FC = () => {
   const [isSidebarCollapsed] = useState(false);
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
   const [isProUpgradeModalOpen, setIsProUpgradeModalOpen] = useState(false);
+  const [isVoiceSearchOpen, setIsVoiceSearchOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -215,10 +218,17 @@ export const Dashboard: React.FC = () => {
               <input
                 type="text"
                 placeholder={t("dashboard.searchChannels")}
-                className="w-full sm:w-48 lg:w-64 bg-slate-900/80 border border-slate-700/50 rounded-full py-2 pl-10 pr-4 text-sm font-medium focus:outline-none focus:border-slate-500 transition-all text-white placeholder-slate-400 shadow-inner"
+                className="w-full sm:w-48 lg:w-64 bg-slate-900/80 border border-slate-700/50 rounded-full py-2 pl-10 pr-10 text-sm font-medium focus:outline-none focus:border-slate-500 transition-all text-white placeholder-slate-400 shadow-inner"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+              <button
+                onClick={() => setIsVoiceSearchOpen(true)}
+                className="absolute right-3 p-1 rounded-full text-slate-400 hover:text-cyan-400 hover:bg-slate-800 transition-colors"
+                title="Voice Search"
+              >
+                <Mic className="w-4 h-4" />
+              </button>
             </div>
 
             <button
@@ -801,6 +811,14 @@ export const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Voice Search Overlay */}
+      {isVoiceSearchOpen && (
+        <VoiceOverlay
+          onClose={() => setIsVoiceSearchOpen(false)}
+          onSearch={(query) => setSearchQuery(query)}
+        />
       )}
     </div>
   );
