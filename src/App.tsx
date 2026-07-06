@@ -20,8 +20,8 @@ const Login = lazy(() =>
 const Dashboard = lazy(() =>
   import("./components/Dashboard").then((m) => ({ default: m.Dashboard })),
 );
-const GoLive = lazy(() =>
-  import("./components/GoLive").then((m) => ({ default: m.GoLive })),
+const ViewSpace = lazy(() =>
+  import("./components/ViewSpace").then((m) => ({ default: m.ViewSpace })),
 );
 const LivePlayer = lazy(() =>
   import("./components/LivePlayer").then((m) => ({ default: m.LivePlayer })),
@@ -152,10 +152,10 @@ function App() {
             }
           />
           <Route
-            path="/go-live"
+            path="/view-space"
             element={
               <ProtectedRoute>
-                <GoLive />
+                <ViewSpace />
               </ProtectedRoute>
             }
           />

@@ -27,6 +27,7 @@ import {
   Download,
   AlertTriangle,
   Radio,
+  Sparkles,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -251,12 +252,12 @@ export const Dashboard: React.FC = () => {
 
             <button
               data-focusable="true"
-              onClick={() => navigate("/go-live")}
-              className="hidden sm:flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-red-500/20 whitespace-nowrap shrink-0"
-              title="Go Live"
+              onClick={() => navigate("/view-space")}
+              className="hidden sm:flex items-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-purple-500/20 whitespace-nowrap shrink-0"
+              title="My Space"
             >
-              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="hidden md:inline">Go Live</span>
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden md:inline">My Space</span>
             </button>
 
             <div className="hidden sm:block">
