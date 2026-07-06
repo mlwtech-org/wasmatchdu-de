@@ -76,6 +76,8 @@ export const Dashboard: React.FC = () => {
     currentPlaylist,
     profiles,
     activeProfileId,
+    aiRecommendedChannels,
+    aiRecommendationTitle,
   } = usePlayerStore();
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId);
@@ -629,6 +631,17 @@ export const Dashboard: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-6 md:space-y-12">
+                {/* AI Recommendations */}
+                {!searchQuery &&
+                  !kidsMode &&
+                  aiRecommendedChannels &&
+                  aiRecommendedChannels.length > 0 && (
+                    <ChannelRow
+                      title={`✨ ${aiRecommendationTitle}`}
+                      channels={aiRecommendedChannels}
+                    />
+                  )}
+
                 {/* Verified Reliable Channels */}
                 {!searchQuery && !kidsMode && (
                   <ChannelRow

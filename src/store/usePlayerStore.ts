@@ -48,6 +48,10 @@ interface StoreState extends PlayerState, PlaylistState {
   miniPlayerChannel: Channel | null;
   setMiniPlayerChannel: (channel: Channel | null) => void;
   closeMiniPlayer: () => void;
+  aiRecommendedChannels: Channel[];
+  setAiRecommendedChannels: (channels: Channel[]) => void;
+  aiRecommendationTitle: string;
+  setAiRecommendationTitle: (title: string) => void;
 }
 
 export const usePlayerStore = create<StoreState>()(
@@ -86,6 +90,13 @@ export const usePlayerStore = create<StoreState>()(
         },
       ],
       miniPlayerChannel: null,
+      aiRecommendedChannels: [],
+      aiRecommendationTitle: "AI Recommendations",
+
+      setAiRecommendedChannels: (channels) =>
+        set({ aiRecommendedChannels: channels }),
+      setAiRecommendationTitle: (title) =>
+        set({ aiRecommendationTitle: title }),
 
       setChannels: (channels) => {
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
