@@ -210,10 +210,26 @@ export const AIAssistantOrb: React.FC = () => {
           );
         }
       }
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.error("AI Error:", error);
-      setAiResponse("Sorry, I had trouble understanding that.");
-      speakText("Sorry, I had trouble understanding that.");
+      const errorMessage = error?.message?.toLowerCase() || "";
+
+      if (
+        errorMessage.includes("api key") ||
+        errorMessage.includes("key invalid") ||
+        errorMessage.includes("authentication") ||
+        errorMessage.includes("400") ||
+        errorMessage.includes("403")
+      ) {
+        setAiResponse(
+          "Your Gemini API Key appears to be invalid or expired. Please re-enter it.",
+        );
+        setShowKeyModal(true);
+      } else {
+        setAiResponse("Sorry, I had trouble understanding that.");
+        speakText("Sorry, I had trouble understanding that.");
+      }
     } finally {
       setProcessing(false);
     }
