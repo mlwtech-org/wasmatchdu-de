@@ -23,8 +23,9 @@ import {
   Heart,
 } from "lucide-react";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { FALLBACK_CHANNELS } from "../lib/constants";
+import { FALLBACK_CHANNELS, GENRE_BUMPERS } from "../lib/constants";
 import { CategoryIcon } from "./CategoryIcon";
+import { cn } from "../utils/cn";
 
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
@@ -47,6 +48,9 @@ export const LivePlayer: React.FC = () => {
     "ALL" | "REGIONAL" | "GLOBAL"
   >("ALL");
   const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [isPreRollPlaying, setIsPreRollPlaying] = useState(true);
+  const [preRollUrl, setPreRollUrl] = useState<string>("");
 
   const IDLE_TIMEOUT_MS = 45 * 60 * 1000; // 45 minutes
 
@@ -174,7 +178,15 @@ export const LivePlayer: React.FC = () => {
     `https://stream.mux.com/${streamId}.m3u8`;
 
   useEffect(() => {
-    if (!videoRef.current || !streamId) return;
+    if (!streamId) return;
+    setIsPreRollPlaying(true);
+    const genre = currentChannelObj?.group || "Default";
+    const bumper = GENRE_BUMPERS[genre] || GENRE_BUMPERS["Default"];
+    setPreRollUrl(bumper);
+  }, [streamId, currentChannelObj]);
+
+  useEffect(() => {
+    if (!videoRef.current || !streamId || isPreRollPlaying) return;
 
     const video = videoRef.current;
     const hlsUrl = playbackUrl; // Mux CDN HLS URL
@@ -241,7 +253,7 @@ export const LivePlayer: React.FC = () => {
       if (hls) hls.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [streamId, playbackUrl]);
+  }, [streamId, playbackUrl, isPreRollPlaying]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -352,17 +364,39 @@ export const LivePlayer: React.FC = () => {
             )}
             <>
               <video
-                key={streamId}
+                key={streamId + "-live"}
                 ref={videoRef}
-                className="w-full h-full object-contain"
+                className={cn(
+                  "w-full h-full object-contain bg-black",
+                  isPreRollPlaying ? "hidden" : "block",
+                )}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onWaiting={() => setIsBuffering(true)}
                 onPlaying={() => setIsBuffering(false)}
               />
 
-              {isBuffering && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none">
+              {isPreRollPlaying && preRollUrl && (
+                <div className="absolute inset-0 z-50 bg-black flex flex-col items-center justify-center">
+                  <video
+                    key={streamId + "-preroll"}
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                    src={preRollUrl}
+                    onEnded={() => setIsPreRollPlaying(false)}
+                  />
+                  <button
+                    onClick={() => setIsPreRollPlaying(false)}
+                    className="absolute bottom-10 right-10 bg-white/10 hover:bg-white/20 backdrop-blur text-white px-6 py-2 rounded-full font-semibold border border-white/20 transition-all shadow-xl z-50"
+                  >
+                    Skip Intro
+                  </button>
+                </div>
+              )}
+
+              {isBuffering && !isPreRollPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40 pointer-events-none z-40">
                   <Loader2 className="w-12 h-12 text-white animate-spin" />
                 </div>
               )}
@@ -402,7 +436,12 @@ export const LivePlayer: React.FC = () => {
               )}
 
               {/* Top Right Overlays */}
-              <div className="absolute top-4 right-4 flex items-center gap-4 z-10 transition-opacity duration-300">
+              <div
+                className={cn(
+                  "absolute top-4 right-4 flex items-center gap-4 z-10 transition-opacity duration-300",
+                  isPreRollPlaying ? "hidden" : "",
+                )}
+              >
                 {isMuted && (
                   <div
                     className="bg-black/50 p-2 rounded-full backdrop-blur-sm cursor-pointer hover:bg-white/10 transition-colors"
@@ -420,7 +459,15 @@ export const LivePlayer: React.FC = () => {
               </div>
 
               {/* Custom Controls Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end pointer-events-auto pb-2">
+              <div
+                className={cn(
+                  "absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end pointer-events-auto pb-2 transition-opacity duration-300",
+                  !isPlaying || showIdleWarning
+                    ? "opacity-100"
+                    : "opacity-0 hover:opacity-100",
+                  isPreRollPlaying ? "hidden" : "",
+                )}
+              >
                 {/* Timeline / Progress Bar */}
                 <div className="px-6 w-full flex items-center gap-4 mb-2 group/timeline cursor-pointer">
                   <div className="text-red-500 font-bold text-sm tracking-wider flex items-center gap-2">

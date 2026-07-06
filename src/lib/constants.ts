@@ -315,6 +315,22 @@ export const FALLBACK_CHANNELS: Channel[] = [
   },
 ];
 
+// Curated stock videos for cinematic pre-roll bumps based on genre
+export const GENRE_BUMPERS: Record<string, string> = {
+  News: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+  Movies:
+    "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+  Sports:
+    "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+  Entertainment:
+    "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+  Kids: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+  Music:
+    "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+  Default:
+    "https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+};
+
 export const GEMEINWOHL_CATEGORIES = [
   "Filme & Serien",
   "Sport & Action",
