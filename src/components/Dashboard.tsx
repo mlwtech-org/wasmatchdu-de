@@ -617,7 +617,7 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {/* Main Content: Channel Shelves */}
-          <main className="relative z-30 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full -mt-16 md:-mt-32">
+          <main className="relative z-50 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full -mt-24 md:-mt-32">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-20">
                 <Loader2 className="w-12 h-12 animate-spin text-blue-500 mb-4" />
