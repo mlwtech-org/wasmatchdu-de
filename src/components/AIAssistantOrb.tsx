@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Mic, Bot, Key, X, Loader2, Play } from 'lucide-react';
-import { useAIAssistantStore } from '../store/useAIAssistantStore';
-import { usePlayerStore } from '../store/usePlayerStore';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import React, { useEffect, useRef, useState } from "react";
+import { Mic, Bot, Key, X, Loader2, Play } from "lucide-react";
+import { useAIAssistantStore } from "../store/useAIAssistantStore";
+import { usePlayerStore } from "../store/usePlayerStore";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // SpeechRecognition Types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+const SpeechRecognition =
+  (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
 
 export const AIAssistantOrb: React.FC = () => {
   const {
@@ -22,13 +23,13 @@ export const AIAssistantOrb: React.FC = () => {
     setTranscript,
     aiResponse,
     setAiResponse,
-    clearInteraction
+    clearInteraction,
   } = useAIAssistantStore();
-  
+
   const { channels, setCurrentChannel, setSelectedGroup } = usePlayerStore();
-  
+
   const [showKeyModal, setShowKeyModal] = useState(false);
-  const [tempKey, setTempKey] = useState('');
+  const [tempKey, setTempKey] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
 
@@ -37,11 +38,11 @@ export const AIAssistantOrb: React.FC = () => {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = "en-US";
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       recognitionRef.current.onresult = (event: any) => {
-        let finalTranscript = '';
+        let finalTranscript = "";
         for (let i = event.resultIndex; i < event.results.length; ++i) {
           if (event.results[i].isFinal) {
             finalTranscript += event.results[i][0].transcript;
@@ -54,7 +55,7 @@ export const AIAssistantOrb: React.FC = () => {
       };
 
       recognitionRef.current.onerror = (event: { error: string }) => {
-        console.error('Speech recognition error', event.error);
+        console.error("Speech recognition error", event.error);
         setListening(false);
       };
 
@@ -85,17 +86,23 @@ export const AIAssistantOrb: React.FC = () => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    
+
     // Try to find a good English voice
     const voices = window.speechSynthesis.getVoices();
-    const englishVoice = voices.find(v => v.lang.startsWith('en-') && (v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Natural')));
+    const englishVoice = voices.find(
+      (v) =>
+        v.lang.startsWith("en-") &&
+        (v.name.includes("Google") ||
+          v.name.includes("Samantha") ||
+          v.name.includes("Natural")),
+    );
     if (englishVoice) {
       utterance.voice = englishVoice;
     }
 
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => setSpeaking(false);
-    
+
     window.speechSynthesis.speak(utterance);
   };
 
@@ -105,7 +112,7 @@ export const AIAssistantOrb: React.FC = () => {
       const genAI = new GoogleGenerativeAI(apiKey!);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      const channelNames = channels.map(c => c.name).join(", ");
+      const channelNames = channels.map((c) => c.name).join(", ");
       const systemPrompt = `You are an AI IPTV Assistant. The user said: "${command}".
       Available channels: ${channelNames.substring(0, 500)}... (truncated if long).
       If the user wants to play a specific channel or category, respond with a JSON object exactly like this:
@@ -115,26 +122,29 @@ export const AIAssistantOrb: React.FC = () => {
       Always return raw valid JSON.`;
 
       const result = await model.generateContent(systemPrompt);
-      const responseText = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-      
+      const responseText = result.response
+        .text()
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+
       const parsed = JSON.parse(responseText);
-      
+
       setAiResponse(parsed.response);
       speakText(parsed.response);
 
-      if (parsed.action === 'play_channel' && parsed.channel_name) {
-        const targetChannel = channels.find(c => 
-          c.name.toLowerCase().includes(parsed.channel_name.toLowerCase())
+      if (parsed.action === "play_channel" && parsed.channel_name) {
+        const targetChannel = channels.find((c) =>
+          c.name.toLowerCase().includes(parsed.channel_name.toLowerCase()),
         );
         if (targetChannel) {
           setCurrentChannel(targetChannel);
           // Auto switch to default playlist layout if not already
           if (targetChannel.group) {
-              setSelectedGroup(targetChannel.group);
+            setSelectedGroup(targetChannel.group);
           }
         }
       }
-
     } catch (error) {
       console.error("AI Error:", error);
       setAiResponse("Sorry, I had trouble understanding that.");
@@ -155,12 +165,16 @@ export const AIAssistantOrb: React.FC = () => {
                 <Key className="w-5 h-5 text-blue-400" />
                 Configure AI Agent
               </h3>
-              <button onClick={() => setShowKeyModal(false)} className="text-slate-400 hover:text-white">
+              <button
+                onClick={() => setShowKeyModal(false)}
+                className="text-slate-400 hover:text-white"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
             <p className="text-slate-400 text-sm mb-4">
-              To use the free voice assistant, please provide a Gemini API Key. You can get one for free from Google AI Studio.
+              To use the free voice assistant, please provide a Gemini API Key.
+              You can get one for free from Google AI Studio.
             </p>
             <input
               type="password"
@@ -183,8 +197,7 @@ export const AIAssistantOrb: React.FC = () => {
       )}
 
       {/* Floating Orb */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 pointer-events-none">
-        
+      <div className="fixed bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-4 pointer-events-none">
         {/* Interaction Bubble */}
         {(transcript || aiResponse || isProcessing) && (
           <div className="bg-slate-900/90 border border-slate-700 p-4 rounded-2xl shadow-2xl backdrop-blur-md max-w-xs sm:max-w-sm pointer-events-auto transition-all duration-300">
@@ -212,18 +225,24 @@ export const AIAssistantOrb: React.FC = () => {
         <button
           onClick={toggleListening}
           className={`pointer-events-auto relative flex items-center justify-center w-14 h-14 rounded-full shadow-2xl transition-all duration-500 group ${
-            isListening 
-              ? 'bg-red-500 hover:bg-red-600 shadow-[0_0_30px_rgba(239,68,68,0.6)]' 
+            isListening
+              ? "bg-red-500 hover:bg-red-600 shadow-[0_0_30px_rgba(239,68,68,0.6)]"
               : isSpeaking
-              ? 'bg-purple-600 shadow-[0_0_30px_rgba(147,51,234,0.6)]'
-              : 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)]'
+                ? "bg-purple-600 shadow-[0_0_30px_rgba(147,51,234,0.6)]"
+                : "bg-blue-600 hover:bg-blue-500 shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)]"
           }`}
         >
           {/* Pulsing rings when active */}
           {(isListening || isSpeaking) && (
             <>
-              <div className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping" style={{ animationDuration: '1.5s' }} />
-              <div className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
+              <div
+                className="absolute inset-0 rounded-full border-2 border-white/30 animate-ping"
+                style={{ animationDuration: "1.5s" }}
+              />
+              <div
+                className="absolute inset-0 rounded-full border-2 border-white/20 animate-ping"
+                style={{ animationDuration: "2s", animationDelay: "0.5s" }}
+              />
             </>
           )}
 

@@ -248,7 +248,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
       <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#020617]/20 to-transparent pointer-events-none z-10" />
 
       {/* ── Main Content ─────────────────────────────────────────────── */}
-      <div className="relative z-20 h-full max-w-[1600px] mx-auto px-6 md:px-12 flex items-center pb-24 md:pb-40">
+      <div className="relative z-20 h-full max-w-[1600px] mx-auto px-6 md:px-12 flex items-center pb-12 md:pb-20">
         <div className="flex items-center w-full gap-8 lg:gap-16">
           {/* LEFT: Text content */}
           <div
@@ -371,7 +371,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
       </div>
 
       {/* ── Bottom Controls ───────────────────────────────────────────── */}
-      <div className="absolute bottom-32 md:bottom-40 left-0 right-0 z-20 max-w-[1600px] mx-auto px-6 md:px-12 flex items-end justify-between gap-4">
+      <div className="absolute bottom-12 md:bottom-20 left-0 right-0 z-20 max-w-[1600px] mx-auto px-6 md:px-12 flex items-end justify-between gap-4">
         {/* Slide indicators */}
         <div className="flex items-center gap-2">
           {channels.map((_, idx) => (
