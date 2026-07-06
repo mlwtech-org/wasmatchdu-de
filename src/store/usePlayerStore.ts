@@ -45,6 +45,9 @@ interface StoreState extends PlayerState, PlaylistState {
   watchHistory: Record<string, number>;
   updateWatchHistory: (category: string, durationSeconds: number) => void;
   loadUserDataFromFirebase: (userId: string) => Promise<void>;
+  miniPlayerChannel: Channel | null;
+  setMiniPlayerChannel: (channel: Channel | null) => void;
+  closeMiniPlayer: () => void;
 }
 
 export const usePlayerStore = create<StoreState>()(
@@ -82,6 +85,7 @@ export const usePlayerStore = create<StoreState>()(
           allowedRoles: ["user", "operator", "admin", "dev"],
         },
       ],
+      miniPlayerChannel: null,
 
       setChannels: (channels) => {
         const groups = Array.from(new Set(channels.map((c) => c.group))).sort();
@@ -254,6 +258,9 @@ export const usePlayerStore = create<StoreState>()(
         set((state) => ({
           configuredFeeds: state.configuredFeeds.filter((f) => f.id !== id),
         })),
+
+      setMiniPlayerChannel: (channel) => set({ miniPlayerChannel: channel }),
+      closeMiniPlayer: () => set({ miniPlayerChannel: null }),
     }),
     {
       name: "openiptv-storage",

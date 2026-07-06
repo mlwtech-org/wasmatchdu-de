@@ -30,7 +30,8 @@ export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { channels, globalChannels, removeChannel } = usePlayerStore();
+  const { channels, globalChannels, removeChannel, setMiniPlayerChannel } =
+    usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -277,7 +278,10 @@ export const LivePlayer: React.FC = () => {
       {/* Header */}
       <div className="h-16 border-b border-slate-800 flex items-center px-6 shrink-0 bg-slate-950 sticky top-0 z-40">
         <button
-          onClick={() => navigate("/dashboard")}
+          onClick={() => {
+            if (currentChannelObj) setMiniPlayerChannel(currentChannelObj);
+            navigate("/dashboard");
+          }}
           className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-semibold"
         >
           <ArrowLeft className="w-5 h-5" />

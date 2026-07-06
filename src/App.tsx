@@ -7,6 +7,7 @@ import { remoteConfig } from "./lib/firebase";
 import { usePlayerStore } from "./store/usePlayerStore";
 import { AIAssistantOrb } from "./components/AIAssistantOrb";
 import { useFetchChannels } from "./hooks/useFetchChannels";
+import { MiniPlayer } from "./components/MiniPlayer";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -176,6 +177,7 @@ function App() {
           />
           <Route path="/legal" element={<Legal />} />
         </Routes>
+        <MiniPlayer />
       </Suspense>
       <AIAssistantOrb />
     </BrowserRouter>
