@@ -125,18 +125,55 @@ export const AIAssistantOrb: React.FC = () => {
   };
 
   const handleVoiceCommand = async (command: string) => {
-    if (!apiKey) {
+    const activeKey = apiKey || import.meta.env.VITE_GEMINI_API_KEY;
+
+    if (!activeKey) {
+      // Offline/No-Key Keyword Fallback
       setTranscript(command);
-      setAiResponse(
-        "Please configure your Gemini API Key to use the AI Assistant.",
-      );
-      setShowKeyModal(true);
+      const lowerCommand = command.toLowerCase();
+
+      let matchedChannel = null;
+      if (lowerCommand.includes("news")) {
+        matchedChannel = channels.find((c) =>
+          c.group.toLowerCase().includes("news"),
+        );
+      } else if (
+        lowerCommand.includes("sports") ||
+        lowerCommand.includes("football")
+      ) {
+        matchedChannel = channels.find((c) =>
+          c.group.toLowerCase().includes("sports"),
+        );
+      } else if (
+        lowerCommand.includes("earth") ||
+        lowerCommand.includes("cams")
+      ) {
+        matchedChannel = channels.find((c) =>
+          c.name.toLowerCase().includes("earth"),
+        );
+      }
+
+      if (matchedChannel) {
+        setAiResponse(
+          `Sure, routing you to ${matchedChannel.name} (Keyword Fallback).`,
+        );
+        speakText(`Sure, playing ${matchedChannel.name}`);
+        setCurrentChannel(matchedChannel);
+        if (matchedChannel.group) setSelectedGroup(matchedChannel.group);
+        navigate(`/live/${matchedChannel.id}`);
+      } else {
+        setAiResponse(
+          "To understand complex requests, please configure your free Gemini API Key.",
+        );
+        speakText("I need an API key for that request.");
+        setShowKeyModal(true);
+      }
       return;
     }
 
     setProcessing(true);
     try {
-      const genAI = new GoogleGenerativeAI(apiKey);
+      const genAI = new GoogleGenerativeAI(activeKey);
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
       const channelNames = channels
