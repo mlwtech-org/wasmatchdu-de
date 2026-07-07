@@ -51,6 +51,41 @@ export const Dashboard: React.FC = () => {
   const [isSidebarCollapsed] = useState(false);
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
   const [isProUpgradeModalOpen, setIsProUpgradeModalOpen] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+
+  const handleUpgradeClick = async () => {
+    if (!user) return; // Prompt login if not logged in? Or just return.
+    setIsCheckoutLoading(true);
+    try {
+      const response = await fetch("https://us-central1-wasmatch-du.cloudfunctions.net/createStripeCheckoutSession", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (error) {
+      console.error("Stripe Checkout Error:", error);
+      alert("Failed to initiate checkout. Please try again.");
+    } finally {
+      setIsCheckoutLoading(false);
+    }
+  };
+
   const [isVoiceSearchOpen, setIsVoiceSearchOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -79,6 +114,7 @@ export const Dashboard: React.FC = () => {
     activeProfileId,
     aiRecommendedChannels,
     aiRecommendationTitle,
+    user,
   } = usePlayerStore();
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId);
@@ -350,16 +386,22 @@ export const Dashboard: React.FC = () => {
                   )}
                 </button>
                 <button
-                  onClick={() => setIsProUpgradeModalOpen(true)}
-                  className="flex items-center justify-between w-full px-3 py-2 bg-slate-800/80 hover:bg-slate-700 text-slate-200 rounded-lg text-sm font-medium transition-colors border border-slate-700/50 group"
+                  onClick={() => {
+                    if (user?.isPro) {
+                      toggleProxy();
+                    } else {
+                      setIsProUpgradeModalOpen(true);
+                    }
+                  }}
+                  className={`flex items-center justify-between w-full px-3 py-2 ${useProxy ? 'bg-amber-500/10 hover:bg-amber-500/20' : 'bg-slate-800/80 hover:bg-slate-700'} text-slate-200 rounded-lg text-sm font-medium transition-colors border ${useProxy ? 'border-amber-500/30' : 'border-slate-700/50'} group`}
                 >
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition-colors" />
+                    <Shield className={`w-4 h-4 ${useProxy ? 'text-amber-400' : 'text-slate-500 group-hover:text-amber-400'} transition-colors`} />
                     {!isSidebarCollapsed && <span>VPN</span>}
                   </div>
                   {!isSidebarCollapsed && (
                     <span className="text-[10px] font-bold bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded uppercase tracking-wider border border-amber-500/30">
-                      Pro
+                      {useProxy ? 'On' : 'Pro'}
                     </span>
                   )}
                 </button>
@@ -556,7 +598,13 @@ export const Dashboard: React.FC = () => {
               </div>
               <button
                 data-focusable="true"
-                onClick={toggleProxy}
+                onClick={() => {
+                  if (user?.isPro) {
+                    toggleProxy();
+                  } else {
+                    setIsProUpgradeModalOpen(true);
+                  }
+                }}
                 className={cn(
                   "w-10 h-5 rounded-full transition-colors relative",
                   useProxy ? "bg-emerald-500" : "bg-slate-700",
@@ -642,6 +690,14 @@ export const Dashboard: React.FC = () => {
                       channels={aiRecommendedChannels}
                     />
                   )}
+
+                {/* Pro Channels Row */}
+                {!searchQuery && !kidsMode && user?.isPro && (
+                  <ChannelRow
+                    title="👑 Pro Channels (VPN Unlocked)"
+                    channels={channels.filter(c => c.group.toLowerCase().includes("sports") || c.group.toLowerCase().includes("movie") || c.name.toLowerCase().includes("pro")).slice(0, 20)}
+                  />
+                )}
 
                 {/* Verified Reliable Channels */}
                 {!searchQuery && !kidsMode && (
@@ -803,21 +859,34 @@ export const Dashboard: React.FC = () => {
                 Pro Feature
               </p>
 
-              <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+              <p className="text-slate-300 text-lg mb-6 leading-relaxed">
                 Bypass geo-restrictions and ISP throttling instantly. Upgrade to
                 Pro for high-speed, encrypted streaming on all channels.
               </p>
 
+              <div className="text-white text-2xl font-black mb-8">
+                $9.99 <span className="text-slate-500 text-sm font-medium">/ month</span>
+              </div>
+
               <div className="w-full space-y-3">
                 <button
-                  onClick={() => setIsProUpgradeModalOpen(false)}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-lg px-8 py-4 rounded-xl transition-all shadow-lg transform hover:scale-[1.02]"
+                  onClick={handleUpgradeClick}
+                  disabled={isCheckoutLoading}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 disabled:opacity-50 text-slate-950 font-black text-lg px-8 py-4 rounded-xl transition-all shadow-lg transform hover:scale-[1.02]"
                 >
-                  Upgrade to Pro
+                  {isCheckoutLoading ? (
+                    <>
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                      Loading Secure Checkout...
+                    </>
+                  ) : (
+                    "Upgrade to Pro"
+                  )}
                 </button>
                 <button
                   onClick={() => setIsProUpgradeModalOpen(false)}
-                  className="w-full bg-transparent hover:bg-slate-800 text-slate-400 font-medium px-8 py-4 rounded-xl transition-colors"
+                  disabled={isCheckoutLoading}
+                  className="w-full bg-transparent hover:bg-slate-800 text-slate-400 font-medium px-8 py-4 rounded-xl transition-colors disabled:opacity-50"
                 >
                   Maybe Later
                 </button>

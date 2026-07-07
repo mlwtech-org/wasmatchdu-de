@@ -168,6 +168,9 @@ export const usePlayerStore = create<StoreState>()(
                 ? {
                     ...state.user,
                     isPremium: !!data.isPremium,
+                    isPro: !!data.isPro,
+                    stripeCustomerId: data.stripeCustomerId || undefined,
+                    subscriptionStatus: data.subscriptionStatus || undefined,
                     role: data.role || state.user.role,
                   }
                 : state.user;

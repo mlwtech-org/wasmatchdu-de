@@ -4,6 +4,9 @@ export interface User {
   uid: string;
   email: string;
   isPremium?: boolean;
+  isPro?: boolean;
+  stripeCustomerId?: string;
+  subscriptionStatus?: "active" | "past_due" | "canceled" | "unpaid" | "incomplete" | "incomplete_expired" | "trialing";
   role: UserRole;
 }
 
@@ -31,6 +34,7 @@ export interface Channel {
   nextProgram?: string;
   nextProgramTime?: string;
   provider?: string;
+  isPremium?: boolean;
 }
 
 export interface PlayerState {
