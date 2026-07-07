@@ -12,26 +12,23 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
 
     - name: Install dependencies
       run: npm install
-      working-directory: ./wasmatch-du
 
     - name: Run aggregation script
       run: node scripts/aggregate_channels.js
-      working-directory: ./wasmatch-du
 
     - name: Check for changes
       id: git-check
       run: |
         git diff --exit-code public/channels.json || echo "changes=true" >> $GITHUB_OUTPUT
-      working-directory: ./wasmatch-du
 
     - name: Commit and push changes
       if: steps.git-check.outputs.changes == 'true'
@@ -41,4 +38,3 @@ jobs:
         git add public/channels.json
         git commit -m "chore: auto-update channels.json feed"
         git push
-      working-directory: ./wasmatch-du
