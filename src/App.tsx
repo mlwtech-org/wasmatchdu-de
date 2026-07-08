@@ -9,6 +9,7 @@ import { AIAssistantOrb } from "./components/AIAssistantOrb";
 import { useFetchChannels } from "./hooks/useFetchChannels";
 import { MiniPlayer } from "./components/MiniPlayer";
 import { Copilot } from "./components/Copilot";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -97,92 +98,94 @@ function App() {
   }, [setTrendingEnabled]);
 
   return (
-    <BrowserRouter>
-      <Copilot />
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/profile-selection"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <ProfileSelection />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/create-profile"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <CreateProfile />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/manage-profiles"
-            element={
-              <Suspense fallback={<PageLoader />}>
-                <ManageProfiles />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/sports"
-            element={
-              <ProtectedRoute>
-                <div className="min-h-screen bg-black">
-                  <SportsHub />
-                </div>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/earthcams"
-            element={
-              <ProtectedRoute>
-                <EarthCamViewer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/view-space"
-            element={
-              <ProtectedRoute>
-                <ViewSpace />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/live/:streamId"
-            element={
-              <ProtectedRoute>
-                <LivePlayer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute allowedRoles={["admin", "dev"]}>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/legal" element={<Legal />} />
-        </Routes>
-        <MiniPlayer />
-      </Suspense>
-      <AIAssistantOrb />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Copilot />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/profile-selection"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <ProfileSelection />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/create-profile"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <CreateProfile />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/manage-profiles"
+              element={
+                <Suspense fallback={<PageLoader />}>
+                  <ManageProfiles />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/sports"
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-black">
+                    <SportsHub />
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/earthcams"
+              element={
+                <ProtectedRoute>
+                  <EarthCamViewer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/view-space"
+              element={
+                <ProtectedRoute>
+                  <ViewSpace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/live/:streamId"
+              element={
+                <ProtectedRoute>
+                  <LivePlayer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute allowedRoles={["admin", "dev"]}>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/legal" element={<Legal />} />
+          </Routes>
+          <MiniPlayer />
+        </Suspense>
+        <AIAssistantOrb />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

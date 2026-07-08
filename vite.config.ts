@@ -71,6 +71,13 @@ export default defineConfig({
           if (id.includes("node_modules/zustand")) {
             return "vendor-state";
           }
+          // Firebase — massive SDK
+          if (
+            id.includes("node_modules/firebase") ||
+            id.includes("node_modules/@firebase")
+          ) {
+            return "vendor-firebase";
+          }
         },
       },
     },
