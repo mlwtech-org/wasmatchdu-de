@@ -25,14 +25,15 @@ import {
 import { usePlayerStore } from "../store/usePlayerStore";
 import { FALLBACK_CHANNELS, GENRE_BUMPERS } from "../lib/constants";
 import { CategoryIcon } from "./CategoryIcon";
+import { sortChannelsAlphabetically } from "../utils/sorting";
 import { cn } from "../utils/cn";
+import { RadioTuner } from "./RadioTuner";
 
 export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { channels, globalChannels, removeChannel, setMiniPlayerChannel } =
-    usePlayerStore();
+  const { channels, globalChannels, setMiniPlayerChannel } = usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -43,7 +44,9 @@ export const LivePlayer: React.FC = () => {
   const [isBuffering, setIsBuffering] = useState(true);
   const [showIdleWarning, setShowIdleWarning] = useState(false);
   const [showTipThanks, setShowTipThanks] = useState(false);
-  const [sidebarTab, setSidebarTab] = useState<"NOW" | "THEREAFTER">("NOW");
+  const [sidebarTab, setSidebarTab] = useState<"NOW" | "THEREAFTER" | "RADIO">(
+    "RADIO",
+  );
   const [regionFilter, setRegionFilter] = useState<
     "ALL" | "REGIONAL" | "GLOBAL"
   >("ALL");
@@ -164,10 +167,10 @@ export const LivePlayer: React.FC = () => {
       ? visibleChannels[currentIndex - 1]
       : visibleChannels[visibleChannels.length - 1];
 
-  // Get other channels for the sidebar
-  const otherChannels = visibleChannels
-    .filter((c) => c.id !== streamId)
-    .slice(0, 50); // limit to 50 for performance
+  // Get other channels for the sidebar (sorted alphabetically for best-in-class UI)
+  const otherChannels = sortChannelsAlphabetically(
+    visibleChannels.filter((c) => c.id !== streamId),
+  ).slice(0, 50); // limit to 50 for performance
 
   // Prefer the playback_url passed from GoLive via router state (Mux CDN URL).
   // Fallback 1: Use the actual IPTV channel URL from the M3U playlist.
@@ -211,21 +214,7 @@ export const LivePlayer: React.FC = () => {
         if (data.fatal) {
           setIsBuffering(false);
           hls.destroy();
-
-          if (nextChannel && nextChannel.id !== streamId) {
-            // "Tuning..." logic: Instead of an ugly error, just show buffering/tuning animation
-            // and skip to the next channel seamlessly
-            setError("TUNING"); // Magic string to show the tuning UI instead of red error box
-            removeChannel(streamId!);
-            setTimeout(() => {
-              navigate(`/live/${nextChannel.id}`, { replace: true });
-              setError(null);
-              setIsBuffering(true);
-            }, 1500); // 1.5s delay to simulate TV channel zapping
-          } else {
-            setError("TUNING");
-            setTimeout(() => navigate("/dashboard", { replace: true }), 2000);
-          }
+          setError("STREAM_OFFLINE");
         }
       });
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
@@ -234,25 +223,13 @@ export const LivePlayer: React.FC = () => {
       video.addEventListener("loadedmetadata", () => video.play());
       video.addEventListener("error", () => {
         setIsBuffering(false);
-        if (nextChannel && nextChannel.id !== streamId) {
-          setError("TUNING");
-          removeChannel(streamId!);
-          setTimeout(() => {
-            navigate(`/live/${nextChannel.id}`, { replace: true });
-            setError(null);
-            setIsBuffering(true);
-          }, 1500);
-        } else {
-          setError("TUNING");
-          setTimeout(() => navigate("/dashboard", { replace: true }), 2000);
-        }
+        setError("STREAM_OFFLINE");
       });
     }
 
     return () => {
       if (hls) hls.destroy();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streamId, playbackUrl, isPreRollPlaying]);
 
   const togglePlay = () => {
@@ -346,6 +323,31 @@ export const LivePlayer: React.FC = () => {
                     <p className="text-white font-mono text-xl md:text-2xl tracking-[0.2em] animate-pulse">
                       TUNING...
                     </p>
+                  </div>
+                ) : error === "STREAM_OFFLINE" ? (
+                  <div className="bg-slate-900/80 border border-slate-700 rounded-xl p-8 max-w-md mx-auto text-center backdrop-blur-md">
+                    <Radio className="w-12 h-12 text-slate-500 mx-auto mb-4 opacity-50" />
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      Stream Offline
+                    </h3>
+                    <p className="text-slate-400 mb-6 leading-relaxed text-sm">
+                      This broadcast is currently unavailable, geo-blocked, or
+                      experiencing technical difficulties.
+                    </p>
+                    <div className="flex gap-4 justify-center">
+                      <button
+                        onClick={() => window.location.reload()}
+                        className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-bold transition-colors"
+                      >
+                        Retry
+                      </button>
+                      <button
+                        onClick={() => navigate("/dashboard")}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-colors"
+                      >
+                        Dashboard
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 md:p-8 max-w-md mx-auto text-center backdrop-blur-md">
@@ -720,150 +722,167 @@ export const LivePlayer: React.FC = () => {
               >
                 THEREAFTER
               </button>
+              <button
+                onClick={() => setSidebarTab("RADIO")}
+                className={`px-3 py-1 text-xs font-bold rounded transition-colors flex items-center gap-1 ${
+                  sidebarTab === "RADIO"
+                    ? "bg-blue-600 text-white"
+                    : "text-slate-400 hover:text-white"
+                }`}
+              >
+                <Radio className="w-3 h-3" /> TUNER
+              </button>
             </div>
           </div>
 
-          {/* Sub-filter for Regional/Global */}
-          <div className="px-6 pb-4 border-b border-slate-800 flex items-center gap-2 bg-[#0b0f19]">
-            <button
-              onClick={() => setRegionFilter("ALL")}
-              className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                regionFilter === "ALL"
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setRegionFilter("REGIONAL")}
-              className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                regionFilter === "REGIONAL"
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
-            >
-              Regional
-            </button>
-            <button
-              onClick={() => setRegionFilter("GLOBAL")}
-              className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                regionFilter === "GLOBAL"
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-              }`}
-            >
-              Global
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
-            {otherChannels.map((channel) => {
-              const isActive = channel.id === streamId;
-
-              // Simulate progress bar based on time or random
-              const progressWidth = Math.floor(Math.random() * 60) + 20;
-
-              return (
+          {sidebarTab === "RADIO" ? (
+            <RadioTuner />
+          ) : (
+            <>
+              {/* Sub-filter for Regional/Global */}
+              <div className="px-6 pb-4 border-b border-slate-800 flex items-center gap-2 bg-[#0b0f19]">
                 <button
-                  key={channel.id}
-                  onClick={() => handleChannelChange(channel.id)}
-                  className={`w-full text-left p-4 rounded-xl transition-all flex items-start gap-4 ${
-                    isActive
-                      ? "bg-[#0b2853] border-[#1e4b8a]"
-                      : "bg-transparent hover:bg-slate-900 border-transparent hover:border-slate-800"
-                  } border`}
+                  onClick={() => setRegionFilter("ALL")}
+                  className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
+                    regionFilter === "ALL"
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  }`}
                 >
-                  <div
-                    className={`w-14 h-14 shrink-0 rounded flex items-center justify-center p-2 ${
-                      isActive ? "bg-[#091e40]" : "bg-slate-800"
-                    }`}
-                  >
-                    {channel.logo ? (
-                      <>
-                        <img
-                          src={channel.logo}
-                          alt=""
-                          className="w-full h-full object-contain"
-                          loading="lazy"
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                            if (e.currentTarget.nextElementSibling) {
-                              (
-                                e.currentTarget
-                                  .nextElementSibling as HTMLElement
-                              ).style.display = "flex";
-                            }
-                          }}
-                        />
-                        <div className="hidden items-center justify-center w-full h-full">
+                  All
+                </button>
+                <button
+                  onClick={() => setRegionFilter("REGIONAL")}
+                  className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
+                    regionFilter === "REGIONAL"
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  }`}
+                >
+                  Regional
+                </button>
+                <button
+                  onClick={() => setRegionFilter("GLOBAL")}
+                  className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
+                    regionFilter === "GLOBAL"
+                      ? "bg-blue-600 text-white"
+                      : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                  }`}
+                >
+                  Global
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
+                {otherChannels.map((channel) => {
+                  const isActive = channel.id === streamId;
+
+                  // Simulate progress bar based on time or random
+                  const progressWidth = Math.floor(Math.random() * 60) + 20;
+
+                  return (
+                    <button
+                      key={channel.id}
+                      onClick={() => handleChannelChange(channel.id)}
+                      className={`w-full text-left p-4 rounded-xl transition-all flex items-start gap-4 ${
+                        isActive
+                          ? "bg-[#0b2853] border-[#1e4b8a]"
+                          : "bg-transparent hover:bg-slate-900 border-transparent hover:border-slate-800"
+                      } border`}
+                    >
+                      <div
+                        className={`w-14 h-14 shrink-0 rounded flex items-center justify-center p-2 ${
+                          isActive ? "bg-[#091e40]" : "bg-slate-800"
+                        }`}
+                      >
+                        {channel.logo ? (
+                          <>
+                            <img
+                              src={channel.logo}
+                              alt=""
+                              className="w-full h-full object-contain"
+                              loading="lazy"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                if (e.currentTarget.nextElementSibling) {
+                                  (
+                                    e.currentTarget
+                                      .nextElementSibling as HTMLElement
+                                  ).style.display = "flex";
+                                }
+                              }}
+                            />
+                            <div className="hidden items-center justify-center w-full h-full">
+                              <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner group-hover:bg-slate-700 transition-colors">
+                                <CategoryIcon
+                                  channel={channel}
+                                  className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`}
+                                />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
                           <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner group-hover:bg-slate-700 transition-colors">
                             <CategoryIcon
                               channel={channel}
                               className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`}
                             />
                           </div>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-inner group-hover:bg-slate-700 transition-colors">
-                        <CategoryIcon
-                          channel={channel}
-                          className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`}
-                        />
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-center h-14">
-                    {sidebarTab === "NOW" && channel.currentProgram ? (
-                      <>
-                        <p className="text-xs text-slate-300 font-semibold mb-0.5">
-                          {channel.currentProgramTime}
-                        </p>
-                        <p
-                          className={`text-sm font-bold line-clamp-2 leading-tight ${isActive ? "text-white" : "text-slate-200"}`}
-                        >
-                          {channel.currentProgram}
-                        </p>
-                        <div className="w-full h-0.5 bg-slate-700 mt-2 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-red-500"
-                            style={{ width: `${progressWidth}%` }}
-                          />
-                        </div>
-                      </>
-                    ) : sidebarTab === "THEREAFTER" && channel.nextProgram ? (
-                      <>
-                        <p
-                          className={`text-sm font-bold line-clamp-2 leading-tight ${isActive ? "text-white" : "text-slate-200"}`}
-                        >
-                          {channel.nextProgram}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <h3
-                          className={`font-bold line-clamp-1 ${isActive ? "text-white" : "text-slate-200"}`}
-                        >
-                          {channel.name}
-                        </h3>
-                        <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-                          {channel.group}
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                      <div className="flex-1 min-w-0 flex flex-col justify-center h-14">
+                        {sidebarTab === "NOW" && channel.currentProgram ? (
+                          <>
+                            <p className="text-xs text-slate-300 font-semibold mb-0.5">
+                              {channel.currentProgramTime}
+                            </p>
+                            <p
+                              className={`text-sm font-bold line-clamp-2 leading-tight ${isActive ? "text-white" : "text-slate-200"}`}
+                            >
+                              {channel.currentProgram}
+                            </p>
+                            <div className="w-full h-0.5 bg-slate-700 mt-2 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-red-500"
+                                style={{ width: `${progressWidth}%` }}
+                              />
+                            </div>
+                          </>
+                        ) : sidebarTab === "THEREAFTER" &&
+                          channel.nextProgram ? (
+                          <>
+                            <p
+                              className={`text-sm font-bold line-clamp-2 leading-tight ${isActive ? "text-white" : "text-slate-200"}`}
+                            >
+                              {channel.nextProgram}
+                            </p>
+                          </>
+                        ) : (
+                          <>
+                            <h3
+                              className={`font-bold line-clamp-1 ${isActive ? "text-white" : "text-slate-200"}`}
+                            >
+                              {channel.name}
+                            </h3>
+                            <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                              {channel.group}
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
 
-            {otherChannels.length === 0 && (
-              <div className="p-8 text-center text-slate-500">
-                <Radio className="w-8 h-8 mx-auto mb-3 opacity-50" />
-                <p>No other channels available in this playlist.</p>
+                {otherChannels.length === 0 && (
+                  <div className="p-8 text-center text-slate-500">
+                    <Radio className="w-8 h-8 mx-auto mb-3 opacity-50" />
+                    <p>No other channels available in this playlist.</p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

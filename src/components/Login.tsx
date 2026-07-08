@@ -5,7 +5,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, db } from "../lib/firebase";
+import { auth, db, functions } from "../lib/firebase";
+import { httpsCallable } from "firebase/functions";
 import { doc, setDoc } from "firebase/firestore";
 import { Loader2, Info } from "lucide-react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -41,6 +42,27 @@ export const Login: React.FC = () => {
 
     try {
       if (isSignUp) {
+        // Pre-check GDPR user limit
+        try {
+          const checkRegistrationAllowed = httpsCallable<{ allowed: boolean }>(
+            functions,
+            "checkRegistrationAllowed",
+          );
+          const response = await checkRegistrationAllowed();
+          if (!(response.data as { allowed: boolean }).allowed) {
+            setStatus("error");
+            setErrorMessage(
+              "Registration is currently closed as we have reached our maximum allowed capacity for data processing in compliance with GDPR limits.",
+            );
+            return;
+          }
+        } catch (functionError) {
+          console.error(
+            "Limit check failed, proceeding cautiously:",
+            functionError,
+          );
+        }
+
         // Register new user
         const result = await createUserWithEmailAndPassword(
           auth,

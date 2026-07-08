@@ -1,11 +1,13 @@
 import React, { useMemo } from "react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { ChannelRow } from "./ChannelRow";
-import { Tv, Star, Flame, Sparkles, Activity } from "lucide-react";
+import { Tv, Star, Flame, Sparkles, Activity, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const ViewSpace: React.FC = () => {
   const { watchHistory, recentlyWatched, favorites, channels } =
     usePlayerStore();
+  const navigate = useNavigate();
 
   // Metrics Calculations
   const totalWatchedSeconds = Object.values(watchHistory || {}).reduce(
@@ -48,8 +50,15 @@ export const ViewSpace: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-white pt-20 pb-20 md:pb-8 px-4 sm:px-8">
       {/* Header */}
-      <div className="max-w-7xl mx-auto mb-12">
-        <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent mb-4 flex items-center gap-3">
+      <div className="max-w-7xl mx-auto mb-12 relative">
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="absolute -top-12 left-0 flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-semibold"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>Back to Dashboard</span>
+        </button>
+        <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent mb-4 flex items-center gap-3 mt-4">
           <Sparkles className="w-10 h-10 text-purple-400" />
           My Space
         </h1>

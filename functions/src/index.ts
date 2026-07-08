@@ -1,5 +1,7 @@
 import * as functions from "firebase-functions";
+import * as functionsV1 from "firebase-functions/v1";
 import * as admin from "firebase-admin";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const cors = require("cors");
 
 admin.initializeApp();
@@ -12,15 +14,18 @@ export const getRegionalSports = functions.https.onRequest((req, res) => {
     try {
       // In a real scenario, you would determine location via CF-IPCountry header
       // or a Geo-IP database based on the requester's IP.
-      const clientIp = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-      
+      const clientIp =
+        req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+
       // Mock logic: Simulate a region based on a query parameter for testing
       const userRegion = req.query.region || "Global";
-      
-      console.log(`Generating regional sports stream for: ${userRegion}, IP: ${clientIp}`);
+
+      console.log(
+        `Generating regional sports stream for: ${userRegion}, IP: ${clientIp}`,
+      );
 
       let m3uContent = "#EXTM3U\n";
-      
+
       // Regional channels (Live Free Feeds)
       if (userRegion === "Europe") {
         m3uContent += `#EXTINF:-1 tvg-id="eu1" tvg-logo="https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/UEFA_Champions_League_logo_2.svg/200px-UEFA_Champions_League_logo_2.svg.png" group-title="Sports",DAZN Women's Football\n`;
@@ -52,10 +57,9 @@ export const getRegionalSports = functions.https.onRequest((req, res) => {
       }
 
       // Return the generated M3U file
-      res.setHeader('Content-Type', 'audio/x-mpegurl');
-      res.setHeader('Access-Control-Allow-Origin', '*'); // explicitly for good measure
+      res.setHeader("Content-Type", "audio/x-mpegurl");
+      res.setHeader("Access-Control-Allow-Origin", "*"); // explicitly for good measure
       res.status(200).send(m3uContent);
-      
     } catch (error) {
       console.error("Error generating regional playlist:", error);
       res.status(500).send("Error generating playlist");
@@ -64,3 +68,36 @@ export const getRegionalSports = functions.https.onRequest((req, res) => {
 });
 
 export * from "./stripe";
+export * from "./ai";
+
+// GDPR / Organizational Compliance Limit
+const MAX_USERS = 650;
+
+export const checkRegistrationAllowed = functionsV1.https.onCall(async () => {
+  try {
+    const listUsersResult = await admin.auth().listUsers(1000);
+    return { allowed: listUsersResult.users.length < MAX_USERS };
+  } catch (error) {
+    console.error("Error checking registration allowance:", error);
+    return { allowed: true }; // Fail open if error
+  }
+});
+
+export const enforceUserLimit = functionsV1.auth
+  .user()
+  .onCreate(async (user: admin.auth.UserRecord) => {
+    try {
+      // Fetch users up to 1000 (enough to check the 650 limit)
+      const listUsersResult = await admin.auth().listUsers(1000);
+      const userCount = listUsersResult.users.length;
+
+      if (userCount > MAX_USERS) {
+        console.warn(
+          `[GDPR Compliance] Maximum user capacity reached (${MAX_USERS}). Deleting newly created user: ${user.uid}`,
+        );
+        await admin.auth().deleteUser(user.uid);
+      }
+    } catch (error) {
+      console.error("Error enforcing user limit:", error);
+    }
+  });

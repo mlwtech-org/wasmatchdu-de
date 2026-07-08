@@ -8,6 +8,7 @@ import { usePlayerStore } from "./store/usePlayerStore";
 import { AIAssistantOrb } from "./components/AIAssistantOrb";
 import { useFetchChannels } from "./hooks/useFetchChannels";
 import { MiniPlayer } from "./components/MiniPlayer";
+import { Copilot } from "./components/Copilot";
 
 // Route-level code splitting — each page becomes its own JS chunk
 // loaded only when the user navigates to that route.
@@ -97,6 +98,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Copilot />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Homepage />} />

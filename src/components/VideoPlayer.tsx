@@ -87,7 +87,8 @@ export const VideoPlayer: React.FC = () => {
   const [currentSubtitleTrack, setCurrentSubtitleTrack] = useState<number>(-1);
   const [showCCMenu, setShowCCMenu] = useState(false);
   const [isAITranslateEnabled, setIsAITranslateEnabled] = useState(false);
-  const [isAITranslateSpeakEnabled, setIsAITranslateSpeakEnabled] = useState(false);
+  const [isAITranslateSpeakEnabled, setIsAITranslateSpeakEnabled] =
+    useState(false);
   const [sourceLang, setSourceLang] = useState("auto");
   const [showQuickSurf, setShowQuickSurf] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -107,7 +108,7 @@ export const VideoPlayer: React.FC = () => {
     isAITranslateEnabled,
     sourceLang,
     targetLang,
-    isAITranslateSpeakEnabled
+    isAITranslateSpeakEnabled,
   );
 
   const retryCount = useRef(0);
@@ -116,7 +117,7 @@ export const VideoPlayer: React.FC = () => {
   // Track Watch History
   useEffect(() => {
     if (!currentChannel || !currentChannel.gemeinwohlCategory) return;
-    
+
     const startTime = Date.now();
     const category = currentChannel.gemeinwohlCategory;
 
@@ -184,7 +185,8 @@ export const VideoPlayer: React.FC = () => {
   useEffect(() => {
     handleUserActivity();
     return () => {
-      if (controlsTimeoutRef.current) window.clearTimeout(controlsTimeoutRef.current);
+      if (controlsTimeoutRef.current)
+        window.clearTimeout(controlsTimeoutRef.current);
     };
   }, []);
 
@@ -208,13 +210,15 @@ export const VideoPlayer: React.FC = () => {
     let timeout: number;
     if (isBuffering && !autoSkipCountdown) {
       timeout = window.setTimeout(() => {
-        setError("Stream taking too long to load. It might be geo-blocked or offline.");
+        setError(
+          "Stream taking too long to load. It might be geo-blocked or offline.",
+        );
         setIsBuffering(false);
         if (hlsRef.current) {
           hlsRef.current.destroy();
           hlsRef.current = null;
         }
-      }, 10000); 
+      }, 10000);
     }
     return () => window.clearTimeout(timeout);
   }, [isBuffering, autoSkipCountdown]);
@@ -360,10 +364,14 @@ export const VideoPlayer: React.FC = () => {
           liveMaxLatencyDurationCount: 10,
           maxLiveSyncPlaybackRate: 1.5,
           xhrSetup: function (xhr, url) {
-            if (useProxy && url.startsWith('http')) {
-              xhr.open('GET', 'https://corsproxy.io/?url=' + encodeURIComponent(url), true);
+            if (useProxy && url.startsWith("http")) {
+              xhr.open(
+                "GET",
+                "https://corsproxy.io/?url=" + encodeURIComponent(url),
+                true,
+              );
             }
-          }
+          },
         });
         hlsRef.current = hls;
 
@@ -406,13 +414,17 @@ export const VideoPlayer: React.FC = () => {
 
             switch (data.type) {
               case Hls.ErrorTypes.NETWORK_ERROR:
-                setError("Stream offline or blocked by CORS. You may need a VPN or the channel is dead.");
+                setError(
+                  "Stream offline or blocked by CORS. You may need a VPN or the channel is dead.",
+                );
                 break;
               case Hls.ErrorTypes.MEDIA_ERROR:
                 setError("Stream format is incompatible or broken.");
                 break;
               default:
-                setError("Playback failed. The community stream is currently offline.");
+                setError(
+                  "Playback failed. The community stream is currently offline.",
+                );
                 break;
             }
           }
@@ -426,7 +438,9 @@ export const VideoPlayer: React.FC = () => {
           video.play().catch(console.error);
         });
         video.addEventListener("error", () => {
-          setError("Playback failed. The community stream is currently offline.");
+          setError(
+            "Playback failed. The community stream is currently offline.",
+          );
           setIsBuffering(false);
         });
       }
@@ -441,11 +455,10 @@ export const VideoPlayer: React.FC = () => {
       }
       if (video) {
         video.pause();
-        video.removeAttribute('src');
+        video.removeAttribute("src");
         video.load();
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentChannel, useProxy]);
 
   const handlePiP = async () => {
@@ -544,19 +557,20 @@ export const VideoPlayer: React.FC = () => {
         autoPlay
         onWaiting={() => setIsBuffering(true)}
         onPlaying={() => setIsBuffering(false)}
+        onEnded={playNextChannel}
       />
 
       {/* Cyberpunk Watermark */}
-        <div className="absolute top-6 right-6 z-20 flex items-center gap-3 pointer-events-none">
-          <img
-            src="/logo.png"
-            alt="WasMatchDu Icon"
-            className="w-10 md:w-12 h-10 md:h-12 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
-          />
-          <span className="text-xl md:text-2xl font-black tracking-tighter text-white drop-shadow-md">
-            WasMatch<span className="text-cyan-400 font-light">Du</span>
-          </span>
-        </div>
+      <div className="absolute top-6 right-6 z-20 flex items-center gap-3 pointer-events-none">
+        <img
+          src="/logo.png"
+          alt="WasMatchDu Icon"
+          className="w-10 md:w-12 h-10 md:h-12 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
+        />
+        <span className="text-xl md:text-2xl font-black tracking-tighter text-white drop-shadow-md">
+          WasMatch<span className="text-cyan-400 font-light">Du</span>
+        </span>
+      </div>
 
       {/* AI Live Translation Text Overlay */}
       {isAITranslateEnabled && liveTranslationText && (
@@ -573,242 +587,256 @@ export const VideoPlayer: React.FC = () => {
       <div
         className={cn(
           "absolute inset-0 transition-opacity duration-300 pointer-events-none z-30",
-          showControls || showCCMenu || showQuickSurf ? "opacity-100" : "opacity-0"
+          showControls || showCCMenu || showQuickSurf
+            ? "opacity-100"
+            : "opacity-0",
         )}
       >
         {/* Top Header Controls */}
         <div className="absolute top-0 inset-x-0 p-4 bg-gradient-to-b from-black/80 to-transparent flex justify-between items-start pointer-events-auto">
-        <div className="px-3 py-1 text-xs font-mono font-medium text-white bg-red-600 rounded-md">
-          LIVE
-        </div>
-        <div className="flex gap-2 pointer-events-auto">
-          {isCastAvailable && (
-            <button
-              onClick={handleCast}
-              className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
-              title="Cast to TV"
-            >
-              <Cast className="w-4 h-4" />
-            </button>
-          )}
+          <div className="px-3 py-1 text-xs font-mono font-medium text-white bg-red-600 rounded-md">
+            LIVE
+          </div>
+          <div className="flex gap-2 pointer-events-auto">
+            {isCastAvailable && (
+              <button
+                onClick={handleCast}
+                className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+                title="Cast to TV"
+              >
+                <Cast className="w-4 h-4" />
+              </button>
+            )}
 
-          <div className="relative">
-            <button
-              onClick={() => setShowCCMenu(!showCCMenu)}
-              className={cn(
-                "p-2 rounded-md backdrop-blur-md transition-colors flex items-center gap-2",
-                showCCMenu || isAITranslateEnabled
-                  ? "bg-blue-600 text-white"
-                  : "bg-black/60 hover:bg-black/80 text-white",
-              )}
-              title="Subtitles & Audio"
-            >
-              <Subtitles className="w-4 h-4" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowCCMenu(!showCCMenu)}
+                className={cn(
+                  "p-2 rounded-md backdrop-blur-md transition-colors flex items-center gap-2",
+                  showCCMenu || isAITranslateEnabled
+                    ? "bg-blue-600 text-white"
+                    : "bg-black/60 hover:bg-black/80 text-white",
+                )}
+                title="Subtitles & Audio"
+              >
+                <Subtitles className="w-4 h-4" />
+              </button>
 
-            {showCCMenu && (
-              <div className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 min-w-[280px] max-h-[60vh] overflow-y-auto shadow-2xl z-50">
-                {/* AI Live Translation Section */}
-                <div className="mb-4 pb-4 border-b border-slate-700/50">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                    Foreign Language Translator
-                  </h4>
-                  <p className="text-xs text-slate-400 mb-3 leading-relaxed">
-                    Uses your microphone to listen and translate the TV in
-                    real-time.
-                  </p>
+              {showCCMenu && (
+                <div className="absolute top-12 right-0 bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-xl p-4 min-w-[280px] max-h-[60vh] overflow-y-auto shadow-2xl z-50">
+                  {/* AI Live Translation Section */}
+                  <div className="mb-4 pb-4 border-b border-slate-700/50">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                      Foreign Language Translator
+                    </h4>
+                    <p className="text-xs text-slate-400 mb-3 leading-relaxed">
+                      Uses your microphone to listen and translate the TV in
+                      real-time.
+                    </p>
 
-                  <div className="space-y-2 mb-3">
-                    <div className="flex flex-col">
-                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
-                        Listen In (Spoken)
-                      </label>
-                      <select
-                        className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
-                        value={sourceLang}
-                        onChange={(e) => setSourceLang(e.target.value)}
-                      >
-                        {SUPPORTED_LANGUAGES.map((lang) => (
-                          <option key={lang.code} value={lang.code}>
-                            {lang.label}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="space-y-2 mb-3">
+                      <div className="flex flex-col">
+                        <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
+                          Listen In (Spoken)
+                        </label>
+                        <select
+                          className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
+                          value={sourceLang}
+                          onChange={(e) => setSourceLang(e.target.value)}
+                        >
+                          {SUPPORTED_LANGUAGES.map((lang) => (
+                            <option key={lang.code} value={lang.code}>
+                              {lang.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
+                          Translate To
+                        </label>
+                        <select
+                          className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
+                          value={targetLang}
+                          onChange={(e) => setTargetLang(e.target.value)}
+                        >
+                          {SUPPORTED_LANGUAGES.map((lang) => (
+                            <option key={lang.code} value={lang.code}>
+                              {lang.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
 
-                    <div className="flex flex-col">
-                      <label className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1">
-                        Translate To
-                      </label>
-                      <select
-                        className="bg-slate-800 text-slate-300 text-sm rounded-lg px-2 py-1.5 border border-slate-700 outline-none focus:border-blue-500"
-                        value={targetLang}
-                        onChange={(e) => setTargetLang(e.target.value)}
+                    <div className="flex items-center justify-between mt-4 mb-2 px-1">
+                      <span className="text-xs font-bold text-slate-300">
+                        Read Translation Aloud
+                      </span>
+                      <button
+                        onClick={() =>
+                          setIsAITranslateSpeakEnabled(
+                            !isAITranslateSpeakEnabled,
+                          )
+                        }
+                        className={cn(
+                          "w-10 h-5 rounded-full relative transition-colors",
+                          isAITranslateSpeakEnabled
+                            ? "bg-blue-500"
+                            : "bg-slate-700",
+                        )}
                       >
-                        {SUPPORTED_LANGUAGES.map((lang) => (
-                          <option key={lang.code} value={lang.code}>
-                            {lang.label}
-                          </option>
-                        ))}
-                      </select>
+                        <span
+                          className={cn(
+                            "absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform",
+                            isAITranslateSpeakEnabled
+                              ? "translate-x-5"
+                              : "translate-x-0",
+                          )}
+                        ></span>
+                      </button>
                     </div>
-                  </div>
 
-                  <div className="flex items-center justify-between mt-4 mb-2 px-1">
-                    <span className="text-xs font-bold text-slate-300">Read Translation Aloud</span>
                     <button
-                      onClick={() => setIsAITranslateSpeakEnabled(!isAITranslateSpeakEnabled)}
+                      onClick={() =>
+                        setIsAITranslateEnabled(!isAITranslateEnabled)
+                      }
                       className={cn(
-                        "w-10 h-5 rounded-full relative transition-colors",
-                        isAITranslateSpeakEnabled ? "bg-blue-500" : "bg-slate-700"
+                        "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-medium flex justify-between items-center mt-2",
+                        isAITranslateEnabled
+                          ? "bg-blue-600/20 text-blue-400"
+                          : "bg-slate-800 text-slate-300 hover:bg-slate-700",
                       )}
                     >
-                      <span className={cn(
-                        "absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform",
-                        isAITranslateSpeakEnabled ? "translate-x-5" : "translate-x-0"
-                      )}></span>
+                      <span>
+                        {isAITranslateEnabled
+                          ? "Translation Active"
+                          : "Start Translating"}
+                      </span>
+                      <span
+                        className={cn(
+                          "w-8 h-4 rounded-full flex items-center transition-all duration-300",
+                          isAITranslateEnabled ? "bg-blue-500" : "bg-slate-600",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "w-3 h-3 bg-white rounded-full transition-all duration-300 transform",
+                            isAITranslateEnabled
+                              ? "translate-x-4"
+                              : "translate-x-1",
+                          )}
+                        ></span>
+                      </span>
                     </button>
                   </div>
 
-                  <button
-                    onClick={() =>
-                      setIsAITranslateEnabled(!isAITranslateEnabled)
-                    }
-                    className={cn(
-                      "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors font-medium flex justify-between items-center mt-2",
-                      isAITranslateEnabled
-                        ? "bg-blue-600/20 text-blue-400"
-                        : "bg-slate-800 text-slate-300 hover:bg-slate-700",
-                    )}
-                  >
-                    <span>
-                      {isAITranslateEnabled
-                        ? "Translation Active"
-                        : "Start Translating"}
-                    </span>
-                    <span
-                      className={cn(
-                        "w-8 h-4 rounded-full flex items-center transition-all duration-300",
-                        isAITranslateEnabled ? "bg-blue-500" : "bg-slate-600",
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "w-3 h-3 bg-white rounded-full transition-all duration-300 transform",
-                          isAITranslateEnabled
-                            ? "translate-x-4"
-                            : "translate-x-1",
-                        )}
-                      ></span>
-                    </span>
-                  </button>
+                  {subtitleTracks.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        Native Subtitles
+                      </h4>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => handleSubtitleChange(-1)}
+                          className={cn(
+                            "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                            currentSubtitleTrack === -1
+                              ? "bg-blue-600/20 text-blue-400 font-medium"
+                              : "text-slate-300 hover:bg-slate-800",
+                          )}
+                        >
+                          Off
+                        </button>
+                        {subtitleTracks.map((track, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleSubtitleChange(i)}
+                            className={cn(
+                              "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                              currentSubtitleTrack === i
+                                ? "bg-blue-600/20 text-blue-400 font-medium"
+                                : "text-slate-300 hover:bg-slate-800",
+                            )}
+                          >
+                            {track.name || `Track ${i + 1}`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {audioTracks.length > 1 && (
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        Native Audio
+                      </h4>
+                      <div className="space-y-1">
+                        {audioTracks.map((track, i) => (
+                          <button
+                            key={i}
+                            onClick={() => handleAudioChange(i)}
+                            className={cn(
+                              "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
+                              currentAudioTrack === i
+                                ? "bg-blue-600/20 text-blue-400 font-medium"
+                                : "text-slate-300 hover:bg-slate-800",
+                            )}
+                          >
+                            {track.name || `Audio ${i + 1}`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                {subtitleTracks.length > 0 && (
-                  <div className="mb-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      Native Subtitles
-                    </h4>
-                    <div className="space-y-1">
-                      <button
-                        onClick={() => handleSubtitleChange(-1)}
-                        className={cn(
-                          "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
-                          currentSubtitleTrack === -1
-                            ? "bg-blue-600/20 text-blue-400 font-medium"
-                            : "text-slate-300 hover:bg-slate-800",
-                        )}
-                      >
-                        Off
-                      </button>
-                      {subtitleTracks.map((track, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleSubtitleChange(i)}
-                          className={cn(
-                            "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
-                            currentSubtitleTrack === i
-                              ? "bg-blue-600/20 text-blue-400 font-medium"
-                              : "text-slate-300 hover:bg-slate-800",
-                          )}
-                        >
-                          {track.name || `Track ${i + 1}`}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {audioTracks.length > 1 && (
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      Native Audio
-                    </h4>
-                    <div className="space-y-1">
-                      {audioTracks.map((track, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleAudioChange(i)}
-                          className={cn(
-                            "w-full text-left px-3 py-2 text-sm rounded-lg transition-colors",
-                            currentAudioTrack === i
-                              ? "bg-blue-600/20 text-blue-400 font-medium"
-                              : "text-slate-300 hover:bg-slate-800",
-                          )}
-                        >
-                          {track.name || `Audio ${i + 1}`}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={handleResync}
-            className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
-            title="Fix Lag / Resync"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-          {document.pictureInPictureEnabled && (
-            <button
-              onClick={handlePiP}
-              className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
-              title="Picture in Picture"
-            >
-              <PictureInPicture className="w-4 h-4" />
-            </button>
-          )}
-          <button
-            onClick={toggleFullScreen}
-            className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
-            title="Fullscreen"
-          >
-            <Maximize className="w-4 h-4" />
-          </button>
-
-          <div className="relative">
-            <button
-              onClick={() => setShowQuickSurf(!showQuickSurf)}
-              className={cn(
-                "p-2 rounded-md backdrop-blur-md transition-colors",
-                showQuickSurf
-                  ? "bg-blue-600 text-white"
-                  : "bg-black/60 hover:bg-black/80 text-white",
               )}
-              title="Quick Surf Channels"
+            </div>
+
+            <button
+              onClick={handleResync}
+              className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+              title="Fix Lag / Resync"
             >
-              <ListVideo className="w-4 h-4" />
+              <RefreshCw className="w-4 h-4" />
             </button>
+            {document.pictureInPictureEnabled && (
+              <button
+                onClick={handlePiP}
+                className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+                title="Picture in Picture"
+              >
+                <PictureInPicture className="w-4 h-4" />
+              </button>
+            )}
+            <button
+              onClick={toggleFullScreen}
+              className="p-2 bg-black/60 hover:bg-black/80 text-white rounded-md backdrop-blur-md transition-colors"
+              title="Fullscreen"
+            >
+              <Maximize className="w-4 h-4" />
+            </button>
+
+            <div className="relative">
+              <button
+                onClick={() => setShowQuickSurf(!showQuickSurf)}
+                className={cn(
+                  "p-2 rounded-md backdrop-blur-md transition-colors",
+                  showQuickSurf
+                    ? "bg-blue-600 text-white"
+                    : "bg-black/60 hover:bg-black/80 text-white",
+                )}
+                title="Quick Surf Channels"
+              >
+                <ListVideo className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Slideshow style Next/Previous Buttons */}
+        {/* Slideshow style Next/Previous Buttons */}
         <div className="absolute inset-y-0 left-0 flex items-center px-4 pointer-events-auto">
           <button
             onClick={(e) => {
@@ -851,21 +879,27 @@ export const VideoPlayer: React.FC = () => {
               </div>
             )}
             <div className="flex flex-col drop-shadow-md">
-              <span className="text-white text-3xl font-black tracking-tight">{currentChannel.name}</span>
+              <span className="text-white text-3xl font-black tracking-tight">
+                {currentChannel.name}
+              </span>
               <div className="flex items-center gap-2 mt-1">
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wider">
                   LIVE
                 </span>
                 {currentChannel.currentProgram && (
-                  <span className="text-slate-200 font-medium line-clamp-1">{currentChannel.currentProgram}</span>
+                  <span className="text-slate-200 font-medium line-clamp-1">
+                    {currentChannel.currentProgram}
+                  </span>
                 )}
                 {!currentChannel.currentProgram && (
-                  <span className="text-slate-400 font-medium">Standard Programming</span>
+                  <span className="text-slate-400 font-medium">
+                    Standard Programming
+                  </span>
                 )}
               </div>
             </div>
           </div>
-          
+
           {/* Action Buttons Right Side */}
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 bg-slate-900/60 p-2 rounded-full border border-slate-700 backdrop-blur-sm group">

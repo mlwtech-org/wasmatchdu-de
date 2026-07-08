@@ -26,8 +26,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRegionalSports = void 0;
+exports.enforceUserLimit = exports.checkRegistrationAllowed = exports.getRegionalSports = void 0;
 const functions = __importStar(require("firebase-functions"));
+const functionsV1 = __importStar(require("firebase-functions/v1"));
 const admin = __importStar(require("firebase-admin"));
 const cors = require("cors");
 admin.initializeApp();
@@ -87,4 +88,31 @@ exports.getRegionalSports = functions.https.onRequest((req, res) => {
     });
 });
 __exportStar(require("./stripe"), exports);
+__exportStar(require("./ai"), exports);
+// GDPR / Organizational Compliance Limit
+const MAX_USERS = 650;
+exports.checkRegistrationAllowed = functionsV1.https.onCall(async (data, context) => {
+    try {
+        const listUsersResult = await admin.auth().listUsers(1000);
+        return { allowed: listUsersResult.users.length < MAX_USERS };
+    }
+    catch (error) {
+        console.error("Error checking registration allowance:", error);
+        return { allowed: true }; // Fail open if error
+    }
+});
+exports.enforceUserLimit = functionsV1.auth.user().onCreate(async (user) => {
+    try {
+        // Fetch users up to 1000 (enough to check the 650 limit)
+        const listUsersResult = await admin.auth().listUsers(1000);
+        const userCount = listUsersResult.users.length;
+        if (userCount > MAX_USERS) {
+            console.warn(`[GDPR Compliance] Maximum user capacity reached (${MAX_USERS}). Deleting newly created user: ${user.uid}`);
+            await admin.auth().deleteUser(user.uid);
+        }
+    }
+    catch (error) {
+        console.error("Error enforcing user limit:", error);
+    }
+});
 //# sourceMappingURL=index.js.map
