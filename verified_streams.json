@@ -28,6 +28,13 @@
     "isRegional": false
   },
   {
+    "id": "1TV.ge",
+    "name": "1TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "1TwenteTV.nl",
     "name": "1Twente TV",
     "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
@@ -196,13 +203,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -366,6 +366,13 @@
   {
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
     "url": "https://cdn-3.pishow.tv/live/6/master.m3u8",
     "group": "music",
     "isRegional": false
@@ -410,13 +417,6 @@
     "name": "9X Tashan",
     "url": "https://mumt01.tangotv.in/O5aw8Zn39XTASHAN/index.m3u8",
     "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "10Bold.au",
-    "name": "10 Bold",
-    "url": "https://dce3793146fef017.mediapackage.us-west-2.amazonaws.com/out/v1/55cdf73af7894775ba6de8f57482b66a/CMAF_HLS/index.m3u8",
-    "group": "lifestyle",
     "isRegional": false
   }
 ]
