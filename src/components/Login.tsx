@@ -290,12 +290,16 @@ export const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center text-xs text-slate-500 max-w-xs mx-auto space-y-2">
+            <p>
+              WasMatchDu IPTV is a media player. It does not supply or include
+              any media or content. Users must provide their own content.
+            </p>
             <Link
               to="/legal"
-              className="text-slate-500 hover:text-slate-300 text-sm font-medium transition-colors"
+              className="text-slate-400 hover:text-slate-200 font-medium transition-colors inline-block pt-2"
             >
-              Legal & DMCA Policy
+              Read Full Legal & DMCA Policy
             </Link>
           </div>
         </div>

@@ -101,3 +101,15 @@ export const enforceUserLimit = functionsV1.auth
       console.error("Error enforcing user limit:", error);
     }
   });
+
+export const cleanupUserData = functionsV1.auth
+  .user()
+  .onDelete(async (user: admin.auth.UserRecord) => {
+    try {
+      // Clean up the user's document in Firestore to comply with Data Deletion requests
+      await admin.firestore().collection("users").doc(user.uid).delete();
+      console.log(`[Data Safety] Deleted Firestore data for user: ${user.uid}`);
+    } catch (error) {
+      console.error("Error cleaning up user data:", error);
+    }
+  });
