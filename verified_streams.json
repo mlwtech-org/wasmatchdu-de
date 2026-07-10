@@ -70,6 +70,13 @@
     "isRegional": false
   },
   {
+    "id": "2STV.sn",
+    "name": "2STV",
+    "url": "http://69.64.57.208/2stv/playlist.m3u8",
+    "group": "culture",
+    "isRegional": false
+  },
+  {
     "id": "2TV.ge",
     "name": "2 TV",
     "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
@@ -200,6 +207,13 @@
     "name": "3sat",
     "url": "http://41.205.77.102/3SAT/index.m3u8",
     "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
     "isRegional": false
   },
   {
