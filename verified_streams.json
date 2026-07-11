@@ -70,6 +70,13 @@
     "isRegional": false
   },
   {
+    "id": "2Plus2Marathon.ua",
+    "name": "2+2 Marathon",
+    "url": "https://lowa8026-cmyk.github.io/Ukraine/Edyni_Novyny/2Plus2Marafon.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "2STV.sn",
     "name": "2STV",
     "url": "http://69.64.57.208/2stv/playlist.m3u8",
@@ -175,13 +182,6 @@
     "isRegional": false
   },
   {
-    "id": "3CatCameresdeltemps.es",
-    "name": "3Cat Cameres del temps",
-    "url": "https://directes-tv-int.3catdirectes.cat/live-content/beauties-hls/master.m3u8",
-    "group": "public",
-    "isRegional": false
-  },
-  {
     "id": "3CatInfo.es",
     "name": "3CatInfo",
     "url": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
@@ -207,13 +207,6 @@
     "name": "3sat",
     "url": "http://41.205.77.102/3SAT/index.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
@@ -416,13 +409,6 @@
     "id": "9XTashan.in",
     "name": "9X Tashan",
     "url": "https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg01281-9xmediapvtltd-9xtashan-samsungin/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XTashan.in",
-    "name": "9X Tashan",
-    "url": "https://cdn-2.pishow.tv/live/1613/master.m3u8",
     "group": "music",
     "isRegional": false
   }
