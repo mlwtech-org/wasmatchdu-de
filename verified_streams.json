@@ -182,6 +182,13 @@
     "isRegional": false
   },
   {
+    "id": "3CatCameresdeltemps.es",
+    "name": "3Cat Cameres del temps",
+    "url": "https://directes-tv-int.3catdirectes.cat/live-content/beauties-hls/master.m3u8",
+    "group": "public",
+    "isRegional": false
+  },
+  {
     "id": "3CatInfo.es",
     "name": "3CatInfo",
     "url": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
