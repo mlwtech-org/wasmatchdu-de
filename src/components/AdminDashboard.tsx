@@ -21,6 +21,8 @@ import { ModerationModule } from "./admin/ModerationModule";
 import { AnalyticsDrillDown } from "./admin/AnalyticsDrillDown";
 import { ContentIntelligence } from "./admin/ContentIntelligence";
 import { BrainCircuit } from "lucide-react";
+import { db } from "../lib/firebase";
+import { collection, getCountFromServer } from "firebase/firestore";
 
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
@@ -37,9 +39,9 @@ type Metric = "viewers" | "revenue" | "health" | null;
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
 
-  // Mock Data States for Overview
-  const [concurrentViewers, setConcurrentViewers] = useState(45291);
-  const [dailyRevenue, setDailyRevenue] = useState(12450.5);
+  // Live Data States for Overview
+  const [totalUsers, setTotalUsers] = useState<number | null>(null);
+  const [dailyRevenue, setDailyRevenue] = useState(0);
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [selectedMetric, setSelectedMetric] = useState<Metric>(null);
   const [toast, setToast] = useState<{
@@ -55,12 +57,20 @@ export const AdminDashboard: React.FC = () => {
     setTimeout(() => setToast(null), 4000);
   };
 
-  // Simulate live changing data for Overview
+  // Fetch live platform telemetry from Firestore
   useEffect(() => {
+    const fetchTelemetry = async () => {
+      try {
+        const snapshot = await getCountFromServer(collection(db, "users"));
+        setTotalUsers(snapshot.data().count);
+      } catch (err) {
+        console.error("Failed to fetch user count:", err);
+      }
+    };
+    fetchTelemetry();
+
+    // Mock revenue simulation for demo purposes
     const interval = setInterval(() => {
-      setConcurrentViewers(
-        (prev) => prev + Math.floor(Math.random() * 100) - 40,
-      );
       setDailyRevenue((prev) => prev + Math.random() * 15);
     }, 3000);
     return () => clearInterval(interval);
@@ -223,12 +233,12 @@ export const AdminDashboard: React.FC = () => {
                   <Users className="w-24 h-24 transform translate-x-4 -translate-y-4" />
                 </div>
                 <h3 className="text-slate-400 font-medium mb-1">
-                  Live Viewers (Global)
+                  Total Registered Users
                 </h3>
                 <div className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
-                  {concurrentViewers.toLocaleString()}
+                  {totalUsers === null ? "..." : totalUsers.toLocaleString()}
                   <span className="text-sm font-bold text-emerald-400 flex items-center bg-emerald-500/10 px-2 py-1 rounded-full">
-                    <TrendingUp className="w-3 h-3 mr-1" /> +12%
+                    <TrendingUp className="w-3 h-3 mr-1" /> Live
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-4 flex items-center gap-1">

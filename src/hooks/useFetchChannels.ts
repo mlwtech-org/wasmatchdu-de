@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { FALLBACK_CHANNELS } from "../lib/constants";
 import { Channel } from "../types";
+import { db } from "../lib/firebase";
+import { collection, onSnapshot, query } from "firebase/firestore";
 
 export const useFetchChannels = () => {
   const {
@@ -21,27 +23,51 @@ export const useFetchChannels = () => {
   const lastLoadedRegion = useRef<string | null>(null);
 
   useEffect(() => {
-    if (regionLock === lastLoadedRegion.current && globalChannels.length > 0) return;
+    // 1. Listen for real-time bans from admin
+    const unsubscribeBans = onSnapshot(
+      query(collection(db, "banned_streams")),
+      (snapshot) => {
+        const bannedIds = snapshot.docs.map((d) => d.id);
+        if (bannedIds.length > 0) {
+          setChannels(
+            usePlayerStore
+              .getState()
+              .channels.filter((c) => !bannedIds.includes(c.id)),
+          );
+          setGlobalChannels(
+            usePlayerStore
+              .getState()
+              .globalChannels.filter((c) => !bannedIds.includes(c.id)),
+          );
+        }
+      },
+    );
+
+    if (regionLock === lastLoadedRegion.current && globalChannels.length > 0)
+      return () => unsubscribeBans();
 
     const fetchOptimizedFeeds = async () => {
       setIsLoading(true);
       setChannels([]);
       try {
         let allChannels: Channel[] = [];
-        
+
         // Fetch pre-aggregated static JSON for instant load
         const res = await fetch("/channels.json");
         if (res.ok) {
-           allChannels = await res.json();
+          allChannels = await res.json();
         } else {
-           console.warn("Failed to fetch channels.json, ensure aggregate script is run.");
+          console.warn(
+            "Failed to fetch channels.json, ensure aggregate script is run.",
+          );
         }
 
-        const dashboardCandidates = allChannels.filter(c => 
-          c.url.startsWith("https") && 
-          !c.url.match(/\d+\.\d+\.\d+\.\d+/) && 
-          c.logo && 
-          !c.isUnstable
+        const dashboardCandidates = allChannels.filter(
+          (c) =>
+            c.url.startsWith("https") &&
+            !c.url.match(/\d+\.\d+\.\d+\.\d+/) &&
+            c.logo &&
+            !c.isUnstable,
         );
 
         // Sorting Logic (Personalization)
@@ -54,12 +80,17 @@ export const useFetchChannels = () => {
         // 2. Sort candidates
         const sortedChannels = [...dashboardCandidates].sort((a, b) => {
           // Boost recently watched
-          const aRecentIdx = recentlyWatched ? recentlyWatched.indexOf(a.id) : -1;
-          const bRecentIdx = recentlyWatched ? recentlyWatched.indexOf(b.id) : -1;
-          
+          const aRecentIdx = recentlyWatched
+            ? recentlyWatched.indexOf(a.id)
+            : -1;
+          const bRecentIdx = recentlyWatched
+            ? recentlyWatched.indexOf(b.id)
+            : -1;
+
           if (aRecentIdx !== -1 && bRecentIdx === -1) return -1;
           if (bRecentIdx !== -1 && aRecentIdx === -1) return 1;
-          if (aRecentIdx !== -1 && bRecentIdx !== -1) return aRecentIdx - bRecentIdx;
+          if (aRecentIdx !== -1 && bRecentIdx !== -1)
+            return aRecentIdx - bRecentIdx;
 
           // Boost top categories
           const aInTop = topCategories.includes(a.gemeinwohlCategory);
@@ -72,12 +103,10 @@ export const useFetchChannels = () => {
           return a.name.localeCompare(b.name);
         });
 
-        const dynamicDashboardChannels = regionLock === "none"
-          ? [
-              ...FALLBACK_CHANNELS,
-              ...sortedChannels
-            ]
-          : sortedChannels; 
+        const dynamicDashboardChannels =
+          regionLock === "none"
+            ? [...FALLBACK_CHANNELS, ...sortedChannels]
+            : sortedChannels;
 
         setChannels(dynamicDashboardChannels);
         setGlobalChannels(allChannels);
@@ -92,6 +121,10 @@ export const useFetchChannels = () => {
     };
 
     fetchOptimizedFeeds();
+
+    return () => {
+      unsubscribeBans();
+    };
   }, [
     setChannels,
     setGlobalChannels,
@@ -99,5 +132,7 @@ export const useFetchChannels = () => {
     setIsLoading,
     globalChannels.length,
     regionLock,
+    recentlyWatched,
+    watchHistory,
   ]);
 };
