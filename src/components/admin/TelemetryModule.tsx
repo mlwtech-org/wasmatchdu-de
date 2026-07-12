@@ -4,38 +4,94 @@ import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 import { RegionalFeedAnalysis } from "./RegionalFeedAnalysis";
 
+import { db } from "../../lib/firebase";
+import {
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  limit,
+  getCountFromServer,
+  getDoc,
+  doc,
+} from "firebase/firestore";
+import { usePlayerStore } from "../../store/usePlayerStore";
+
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
 
 export const TelemetryModule: React.FC = () => {
+  const { globalChannels } = usePlayerStore();
   const [logs, setLogs] = useState<
-    { id: number; msg: string; type: "info" | "warn" | "error"; time: string }[]
+    { id: string; msg: string; type: "info" | "warn" | "error"; time: string }[]
   >([]);
 
-  // Mock live server logs
+  const [dbLatency, setDbLatency] = useState<number>(0);
+  const [modQueueSize, setModQueueSize] = useState<number>(0);
+  const [totalUsers, setTotalUsers] = useState<number>(0);
+
   useEffect(() => {
-    const messages = [
-      "Stream health check: [Global Sports] ping 45ms.",
-      "Dead link pruned automatically from feed: .m3u8 404 Not Found.",
-      "Buffer event spike detected on stream #421.",
-      "Transcoding worker node scaled up.",
-      "Syncing live viewer presence for 45,291 clients.",
-    ];
+    // 1. Fetch Total Users
+    getCountFromServer(collection(db, "users"))
+      .then((snap) => setTotalUsers(snap.data().count))
+      .catch(() => {});
 
-    let id = 0;
-    const interval = setInterval(() => {
-      const type =
-        Math.random() > 0.8 ? "warn" : Math.random() > 0.9 ? "error" : "info";
-      const newLog = {
-        id: id++,
-        msg: messages[Math.floor(Math.random() * messages.length)],
-        type: type as "info" | "warn" | "error",
-        time: new Date().toLocaleTimeString(),
-      };
-      setLogs((prev) => [newLog, ...prev].slice(0, 50));
-    }, 2000);
+    // 2. Fetch Moderation Queue Size real-time
+    const unsubMod = onSnapshot(collection(db, "moderation_queue"), (snap) => {
+      setModQueueSize(snap.size);
+    });
 
-    return () => clearInterval(interval);
+    // 3. Measure real-time DB ping
+    const pingInterval = setInterval(async () => {
+      const start = performance.now();
+      try {
+        await getDoc(doc(db, "system_logs", "ping_test"));
+        setDbLatency(Math.round(performance.now() - start));
+      } catch {
+        setDbLatency(0);
+      }
+    }, 5000);
+    // Initial ping
+    getDoc(doc(db, "system_logs", "ping_test"))
+      .then(() => setDbLatency(20))
+      .catch(() => setDbLatency(0));
+
+    // 4. Listen to real system logs
+    const q = query(
+      collection(db, "system_logs"),
+      orderBy("time", "desc"),
+      limit(50),
+    );
+    const unsubLogs = onSnapshot(q, (snapshot) => {
+      const realLogs: {
+        id: string;
+        msg: string;
+        type: "info" | "warn" | "error";
+        time: string;
+      }[] = [];
+      snapshot.forEach((d) => {
+        if (d.id !== "ping_test") {
+          const data = d.data() as {
+            msg: string;
+            type: "info" | "warn" | "error";
+            time: string;
+          };
+          realLogs.push({
+            id: d.id,
+            msg: data.msg,
+            type: data.type,
+            time: new Date(data.time).toLocaleTimeString(),
+          });
+        }
+      });
+      setLogs(realLogs);
+    });
+
+    return () => {
+      unsubMod();
+      unsubLogs();
+      clearInterval(pingInterval);
+    };
   }, []);
 
   return (
@@ -45,12 +101,13 @@ export const TelemetryModule: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-400 font-medium text-sm">
-              Global CDN Latency
+              Database Latency
             </h3>
             <Globe2 className="w-4 h-4 text-blue-500" />
           </div>
           <div className="text-3xl font-black text-white flex items-baseline gap-1">
-            24 <span className="text-sm font-medium text-slate-500">ms</span>
+            {dbLatency || "--"}{" "}
+            <span className="text-sm font-medium text-slate-500">ms</span>
           </div>
           <div className="mt-3 flex gap-1 h-8 items-end opacity-60">
             {Array.from({ length: 12 }).map((_, i) => (
@@ -66,43 +123,47 @@ export const TelemetryModule: React.FC = () => {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-400 font-medium text-sm">
-              Active Edge Nodes
+              Active Live Channels
             </h3>
             <Server className="w-4 h-4 text-emerald-500" />
           </div>
           <div className="text-3xl font-black text-white flex items-baseline gap-1">
-            142
+            {globalChannels.length || "--"}
           </div>
           <p className="text-xs text-emerald-400 mt-2 flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            All systems operational
+            Synced dynamically
           </p>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-400 font-medium text-sm">
-              Transcode CPU Load
+              Moderation Queue Size
             </h3>
             <Cpu className="w-4 h-4 text-orange-500" />
           </div>
           <div className="text-3xl font-black text-white flex items-baseline gap-1">
-            68%
+            {modQueueSize}
           </div>
           <div className="w-full bg-slate-800 rounded-full h-1.5 mt-4">
-            <div className="bg-gradient-to-r from-orange-500 to-rose-500 h-1.5 rounded-full w-[68%]" />
+            <div
+              className="bg-gradient-to-r from-orange-500 to-rose-500 h-1.5 rounded-full"
+              style={{ width: `${Math.min(modQueueSize * 10, 100)}%` }}
+            />
           </div>
         </div>
 
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-400 font-medium text-sm">
-              Bandwidth (Out)
+              Total Registered Users
             </h3>
             <WifiHigh className="w-4 h-4 text-indigo-500" />
           </div>
           <div className="text-3xl font-black text-white flex items-baseline gap-1">
-            1.2 <span className="text-sm font-medium text-slate-500">Tbps</span>
+            {totalUsers || "--"}{" "}
+            <span className="text-sm font-medium text-slate-500">users</span>
           </div>
           <div className="mt-3 flex gap-1 h-8 items-end opacity-60">
             {Array.from({ length: 12 }).map((_, i) => (

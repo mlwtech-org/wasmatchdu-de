@@ -68,6 +68,31 @@ export const ModerationModule: React.FC<{
           reason: stream.reason,
           bannedAt: new Date().toISOString(),
         });
+        await setDoc(
+          doc(
+            db,
+            "system_logs",
+            Date.now().toString() + Math.random().toString(36).substr(2, 5),
+          ),
+          {
+            msg: `Admin BANNED stream: ${stream.channelId || stream.id}`,
+            type: "error",
+            time: new Date().toISOString(),
+          },
+        );
+      } else {
+        await setDoc(
+          doc(
+            db,
+            "system_logs",
+            Date.now().toString() + Math.random().toString(36).substr(2, 5),
+          ),
+          {
+            msg: `Admin IGNORED report for stream: ${stream.channelId || stream.id}`,
+            type: "info",
+            time: new Date().toISOString(),
+          },
+        );
       }
       // Remove from moderation_queue
       await deleteDoc(doc(db, "moderation_queue", stream.id));
