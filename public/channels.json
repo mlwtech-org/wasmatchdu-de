@@ -1331,17 +1331,6 @@
     "id": "ch-hidklp"
   },
   {
-    "logo": "https://i.imgur.com/E84jnP8.png",
-    "group": "Kids",
-    "name": "Nick Germany (1080p) [Geo-blocked]",
-    "isRegional": false,
-    "gemeinwohlCategory": "Kinder & Familie",
-    "isUnstable": true,
-    "provider": "Public IPTV",
-    "url": "https://0d26a00dfbb1.airspace-cdn.cbsivideo.com/nick1999/master/nick1999.m3u8",
-    "id": "ch-iluhyk"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/67f3eb1c443f0671bc03ece8/colorLogoPNG_1748329104247.png",
     "group": "Kids",
     "name": "Nick Jr. Club (720p)",
@@ -1351,6 +1340,17 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-67f3eb1c443f0671bc03ece8.m3u8",
     "id": "ch-eiriov"
+  },
+  {
+    "logo": "https://i.imgur.com/E84jnP8.png",
+    "group": "Kids",
+    "name": "Nickelodeon",
+    "isRegional": false,
+    "gemeinwohlCategory": "Kinder & Familie",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://ma.anixa.tv/clips/stream/nickelodeon/playlist.php",
+    "id": "ch-qh87gw"
   },
   {
     "logo": "https://images.pluto.tv/channels/67f3eb800a1beb98767ca748/colorLogoPNG_1749200817646.png",
