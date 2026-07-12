@@ -19,11 +19,19 @@ import { CMSModule } from "./admin/CMSModule";
 import { FinancialsModule } from "./admin/FinancialsModule";
 import { ModerationModule } from "./admin/ModerationModule";
 import { AnalyticsDrillDown } from "./admin/AnalyticsDrillDown";
+import { ContentIntelligence } from "./admin/ContentIntelligence";
+import { BrainCircuit } from "lucide-react";
 
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
 
-type Tab = "overview" | "telemetry" | "cms" | "financials" | "moderation";
+type Tab =
+  | "overview"
+  | "telemetry"
+  | "cms"
+  | "financials"
+  | "moderation"
+  | "intelligence";
 type Metric = "viewers" | "revenue" | "health" | null;
 
 export const AdminDashboard: React.FC = () => {
@@ -93,6 +101,17 @@ export const AdminDashboard: React.FC = () => {
             <Activity className="w-5 h-5" /> Telemetry
           </button>
           <button
+            onClick={() => setActiveTab("intelligence")}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all",
+              activeTab === "intelligence"
+                ? "bg-blue-600/10 text-blue-400"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5",
+            )}
+          >
+            <BrainCircuit className="w-5 h-5" /> Intelligence
+          </button>
+          <button
             onClick={() => setActiveTab("cms")}
             className={cn(
               "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all",
@@ -144,13 +163,17 @@ export const AdminDashboard: React.FC = () => {
             <h1 className="text-3xl font-black text-white capitalize">
               {activeTab === "overview"
                 ? "Platform Overview"
-                : activeTab === "cms"
-                  ? "CMS Content"
-                  : activeTab}
+                : activeTab === "intelligence"
+                  ? "Content Intelligence"
+                  : activeTab === "cms"
+                    ? "CMS Content"
+                    : activeTab}
             </h1>
             <p className="text-slate-500 mt-1">
               {activeTab === "overview" &&
                 "Real-time metrics and platform administration"}
+              {activeTab === "intelligence" &&
+                "AI-driven content recommendations and stream health"}
               {activeTab === "telemetry" &&
                 "Network health, latency, and regional VPN analysis"}
               {activeTab === "cms" &&
@@ -171,6 +194,8 @@ export const AdminDashboard: React.FC = () => {
 
         {activeTab === "telemetry" ? (
           <TelemetryModule />
+        ) : activeTab === "intelligence" ? (
+          <ContentIntelligence />
         ) : activeTab === "cms" ? (
           <CMSModule showToast={showToast} />
         ) : activeTab === "financials" ? (

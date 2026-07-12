@@ -9,6 +9,7 @@ import { RadioHub } from "./RadioHub";
 import { GlobalRadioPlayer } from "./GlobalRadioPlayer";
 import { MobileNav } from "./MobileNav";
 import { VoiceOverlay } from "./VoiceOverlay";
+import { useSmartFeed } from "../hooks/useSmartFeed";
 import {
   Search,
   Mic,
@@ -184,23 +185,16 @@ export const Dashboard: React.FC = () => {
     });
   }, [channels, searchQuery, kidsMode, showUnstableChannels]);
 
-  // Compute trending channels deterministically
+  // Feed intelligence based on active profile
+  const { smartFeed } = useSmartFeed(
+    filteredChannels,
+    activeProfile?.name || "General",
+  );
+
+  // Compute trending channels deterministically using the Smart Feed Algorithm
   const trendingChannels = useMemo(() => {
-    return [...filteredChannels]
-      .filter((c) => !c.isUnstable)
-      .sort((a, b) => {
-        let hashA = 0;
-        for (let i = 0; i < a.id.length; i++)
-          hashA = a.id.charCodeAt(i) + ((hashA << 5) - hashA);
-        let hashB = 0;
-        for (let i = 0; i < b.id.length; i++)
-          hashB = b.id.charCodeAt(i) + ((hashB << 5) - hashB);
-        const countA = Math.abs(hashA) % 49000;
-        const countB = Math.abs(hashB) % 49000;
-        return countB - countA; // Sort descending
-      })
-      .slice(0, 12);
-  }, [filteredChannels]);
+    return smartFeed.slice(0, 12);
+  }, [smartFeed]);
 
   const liveEventsChannels = useMemo(() => {
     return filteredChannels
