@@ -77,13 +77,6 @@
     "isRegional": false
   },
   {
-    "id": "2STV.sn",
-    "name": "2STV",
-    "url": "http://69.64.57.208/2stv/playlist.m3u8",
-    "group": "culture",
-    "isRegional": false
-  },
-  {
     "id": "2TV.ge",
     "name": "2 TV",
     "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
@@ -219,13 +212,6 @@
   {
     "id": "4E.gr",
     "name": "4E",
-    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "4E.gr",
-    "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
     "isRegional": false
@@ -340,13 +326,6 @@
     "name": "7S Music",
     "url": "https://mumt03.tangotv.in/Dsly5z3H7SMUSIC/index.m3u8",
     "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "7TV.hu",
-    "name": "7.TV",
-    "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
