@@ -6,7 +6,14 @@ export interface User {
   isPremium?: boolean;
   isPro?: boolean;
   stripeCustomerId?: string;
-  subscriptionStatus?: "active" | "past_due" | "canceled" | "unpaid" | "incomplete" | "incomplete_expired" | "trialing";
+  subscriptionStatus?:
+    | "active"
+    | "past_due"
+    | "canceled"
+    | "unpaid"
+    | "incomplete"
+    | "incomplete_expired"
+    | "trialing";
   role: UserRole;
 }
 
@@ -28,6 +35,12 @@ export interface Channel {
   group: string;
   isRegional: boolean;
   gemeinwohlCategory: string;
+  _intelligence?: {
+    healthScore: number;
+    matchScore: number;
+    rankScore: number;
+    isHealthy: boolean;
+  };
   isUnstable: boolean;
   currentProgram?: string;
   currentProgramTime?: string;
