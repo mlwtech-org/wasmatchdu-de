@@ -231,11 +231,11 @@ export const Dashboard: React.FC = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
+    <div className="min-h-screen mesh-bg text-white font-sans selection:bg-blue-500/30 overflow-x-clip pb-20 lg:pb-0">
       {/* Top Desktop Navigation */}
       <header
         className={cn(
-          "fixed top-0 inset-x-0 z-50 transition-all duration-300 bg-slate-950/95 backdrop-blur-md border-b border-slate-800",
+          "fixed top-0 inset-x-0 z-50 transition-all duration-300 glass-panel border-b-0",
           isTheaterMode ? "opacity-0 pointer-events-none" : "opacity-100",
         )}
       >
@@ -344,11 +344,11 @@ export const Dashboard: React.FC = () => {
       {/* Sidebar Drawer */}
       <aside
         className={cn(
-          "fixed top-0 left-0 bottom-0 w-72 bg-slate-950/95 backdrop-blur-xl border-r border-slate-800 z-[110] transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto shadow-2xl flex flex-col",
+          "fixed top-0 left-0 bottom-0 w-72 glass-panel border-r border-white/5 z-[110] transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-y-auto shadow-2xl flex flex-col",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="p-4 flex items-center justify-between border-b border-slate-800 sticky top-0 bg-slate-950/95 backdrop-blur-md z-10">
+        <div className="p-4 flex items-center justify-between border-b border-white/5 sticky top-0 glass-panel z-10">
           <div className="flex items-center gap-2 text-white font-black text-xl tracking-tight">
             <div className="relative w-6 h-6">
               <img

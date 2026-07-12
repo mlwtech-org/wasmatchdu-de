@@ -4,6 +4,7 @@ import { usePlayerStore } from "../store/usePlayerStore";
 import { CategoryIcon } from "./CategoryIcon";
 import { PlayCircle, Heart, Flame } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -72,10 +73,13 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
             const viewerCount = (Math.abs(hash) % 49000) + 1200;
 
             return (
-              <div
+              <motion.div
                 key={channel.id}
                 data-focusable="true"
                 tabIndex={0}
+                whileHover={{ scale: 1.05, y: -8 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 onClick={() => {
                   setCurrentPlaylist(channels);
                   navigate(`/live/${channel.id}`);
@@ -87,11 +91,10 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                   }
                 }}
                 className={cn(
-                  "relative aspect-video bg-[#050505] rounded-xl overflow-hidden cursor-pointer group/card transition-all duration-500 transform ease-out",
+                  "relative aspect-video rounded-xl overflow-hidden cursor-pointer group/card glass-card hover-glow",
                   isViewAll
                     ? "w-full"
                     : "flex-none w-[75vw] sm:w-[240px] md:w-[280px] lg:w-[320px] snap-start",
-                  "hover:scale-[1.08] hover:z-50 hover:shadow-[0_20px_60px_rgba(0,0,0,0.9)] ring-1 ring-white/5 hover:ring-white/20",
                   isPlaying
                     ? "ring-2 ring-cyan-500 shadow-[0_0_30px_rgba(34,211,238,0.3)] scale-[1.02]"
                     : "",
@@ -235,7 +238,7 @@ export const ChannelRow: React.FC<ChannelRowProps> = ({
                     {channel.provider}
                   </div>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </div>
