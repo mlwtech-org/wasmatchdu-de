@@ -189,6 +189,7 @@ export const Dashboard: React.FC = () => {
   const { smartFeed } = useSmartFeed(
     filteredChannels,
     activeProfile?.name || "General",
+    activeProfile?.regionLock || "Global",
   );
 
   // Compute trending channels deterministically using the Smart Feed Algorithm

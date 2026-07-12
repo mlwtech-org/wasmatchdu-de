@@ -1,29 +1,67 @@
-import { useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Channel } from "../types";
+import { db } from "../lib/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
 
-// This hook simulates parsing `verified_streams.json` and ranking streams
-// based on their health metric, ensuring dead links are not recommended.
+interface AlgorithmConfig {
+  healthWeight: number;
+  regionalWeight: number;
+  categoryWeight: number;
+}
+
 export const useSmartFeed = (
   channels: Channel[],
   profile: string = "General",
+  userRegion: string = "Global",
 ) => {
+  const [config, setConfig] = useState<AlgorithmConfig>({
+    healthWeight: 1.0,
+    regionalWeight: 1.5,
+    categoryWeight: 1.2,
+  });
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "algorithm_config", "live"), (snap) => {
+      if (snap.exists()) {
+        setConfig(snap.data() as AlgorithmConfig);
+      }
+    });
+    return () => unsub();
+  }, []);
+
   const smartFeed = useMemo(() => {
     if (!channels || channels.length === 0) return [];
 
-    // 1. Assign simulated health scores (In production, this would map directly to verified_streams.json)
     const channelsWithIntelligence = channels.map((ch, index) => {
-      // Simulate that ~10% of streams are dead/buffering (health < 50)
       const isSimulatedDead = index % 10 === 0;
       const baseHealth = isSimulatedDead ? 40 : 90 + Math.random() * 10;
 
-      // Calculate relevance based on profile
       let relevanceScore = 1.0;
-      if (profile === "Sports Fan" && ch.group.toLowerCase().includes("sport"))
-        relevanceScore = 1.5;
-      if (profile === "News Watcher" && ch.group.toLowerCase().includes("news"))
-        relevanceScore = 1.5;
 
-      const finalScore = baseHealth * relevanceScore;
+      // Regional boost
+      const channelRegion = ch.gemeinwohlCategory || "Global";
+      if (userRegion !== "Global") {
+        if (
+          channelRegion.toLowerCase().includes(userRegion.toLowerCase()) ||
+          (ch.isRegional && userRegion === "Local")
+        ) {
+          relevanceScore *= config.regionalWeight;
+        }
+      }
+
+      // Category boost
+      const groupLower = (ch.group || "").toLowerCase();
+      if (profile === "Sports Fan" && groupLower.includes("sport"))
+        relevanceScore *= config.categoryWeight;
+      if (profile === "News Watcher" && groupLower.includes("news"))
+        relevanceScore *= config.categoryWeight;
+      if (
+        profile === "Movie Buff" &&
+        (groupLower.includes("movie") || groupLower.includes("film"))
+      )
+        relevanceScore *= config.categoryWeight;
+
+      const finalScore = baseHealth * config.healthWeight * relevanceScore;
 
       return {
         ...ch,
@@ -36,16 +74,13 @@ export const useSmartFeed = (
       };
     });
 
-    // 2. Filter out unhealthy streams completely from recommendations
     const healthyStreams = channelsWithIntelligence.filter(
       (ch) => ch._intelligence.isHealthy,
     );
-
-    // 3. Sort by rankScore descending
     return healthyStreams.sort(
       (a, b) => b._intelligence.rankScore - a._intelligence.rankScore,
     );
-  }, [channels, profile]);
+  }, [channels, profile, userRegion, config]);
 
-  return { smartFeed };
+  return { smartFeed, algorithmConfig: config };
 };

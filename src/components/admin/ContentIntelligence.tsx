@@ -13,12 +13,20 @@ import {
 import { useSmartFeed } from "../../hooks/useSmartFeed";
 import { Channel } from "../../types";
 
-// Define local interfaces for the fetched data
+import { db } from "../../lib/firebase";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+
 interface ChannelData {
   id: string;
   name: string;
   group: string;
   url: string;
+}
+
+interface AlgorithmConfig {
+  healthWeight: number;
+  regionalWeight: number;
+  categoryWeight: number;
 }
 
 interface MetricState {
@@ -45,12 +53,38 @@ export const ContentIntelligence: React.FC = () => {
     { name: string; error: string }[]
   >([]);
   const [simulatedProfile, setSimulatedProfile] = useState("Sports Fan");
+  const [simulatedRegion, setSimulatedRegion] = useState("Global");
   const [isScanning, setIsScanning] = useState(false);
+
+  const [config, setConfig] = useState<AlgorithmConfig>({
+    healthWeight: 1.0,
+    regionalWeight: 1.5,
+    categoryWeight: 1.2,
+  });
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "algorithm_config", "live"), (snap) => {
+      if (snap.exists()) {
+        setConfig(snap.data() as AlgorithmConfig);
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const handleConfigChange = async (
+    key: keyof AlgorithmConfig,
+    value: number,
+  ) => {
+    const newConfig = { ...config, [key]: value };
+    setConfig(newConfig);
+    await setDoc(doc(db, "algorithm_config", "live"), newConfig);
+  };
 
   // The actual algorithmic recommendations based on live data
   const { smartFeed } = useSmartFeed(
     channels as unknown as Channel[],
     simulatedProfile,
+    simulatedRegion,
   );
 
   const fetchLiveData = async () => {
@@ -245,6 +279,86 @@ export const ContentIntelligence: React.FC = () => {
                   </button>
                 ),
               )}
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-slate-400 mb-2">
+              Simulate User Region
+            </label>
+            <div className="flex gap-2 flex-wrap">
+              {["Global", "DE", "US", "Local"].map((region) => (
+                <button
+                  key={region}
+                  onClick={() => setSimulatedRegion(region)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${simulatedRegion === region ? "bg-emerald-600 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700"}`}
+                >
+                  {region}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-6 space-y-4 border-t border-slate-800 pt-6">
+            <h4 className="text-sm font-medium text-slate-400">
+              Live Algorithm Weights (Synced to Frontend)
+            </h4>
+
+            <div>
+              <div className="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Health Weight ({config.healthWeight}x)</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="3"
+                step="0.1"
+                value={config.healthWeight}
+                onChange={(e) =>
+                  handleConfigChange("healthWeight", parseFloat(e.target.value))
+                }
+                className="w-full accent-indigo-500"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Regional Boost ({config.regionalWeight}x)</span>
+              </div>
+              <input
+                type="range"
+                min="1"
+                max="5"
+                step="0.1"
+                value={config.regionalWeight}
+                onChange={(e) =>
+                  handleConfigChange(
+                    "regionalWeight",
+                    parseFloat(e.target.value),
+                  )
+                }
+                className="w-full accent-emerald-500"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between text-xs text-slate-400 mb-1">
+                <span>Category Match ({config.categoryWeight}x)</span>
+              </div>
+              <input
+                type="range"
+                min="1"
+                max="5"
+                step="0.1"
+                value={config.categoryWeight}
+                onChange={(e) =>
+                  handleConfigChange(
+                    "categoryWeight",
+                    parseFloat(e.target.value),
+                  )
+                }
+                className="w-full accent-amber-500"
+              />
             </div>
           </div>
 
