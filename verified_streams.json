@@ -212,6 +212,13 @@
   {
     "id": "4E.gr",
     "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
     "isRegional": false
@@ -301,6 +308,13 @@
     "isRegional": false
   },
   {
+    "id": "6WiseTv.us",
+    "name": "6 Wise Tv",
+    "url": "https://live.enhdtv.com:8081/8150/index.m3u8",
+    "group": "family",
+    "isRegional": false
+  },
+  {
     "id": "7Info.ci",
     "name": "7 Info",
     "url": "https://video1.getstreamhosting.com:1936/8042/8042/playlist.m3u8",
@@ -319,13 +333,6 @@
     "name": "7S Music",
     "url": "https://mumt03.tangotv.in/Dsly5z3H7SMUSIC/index.m3u8",
     "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "7TV.hu",
-    "name": "7.TV",
-    "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
@@ -353,13 +360,6 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJhakaas.in",
-    "name": "9X Jhakaas",
-    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
