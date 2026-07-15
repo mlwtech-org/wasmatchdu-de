@@ -301,13 +301,6 @@
     "isRegional": false
   },
   {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "6PR.au",
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
@@ -381,6 +374,13 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
