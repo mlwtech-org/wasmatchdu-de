@@ -217,13 +217,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -294,17 +287,17 @@
     "isRegional": false
   },
   {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "6PR.au",
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
     "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "6ter.fr",
+    "name": "6ter",
+    "url": "http://145.239.5.177/314/index.m3u8",
+    "group": "entertainment",
     "isRegional": false
   },
   {
@@ -410,6 +403,34 @@
     "name": "9XM",
     "url": "https://mumt01.tangotv.in/O5aw8Zn39XM/index.m3u8",
     "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XTashan.in",
+    "name": "9X Tashan",
+    "url": "https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg01281-9xmediapvtltd-9xtashan-samsungin/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XTashan.in",
+    "name": "9X Tashan",
+    "url": "https://mumt01.tangotv.in/O5aw8Zn39XTASHAN/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XTashan.in",
+    "name": "9X Tashan",
+    "url": "https://cdn-2.pishow.tv/live/1613/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "10Bold.au",
+    "name": "10 Bold",
+    "url": "https://dce3793146fef017.mediapackage.us-west-2.amazonaws.com/out/v1/55cdf73af7894775ba6de8f57482b66a/CMAF_HLS/index.m3u8",
+    "group": "lifestyle",
     "isRegional": false
   }
 ]
