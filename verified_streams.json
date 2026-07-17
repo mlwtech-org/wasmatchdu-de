@@ -189,13 +189,6 @@
     "isRegional": false
   },
   {
-    "id": "3HD.th",
-    "name": "3HD",
-    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "3sat.de",
     "name": "3sat",
     "url": "http://41.205.77.102/3SAT/index.m3u8",
@@ -290,6 +283,13 @@
     "id": "5tv.ar",
     "name": "5tv",
     "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
     "group": "general",
     "isRegional": false
   },
