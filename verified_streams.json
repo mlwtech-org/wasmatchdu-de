@@ -86,6 +86,13 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
+    "url": "http://stream.mcquack.net/187/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
     "url": "http://31.148.48.15/2x2/index.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -189,6 +196,13 @@
     "isRegional": false
   },
   {
+    "id": "3HD.th",
+    "name": "3HD",
+    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "3sat.de",
     "name": "3sat",
     "url": "http://41.205.77.102/3SAT/index.m3u8",
@@ -200,13 +214,6 @@
     "name": "3sat",
     "url": "http://41.223.30.230/3SAT/index.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
@@ -431,20 +438,6 @@
     "name": "9X Tashan",
     "url": "https://cdn-2.pishow.tv/live/1613/master.m3u8",
     "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "10Bold.au",
-    "name": "10 Bold",
-    "url": "https://dce3793146fef017.mediapackage.us-west-2.amazonaws.com/out/v1/55cdf73af7894775ba6de8f57482b66a/CMAF_HLS/index.m3u8",
-    "group": "lifestyle",
-    "isRegional": false
-  },
-  {
-    "id": "10TV.in",
-    "name": "10 TV",
-    "url": "https://mumbai-edge.smartplaytv.in/10TV/index.m3u8",
-    "group": "news",
     "isRegional": false
   }
 ]
