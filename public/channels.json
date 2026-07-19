@@ -3366,6 +3366,17 @@
     "id": "ch-eo8m2r"
   },
   {
+    "logo": "https://i.imgur.com/rTBX6lS.png",
+    "group": "General",
+    "name": "YOL TV",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://live.yoltv.com/hls/stream.m3u8",
+    "id": "ch-g1tpq8"
+  },
+  {
     "logo": "https://i.imgur.com/rtLb6m9.png",
     "group": "Undefined",
     "name": "ZDF (720p) [Geo-blocked]",
