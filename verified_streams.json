@@ -196,16 +196,9 @@
     "isRegional": false
   },
   {
-    "id": "3sat.de",
-    "name": "3sat",
-    "url": "http://41.205.77.102/3SAT/index.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "3sat.de",
-    "name": "3sat",
-    "url": "http://41.223.30.230/3SAT/index.m3u8",
+    "id": "3HD.th",
+    "name": "3HD",
+    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -381,13 +374,6 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJhakaas.in",
-    "name": "9X Jhakaas",
-    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
