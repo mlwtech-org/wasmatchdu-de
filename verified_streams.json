@@ -196,13 +196,6 @@
     "isRegional": false
   },
   {
-    "id": "3HD.th",
-    "name": "3HD",
-    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "3sat.de",
     "name": "3sat",
     "url": "http://41.205.77.102/3SAT/index.m3u8",
@@ -214,13 +207,6 @@
     "name": "3sat",
     "url": "http://41.223.30.230/3SAT/index.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
@@ -294,6 +280,20 @@
     "isRegional": false
   },
   {
+    "id": "5Plus.mm",
+    "name": "5 Plus",
+    "url": "https://mmtvs.exliatycl.online/5plus/stream.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5Sport.il",
+    "name": "5Sport",
+    "url": "http://stream.mcquack.net/41/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
     "id": "5tv.ar",
     "name": "5tv",
     "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
@@ -312,6 +312,13 @@
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
     "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "6sotok.ua",
+    "name": "6 sotok",
+    "url": "http://stream.mcquack.net/405/index.m3u8",
+    "group": "general",
     "isRegional": false
   },
   {
@@ -343,13 +350,6 @@
     "isRegional": false
   },
   {
-    "id": "7RadioVisione.it",
-    "name": "7 RadioVisione",
-    "url": "https://stream10.xdevel.com/video1s976543-1932/stream/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
     "id": "7SMusic.in",
     "name": "7S Music",
     "url": "https://mumt03.tangotv.in/Dsly5z3H7SMUSIC/index.m3u8",
@@ -361,13 +361,6 @@
     "name": "7.TV",
     "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "7YOUME.it",
-    "name": "7 YOU & ME",
-    "url": "https://stream10.xdevel.com/video0s977798-2239/stream/playlist.m3u8",
-    "group": "music",
     "isRegional": false
   },
   {
@@ -423,27 +416,6 @@
     "id": "9XM.in",
     "name": "9XM",
     "url": "https://mumt01.tangotv.in/O5aw8Zn39XM/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XTashan.in",
-    "name": "9X Tashan",
-    "url": "https://amg01281-9xmediapvtltd-9xtashan-samsungin-xz1sd.amagi.tv/playlist/amg01281-9xmediapvtltd-9xtashan-samsungin/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XTashan.in",
-    "name": "9X Tashan",
-    "url": "https://mumt01.tangotv.in/O5aw8Zn39XTASHAN/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XTashan.in",
-    "name": "9X Tashan",
-    "url": "https://cdn-2.pishow.tv/live/1613/master.m3u8",
     "group": "music",
     "isRegional": false
   }
