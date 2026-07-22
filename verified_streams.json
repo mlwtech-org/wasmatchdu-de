@@ -182,6 +182,13 @@
     "isRegional": false
   },
   {
+    "id": "3ABNTVUganda.ug",
+    "name": "3ABN TV Uganda",
+    "url": "https://3abn.bozztv.com/3abn/3abn_uganda_live/index.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
     "id": "3AW.au",
     "name": "3AW",
     "url": "https://3awlive.akamaized.net/hls/live/2032295/3AW/index.m3u8",
@@ -207,13 +214,6 @@
     "name": "3HD",
     "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4E.gr",
-    "name": "4E",
-    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
-    "group": "religious",
     "isRegional": false
   },
   {
@@ -388,13 +388,6 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJhakaas.in",
-    "name": "9X Jhakaas",
-    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
