@@ -219,6 +219,13 @@
   {
     "id": "4E.gr",
     "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
     "isRegional": false
@@ -388,6 +395,13 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
