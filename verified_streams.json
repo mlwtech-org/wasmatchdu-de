@@ -7,6 +7,13 @@
     "isRegional": false
   },
   {
+    "id": "1KZNTV.za",
+    "name": "1KZN TV",
+    "url": "https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
     "id": "1Plus1International.ua",
     "name": "1+1 International",
     "url": "https://dash2.antik.sk/live/test_one_plus_one_int_tizen/playlist.m3u8",
@@ -311,6 +318,13 @@
     "id": "5tv.ar",
     "name": "5tv",
     "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
     "group": "general",
     "isRegional": false
   },
