@@ -1122,17 +1122,6 @@
     "id": "ch-9ssipr"
   },
   {
-    "logo": "https://i.imgur.com/5cs5GkJ.png",
-    "group": "Auto",
-    "name": "Motorvision.tv (French)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
-    "provider": "Public IPTV",
-    "url": "https://d39g1vxj2ef6in.cloudfront.net/v1/master/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-rakuten-stitched/master.m3u8?ads.xumo_channelId=88883047",
-    "id": "ch-knlzwv"
-  },
-  {
     "logo": "https://i.imgur.com/8c54ycg.png",
     "group": "Movies",
     "name": "MOVIEDOME (720p)",
