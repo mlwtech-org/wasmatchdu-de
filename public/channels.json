@@ -22,17 +22,6 @@
     "id": "ch-58p8k"
   },
   {
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/3sat_2019.svg/960px-3sat_2019.svg.png",
-    "group": "General",
-    "name": "3sat HD (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "http://41.205.77.102/3SAT/index.m3u8",
-    "id": "ch-bz79bh"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/65a67dd13af63d0008257f17/colorLogoPNG.png",
     "group": "Series",
     "name": "90210",
