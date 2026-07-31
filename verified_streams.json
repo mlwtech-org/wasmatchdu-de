@@ -21,13 +21,6 @@
     "isRegional": false
   },
   {
-    "id": "1Plus1International.ua",
-    "name": "1+1 International",
-    "url": "http://158.101.222.193:88/georgia_play.php?id=1plus1international",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "1Plus1Marafon.ua",
     "name": "1+1 Marafon",
     "url": "https://dash2.antik.sk/live/1plus1_marathon/playlist.m3u8",
@@ -224,13 +217,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -409,6 +395,13 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJhakaas.in",
+    "name": "9X Jhakaas",
+    "url": "https://mumt03.tangotv.in/Dsly5z3H9XJHAKAAS/index.m3u8",
     "group": "music",
     "isRegional": false
   },
