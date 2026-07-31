@@ -2948,17 +2948,6 @@
     "id": "ch-b8q7cm"
   },
   {
-    "logo": "https://i.imgur.com/4fMWhUE.png",
-    "group": "Undefined",
-    "name": "SYFY HD (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "http://rezofoot.tv/SYFY-HD/index.m3u8",
-    "id": "ch-47f4k5"
-  },
-  {
     "logo": "https://i.imgur.com/LH0Gctv.png",
     "group": "Undefined",
     "name": "Tagesschau 24 (720p)",
