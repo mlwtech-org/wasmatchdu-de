@@ -217,6 +217,13 @@
     "isRegional": false
   },
   {
+    "id": "3HD.th",
+    "name": "3HD",
+    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -287,31 +294,10 @@
     "isRegional": false
   },
   {
-    "id": "5Plus.mm",
-    "name": "5 Plus",
-    "url": "https://mmtvs.exliatycl.online/5plus/stream.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
     "id": "5Sport.il",
     "name": "5Sport",
     "url": "http://stream.mcquack.net/41/index.m3u8",
     "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
@@ -333,13 +319,6 @@
     "name": "6ter",
     "url": "http://145.239.5.177/314/index.m3u8",
     "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "6TVTelugu.in",
-    "name": "6 TV Telugu",
-    "url": "https://cdn-1.pishow.tv/live/232/master.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
