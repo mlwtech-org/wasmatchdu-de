@@ -70,13 +70,6 @@
     "isRegional": false
   },
   {
-    "id": "2MMonde.ma",
-    "name": "2M Monde",
-    "url": "https://stream-lb.livemediama.com/2m/hls/master.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "2Plus2.ua",
     "name": "2+2",
     "url": "http://stream.mcquack.net/173/index.m3u8",
@@ -298,6 +291,20 @@
     "name": "5Sport",
     "url": "http://stream.mcquack.net/41/index.m3u8",
     "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
     "isRegional": false
   },
   {
