@@ -33,6 +33,17 @@
     "id": "ch-7yay6x"
   },
   {
+    "logo": "https://i.imgur.com/QoDpnKg.png",
+    "group": "Music",
+    "name": "Adria Music Television",
+    "isRegional": false,
+    "gemeinwohlCategory": "Musik & Kultur",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://adriaapp.b-cdn.net/1080p/index.m3u8",
+    "id": "ch-k9a272"
+  },
+  {
     "logo": "https://d3b6luslimvglo.cloudfront.net/images/79/rlaxximages/channels-rescaled/icon-white/adventureearth_white.png",
     "group": "Documentary",
     "name": "Adventure Earth (1080p)",
@@ -673,13 +684,13 @@
   {
     "logo": "https://i.imgur.com/ze04puX.png",
     "group": "Music",
-    "name": "FOLX Music (1080p)",
+    "name": "Folx Music Television",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
     "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://cdne.folxplay.tv/folx-trz/streams/ch-4/master.m3u8",
-    "id": "ch-5jde5y"
+    "url": "https://folxapp.b-cdn.net/1080p/index.m3u8",
+    "id": "ch-kd1zme"
   },
   {
     "logo": "https://i.imgur.com/3pGGLLD.png",
@@ -1639,26 +1650,26 @@
     "id": "ch-4quwvt"
   },
   {
-    "logo": "https://i.imgur.com/dLgoKJ0.png",
-    "group": "Music",
-    "name": "ONE1 Music (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Musik & Kultur",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://cdne.folxplay.tv/folx-trz/streams/ch-3/master.m3u8",
-    "id": "ch-ooqyf"
-  },
-  {
     "logo": "https://i.imgur.com/NYkMamU.png",
     "group": "Music",
-    "name": "One Adria (1080p)",
+    "name": "One Adria",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
     "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://cdne.folxplay.tv/folx-trz/streams/ch-6/master.m3u8",
-    "id": "ch-f8qol0"
+    "url": "https://oneadriaapp.b-cdn.net/1080p/index.m3u8",
+    "id": "ch-kr1tme"
+  },
+  {
+    "logo": "https://i.imgur.com/dLgoKJ0.png",
+    "group": "Music",
+    "name": "One Music Television",
+    "isRegional": false,
+    "gemeinwohlCategory": "Musik & Kultur",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://oneapp.b-cdn.net/1080p/index.m3u8",
+    "id": "ch-9bo9hf"
   },
   {
     "logo": "https://i.imgur.com/nSQWo49.png",
@@ -2651,6 +2662,17 @@
     "id": "ch-85a61o"
   },
   {
+    "logo": "https://i.imgur.com/kQ6cVNx.png",
+    "group": "Sports",
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36 VLC/3.0.21 LibVLC/3.0.21\" group-title=\"Sports\",Sky Sport Top Event",
+    "isRegional": false,
+    "gemeinwohlCategory": "Sport & Action",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://7nyaler.streamhostingcdn.top/stream/6/index.m3u8",
+    "id": "ch-1i4eth"
+  },
+  {
     "logo": "https://i.imgur.com/g4QeXwF.png",
     "group": "Undefined",
     "name": "Sonnenklar TV (1080p)",
@@ -2825,6 +2847,17 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-5d00e8adaab96b5635b2a005.m3u8",
     "id": "ch-bxb08b"
+  },
+  {
+    "logo": "https://i.imgur.com/NDbWxqF.png",
+    "group": "Sports",
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36 VLC/3.0.21 LibVLC/3.0.21\" group-title=\"Sports\",Sportdigital FUSSBALL",
+    "isRegional": false,
+    "gemeinwohlCategory": "Sport & Action",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://7nyaler.streamhostingcdn.top/stream/15/index.m3u8",
+    "id": "ch-ld4m2b"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/SR_Fernsehen_Logo_2023.svg/960px-SR_Fernsehen_Logo_2023.svg.png",
@@ -3379,12 +3412,12 @@
   {
     "logo": "https://i.imgur.com/RbdpCNf.png",
     "group": "Music",
-    "name": "ZWEI2 Music (1080p)",
+    "name": "Zwei Music Television",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
     "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://cdne.folxplay.tv/folx-trz/streams/ch-2/master.m3u8",
-    "id": "ch-45zw94"
+    "url": "https://zweiapp.b-cdn.net/1080p/index.m3u8",
+    "id": "ch-xjecxi"
   }
 ]
