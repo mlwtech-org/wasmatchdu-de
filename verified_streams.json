@@ -42,13 +42,6 @@
     "isRegional": false
   },
   {
-    "id": "1TV.ge",
-    "name": "1TV",
-    "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "1TwenteTV.nl",
     "name": "1Twente TV",
     "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
@@ -80,13 +73,6 @@
     "id": "2Plus2Marathon.ua",
     "name": "2+2 Marathon",
     "url": "https://lowa8026-cmyk.github.io/Ukraine/Edyni_Novyny/2Plus2Marafon.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "2TV.ge",
-    "name": "2 TV",
-    "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -217,6 +203,13 @@
     "isRegional": false
   },
   {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -228,6 +221,27 @@
     "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4FunKids.pl",
+    "name": "4 Fun Kids",
+    "url": "https://stream.4fun.tv:8889/hls/4fk_high/index.m3u8",
+    "group": "kids",
+    "isRegional": false
+  },
+  {
+    "id": "4FunTV.pl",
+    "name": "4 Fun TV",
+    "url": "https://stream.4fun.tv:8888/hls/4f_high/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "4FunTV.pl",
+    "name": "4 Fun TV",
+    "url": "https://stream.4fun.tv:8888/hls/4f.m3u8",
+    "group": "music",
     "isRegional": false
   },
   {
