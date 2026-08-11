@@ -242,17 +242,6 @@
     "id": "ch-vs3odw"
   },
   {
-    "logo": "https://badentvsued.s3.welocal.cloud/sources/60631840dfa86.png",
-    "group": "General",
-    "name": "Baden TV Süd (480p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://cdn.icu.de/rtplive/smil:btvsued.smil/playlist.m3u8",
-    "id": "ch-ovnfqx"
-  },
-  {
     "logo": "https://i.imgur.com/QiuYWs9.png",
     "group": "Lifestyle",
     "name": "BBC Travel",
@@ -462,17 +451,6 @@
     "id": "ch-w2rybr"
   },
   {
-    "logo": "https://images.pluto.tv/channels/6683f7fe36a2f9000804940c/colorLogoPNG.png",
-    "group": "Sports",
-    "name": "DAZN Handball x Pluto TV",
-    "isRegional": false,
-    "gemeinwohlCategory": "Sport & Action",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-6683f7fe36a2f9000804940c.m3u8",
-    "id": "ch-xkt16w"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/64afe50c5dc16600087f3227/colorLogoPNG.png",
     "group": "Sports",
     "name": "DAZN Heldinnen x Pluto TV",
@@ -605,17 +583,6 @@
     "id": "ch-x4st5k"
   },
   {
-    "logo": "https://i.imgur.com/Yo1GMku.png",
-    "group": "General",
-    "name": "ems TV Lingen (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://h058.video-stream-hosting.de/ev1tv-live/_definst_/mp4:stream1.stream/playlist.m3u8",
-    "id": "ch-vjahz1"
-  },
-  {
     "logo": "https://i.imgur.com/6FHl9B1.png",
     "group": "General",
     "name": "Erz-TV Stollberg (576p)",
@@ -625,17 +592,6 @@
     "provider": "Public IPTV",
     "url": "https://5acade5fc0c29.streamlock.net/kabeljournal/live2020.stream/playlist.m3u8",
     "id": "ch-pei6a2"
-  },
-  {
-    "logo": "https://i.imgur.com/0GrDAWx.png",
-    "group": "Undefined",
-    "name": "EuroAl TV (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "http://5.135.92.131:1935/live/euroAl/playlist.m3u8",
-    "id": "ch-snb8a"
   },
   {
     "logo": "https://i.imgur.com/NXeygNk.png",
@@ -957,17 +913,6 @@
     "id": "ch-a72guj"
   },
   {
-    "logo": "https://i.imgur.com/HuGaMJj.png",
-    "group": "General",
-    "name": "L-TV (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://live2.telvi.de/hls/l-tv_s1.m3u8",
-    "id": "ch-qkgivo"
-  },
-  {
     "logo": "https://www.tlm.de/assets/uploads/general/Sonstiges/LogoExt/_500xAUTO_crop_center-center_none/21labor14.jpg",
     "group": "Undefined",
     "name": "labor14 (720p)",
@@ -1133,17 +1078,6 @@
     "id": "ch-pro8od"
   },
   {
-    "logo": "https://images.pluto.tv/channels/65a67d572fac9c000835eb3a/colorLogoPNG.png",
-    "group": "Movies",
-    "name": "Moviepilot TV mit Pluto TV",
-    "isRegional": false,
-    "gemeinwohlCategory": "Filme & Serien",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-65a67d572fac9c000835eb3a.m3u8",
-    "id": "ch-ix9jf8"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/6093f9ed2c75660007322bb7/colorLogoPNG_1750862971704.png",
     "group": "Entertainment",
     "name": "MTV Catfish TV Show (720p)",
@@ -1208,17 +1142,6 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-5cffcf5686dfe15595fb3f56.m3u8",
     "id": "ch-k93lk6"
-  },
-  {
-    "logo": "https://images.pluto.tv/channels/5caf32c2a5068259a32320fc/colorLogoPNG-1637850773210.png",
-    "group": "Entertainment",
-    "name": "MTV The Shores",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-5caf32c2a5068259a32320fc.m3u8",
-    "id": "ch-royaw3"
   },
   {
     "logo": "https://i.imgur.com/lt7xNWW.png",
@@ -1815,17 +1738,6 @@
     "id": "ch-yyqtp6"
   },
   {
-    "logo": "https://images.pluto.tv/channels/661801e871e8c30008a73f7b/colorLogoPNG.png",
-    "group": "Entertainment",
-    "name": "Pluto TV Camp",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-661801e871e8c30008a73f7b.m3u8",
-    "id": "ch-affl00"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/69b968ba255fecb01f602257/colorLogoPNG_1777380677093.png",
     "group": "Comedy",
     "name": "Pluto TV Comedy Therapie",
@@ -2055,17 +1967,6 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-64be64445dc166000899ce75.m3u8",
     "id": "ch-u0mdcw"
-  },
-  {
-    "logo": "https://images.pluto.tv/channels/67ebc1b6432a0e406f141341/colorLogoPNG.png",
-    "group": "Entertainment",
-    "name": "Pluto TV Pride",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-69f209cd0ed14e790bddeb46.m3u8",
-    "id": "ch-ho77jv"
   },
   {
     "logo": "https://images.pluto.tv/channels/68ada3edf84960586ad31c7d/colorLogoPNG_1760078189640.png",
@@ -2455,17 +2356,6 @@
   {
     "logo": "https://i.imgur.com/3koyLef.png",
     "group": "Undefined",
-    "name": "Regio TV Schwaben (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://stream05.welocal.stream/stream/fhd-regiotv_182913/ngrp:stream_all/playlist.m3u8",
-    "id": "ch-c8fidn"
-  },
-  {
-    "logo": "https://i.imgur.com/3koyLef.png",
-    "group": "Undefined",
     "name": "Regio TV Stuttgart (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
@@ -2473,17 +2363,6 @@
     "provider": "Public IPTV",
     "url": "https://regiotv-s.iptv-playoutcenter.de/regiotv-s/regiotv-s.stream_1/playlist.m3u8",
     "id": "ch-7iyrtz"
-  },
-  {
-    "logo": "https://www.rennsteig.tv/wp-content/uploads/rennsteig-tv-claim-300.png",
-    "group": "Undefined",
-    "name": "Rennsteig TV (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "http://wowza.telvi.de/rennsteigtv/stream_720p/playlist.m3u8",
-    "id": "ch-vofy9q"
   },
   {
     "logo": "https://i.imgur.com/8DZa7in.png",
@@ -2517,17 +2396,6 @@
     "provider": "Public IPTV",
     "url": "https://rictv.iptv-playoutcenter.de/rictv/rictv-web/playlist.m3u8",
     "id": "ch-755gcw"
-  },
-  {
-    "logo": "https://i.imgur.com/CRk9usN.png",
-    "group": "Undefined",
-    "name": "RNF (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://rnf.iptv-playoutcenter.de/rnf/rnf.stream_1/playlist.m3u8",
-    "id": "ch-hknozz"
   },
   {
     "logo": "https://i.imgur.com/nvFXRjH.png",
@@ -2728,28 +2596,6 @@
     "id": "ch-nzfr1h"
   },
   {
-    "logo": "https://images.pluto.tv/channels/660c010ce8fba800084f0697/colorLogoPNG.png",
-    "group": "Animation;Comedy",
-    "name": "South Park Armageddon",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-660c010ce8fba800084f0697.m3u8",
-    "id": "ch-ybernd"
-  },
-  {
-    "logo": "https://images.pluto.tv/channels/664f12bb3d173b0008168c1f/colorLogoPNG.png",
-    "group": "Animation;Comedy",
-    "name": "South Park Rocks!",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-664f12bb3d173b0008168c1f.m3u8",
-    "id": "ch-9wm5q6"
-  },
-  {
     "logo": "https://images.pluto.tv/channels/646b14a0e94c3800082a8d3a/colorLogoPNG.png",
     "group": "Animation;Comedy",
     "name": "South Park: Butters Collection",
@@ -2814,17 +2660,6 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-646b1438e94c3800082a8cff.m3u8",
     "id": "ch-il7uaw"
-  },
-  {
-    "logo": "https://images.pluto.tv/channels/664f0d373d173b0008164948/colorLogoPNG.png",
-    "group": "Animation;Comedy",
-    "name": "South Park: Stars & Sternchen",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-664f0d373d173b0008164948.m3u8",
-    "id": "ch-tue6f6"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Curiosity_Channel_Logo_2023.svg/960px-Curiosity_Channel_Logo_2023.svg.png",
@@ -2904,17 +2739,6 @@
     "id": "ch-5birx"
   },
   {
-    "logo": "",
-    "group": "General",
-    "name": "Stimmungsgarten TV",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://live20.bozztv.com/akamaissh101/ssh101/stimmungsgarten/playlist.m3u8",
-    "id": "ch-60dt9u"
-  },
-  {
     "logo": "https://i.imgur.com/bVQBF6R.png",
     "group": "Sports",
     "name": "Strongman Champions League (720p)",
@@ -2924,17 +2748,6 @@
     "provider": "Public IPTV",
     "url": "https://rightsboosterltd-scl-2-eu.rakuten.wurl.tv/playlist.m3u8",
     "id": "ch-ou4ehf"
-  },
-  {
-    "logo": "https://i.imgur.com/xCiU1TB.png",
-    "group": "Undefined",
-    "name": "Studio 47 (576p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://h057.video-stream-hosting.de/studio47-live/_definst_/mp4:livestream/playlist.m3u8",
-    "id": "ch-vp1r8q"
   },
   {
     "logo": "https://i.imgur.com/KbdK8t9.png",
@@ -3001,17 +2814,6 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-6054a9f4bc8a5f000771504c.m3u8",
     "id": "ch-ma99zz"
-  },
-  {
-    "logo": "https://i.imgur.com/xP7Ehn8.png",
-    "group": "Cooking",
-    "name": "Tastemade (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
-    "provider": "Public IPTV",
-    "url": "https://rakutenaa-tm-germany-rakuten-ger-8jboz.amagi.tv/playlist/rakutenAA-tm-germany-rakuten-ger/playlist.m3u8",
-    "id": "ch-rwq5n2"
   },
   {
     "logo": "https://i.imgur.com/G0cImlU.png",
