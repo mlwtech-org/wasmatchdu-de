@@ -86,6 +86,13 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
+    "url": "http://31.148.48.15/2x2/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
     "url": "https://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -263,13 +270,6 @@
     "name": "5AAB TV",
     "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
     "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "5Sport.il",
-    "name": "5Sport",
-    "url": "http://stream.mcquack.net/41/index.m3u8",
-    "group": "sports",
     "isRegional": false
   },
   {
