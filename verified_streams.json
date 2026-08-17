@@ -42,6 +42,13 @@
     "isRegional": false
   },
   {
+    "id": "1TV.ge",
+    "name": "1TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "1TwenteTV.nl",
     "name": "1Twente TV",
     "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
@@ -73,6 +80,13 @@
     "id": "2Plus2Marathon.ua",
     "name": "2+2 Marathon",
     "url": "https://lowa8026-cmyk.github.io/Ukraine/Edyni_Novyny/2Plus2Marafon.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "2TV.ge",
+    "name": "2 TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -193,6 +207,13 @@
     "name": "3HD",
     "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
     "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
     "isRegional": false
   },
   {
