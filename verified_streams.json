@@ -168,13 +168,6 @@
     "isRegional": false
   },
   {
-    "id": "3ABNTVUganda.ug",
-    "name": "3ABN TV Uganda",
-    "url": "https://3abn.bozztv.com/3abn/3abn_uganda_live/index.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
     "id": "3AW.au",
     "name": "3AW",
     "url": "https://3awlive.akamaized.net/hls/live/2032295/3AW/index.m3u8",
@@ -200,13 +193,6 @@
     "name": "3HD",
     "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
@@ -284,6 +270,20 @@
     "name": "5Sport",
     "url": "http://stream.mcquack.net/41/index.m3u8",
     "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
     "isRegional": false
   },
   {
