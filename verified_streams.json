@@ -210,10 +210,10 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
     "isRegional": false
   },
   {
