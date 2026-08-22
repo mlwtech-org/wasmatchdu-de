@@ -100,6 +100,13 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
+    "url": "http://185.23.80.23:8080/2x2/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
     "url": "https://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -212,13 +219,6 @@
   {
     "id": "4E.gr",
     "name": "4E",
-    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "4E.gr",
-    "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
     "isRegional": false
@@ -319,6 +319,13 @@
     "name": "6ter",
     "url": "http://145.239.5.177/314/index.m3u8",
     "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "6TVTelugu.in",
+    "name": "6 TV Telugu",
+    "url": "https://yuppparoriglin.akamaized.net/181224/smil:6tv.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b",
+    "group": "news",
     "isRegional": false
   },
   {
