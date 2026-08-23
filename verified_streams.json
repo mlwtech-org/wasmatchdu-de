@@ -315,24 +315,10 @@
     "isRegional": false
   },
   {
-    "id": "6ter.fr",
-    "name": "6ter",
-    "url": "http://145.239.5.177/314/index.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
     "id": "6TVTelugu.in",
     "name": "6 TV Telugu",
     "url": "https://yuppparoriglin.akamaized.net/181224/smil:6tv.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b",
     "group": "news",
-    "isRegional": false
-  },
-  {
-    "id": "6WiseTv.us",
-    "name": "6 Wise Tv",
-    "url": "https://live.enhdtv.com:8081/8150/index.m3u8",
-    "group": "family",
     "isRegional": false
   },
   {
