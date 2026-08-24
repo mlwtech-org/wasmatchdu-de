@@ -217,13 +217,6 @@
     "isRegional": false
   },
   {
-    "id": "4E.gr",
-    "name": "4E",
-    "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
     "id": "4FunKids.pl",
     "name": "4 Fun Kids",
     "url": "https://stream.4fun.tv:8889/hls/4fk_high/index.m3u8",
@@ -367,13 +360,6 @@
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJalwa.in",
-    "name": "9X Jalwa",
-    "url": "https://tvsen6.aynaott.com/CiPT1VTG8bVekeAZiibd/index.m3u8",
     "group": "music",
     "isRegional": false
   },
