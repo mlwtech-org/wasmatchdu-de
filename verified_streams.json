@@ -7,6 +7,20 @@
     "isRegional": false
   },
   {
+    "id": "1KZNTV.za",
+    "name": "1KZN TV",
+    "url": "https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "1Plus1International.ua",
+    "name": "1+1 International",
+    "url": "https://dash2.antik.sk/live/test_one_plus_one_int_tizen/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "1Plus1Marafon.ua",
     "name": "1+1 Marafon",
     "url": "https://dash2.antik.sk/live/1plus1_marathon/playlist.m3u8",
@@ -196,13 +210,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -360,6 +367,13 @@
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJalwa.in",
+    "name": "9X Jalwa",
+    "url": "https://tvsen6.aynaott.com/CiPT1VTG8bVekeAZiibd/index.m3u8",
     "group": "music",
     "isRegional": false
   },
