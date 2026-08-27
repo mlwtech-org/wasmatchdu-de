@@ -210,13 +210,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -294,6 +287,20 @@
     "isRegional": false
   },
   {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "6PR.au",
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
@@ -360,6 +367,13 @@
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJalwa.in",
+    "name": "9X Jalwa",
+    "url": "https://tvsen6.aynaott.com/CiPT1VTG8bVekeAZiibd/index.m3u8",
     "group": "music",
     "isRegional": false
   },
