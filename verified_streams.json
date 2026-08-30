@@ -329,6 +329,13 @@
     "isRegional": false
   },
   {
+    "id": "7Gold.it",
+    "name": "7 Gold",
+    "url": "https://streamcdnr6-dddfac816632463dac50b21109dc1bb3.msvdn.net/live/S58803518/OOZape6Nxp4H/playlist.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
     "id": "7Info.ci",
     "name": "7 Info",
     "url": "https://video1.getstreamhosting.com:1936/8042/8042/playlist.m3u8",
@@ -395,20 +402,6 @@
     "id": "9XJhakaas.in",
     "name": "9X Jhakaas",
     "url": "https://wiselp.wiseplayout.com/9X_Jhakaas/master.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJhakaas.in",
-    "name": "9X Jhakaas",
-    "url": "https://cdn-3.pishow.tv/live/6/master.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XM.in",
-    "name": "9XM",
-    "url": "https://9xjio.wiseplayout.com/9XM/master.m3u8",
     "group": "music",
     "isRegional": false
   }
