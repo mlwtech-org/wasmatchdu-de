@@ -407,6 +407,17 @@
     "id": "ch-9yvy2r"
   },
   {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Comedy_Central_2018.svg/960px-Comedy_Central_2018.svg.png",
+    "group": "Comedy",
+    "name": "Comedy Central",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://ma.anixa.tv/clips/stream/comedy_central/playlist.php",
+    "id": "ch-8nxc26"
+  },
+  {
     "logo": "https://images.pluto.tv/channels/60c716084d842c00085f6e64/colorLogoPNG_1748434979824.png",
     "group": "Animation;Comedy",
     "name": "Comedy Central South Park",
@@ -1076,6 +1087,17 @@
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-615c1e5ce3039400070a0547.m3u8",
     "id": "ch-pro8od"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/MTV_2021_%28brand_version%29.svg/960px-MTV_2021_%28brand_version%29.svg.png",
+    "group": "Entertainment",
+    "name": "MTV",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://ma.anixa.tv/clips/stream/mtv/playlist.php",
+    "id": "ch-3qx2u2"
   },
   {
     "logo": "https://images.pluto.tv/channels/6093f9ed2c75660007322bb7/colorLogoPNG_1750862971704.png",
