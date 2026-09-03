@@ -126,6 +126,13 @@
     "isRegional": false
   },
   {
+    "id": "3ABNFrench.us",
+    "name": "3ABN French",
+    "url": "https://3abn.bozztv.com/3abn2/Fre_live/smil:Fre_live.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
     "id": "3ABNInternational.us",
     "name": "3ABN International",
     "url": "https://3abn.bozztv.com/3abn2/Int_live/smil:Int_live.smil/playlist.m3u8",
@@ -182,30 +189,9 @@
     "isRegional": false
   },
   {
-    "id": "3CatCameresdeltemps.es",
-    "name": "3Cat Cameres del temps",
-    "url": "https://directes-tv-int.3catdirectes.cat/live-content/beauties-hls/master.m3u8",
-    "group": "public",
-    "isRegional": false
-  },
-  {
     "id": "3CatInfo.es",
     "name": "3CatInfo",
     "url": "https://directes-tv-int.3catdirectes.cat/live-origin/canal324-hls/master.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
-    "id": "3HD.th",
-    "name": "3HD",
-    "url": "https://live-us1.thaimomo.com/live-as/ch3hd-3/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
     "group": "news",
     "isRegional": false
   },
