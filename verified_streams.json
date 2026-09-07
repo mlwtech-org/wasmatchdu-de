@@ -217,6 +217,27 @@
     "isRegional": false
   },
   {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
     "id": "4everCinema.ua",
     "name": "4ever Cinema",
     "url": "http://stream.mcquack.net/258/index.m3u8",
@@ -343,13 +364,6 @@
     "isRegional": false
   },
   {
-    "id": "7Gold.it",
-    "name": "7 Gold",
-    "url": "https://streamcdnr6-dddfac816632463dac50b21109dc1bb3.msvdn.net/live/S58803518/OOZape6Nxp4H/playlist.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
     "id": "7Info.ci",
     "name": "7 Info",
     "url": "https://video1.getstreamhosting.com:1936/8042/8042/playlist.m3u8",
@@ -395,6 +409,13 @@
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "9XJalwa.in",
+    "name": "9X Jalwa",
+    "url": "https://tvsen6.aynaott.com/CiPT1VTG8bVekeAZiibd/index.m3u8",
     "group": "music",
     "isRegional": false
   },
