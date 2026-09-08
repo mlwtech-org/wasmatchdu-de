@@ -217,13 +217,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -371,6 +364,13 @@
     "isRegional": false
   },
   {
+    "id": "7News.pk",
+    "name": "7 News",
+    "url": "https://sscsott.com/7news/live/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
     "id": "7RadioVisione.it",
     "name": "7 RadioVisione",
     "url": "https://stream10.xdevel.com/video1s976543-1932/stream/playlist.m3u8",
@@ -399,6 +399,13 @@
     "isRegional": false
   },
   {
+    "id": "8XM.pk",
+    "name": "8XM",
+    "url": "https://cdn4.mjunoon.tv:8087/streamtest/135M/chunks.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://mumt03.tangotv.in/Dsly5z3H9XJALWA/index.m3u8",
@@ -409,20 +416,6 @@
     "id": "9XJalwa.in",
     "name": "9X Jalwa",
     "url": "https://wiselp.wiseplayout.com/9X_Jalwa/master.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJalwa.in",
-    "name": "9X Jalwa",
-    "url": "https://tvsen6.aynaott.com/CiPT1VTG8bVekeAZiibd/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "9XJhakaas.in",
-    "name": "9X Jhakaas",
-    "url": "https://amg01281-9xmediapvtltd-9xjhakaas-samsungin-ci2cs.amagi.tv/playlist/amg01281-9xmediapvtltd-9xjhakaas-samsungin/playlist.m3u8",
     "group": "music",
     "isRegional": false
   }
