@@ -649,6 +649,17 @@
     "id": "ch-b5oexk"
   },
   {
+    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Fix_and_Fox_Channel_Logo.png/250px-Fix_and_Fox_Channel_Logo.png",
+    "group": "Kids",
+    "name": "Fix & Foxi (540p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Kinder & Familie",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://live.omni3.pl/fixfoxide/index.m3u8?token=ebnk.xyz",
+    "id": "ch-pcgrqg"
+  },
+  {
     "logo": "https://i.imgur.com/ze04puX.png",
     "group": "Music",
     "name": "Folx Music Television",
@@ -2451,6 +2462,28 @@
     "provider": "Public IPTV",
     "url": "https://rt-ger.rttv.com/dvr/rtdeutsch/playlist.m3u8",
     "id": "ch-wae4xn"
+  },
+  {
+    "logo": "https://i.imgur.com/94K94k2.png",
+    "group": "Undefined",
+    "name": "RTL HD (1080p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://live.omni3.pl/rtlde/index.m3u8?token=ebnk.xyz",
+    "id": "ch-3lhoy5"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/RTLZWEI_Logo_2019.svg/960px-RTLZWEI_Logo_2019.svg.png",
+    "group": "Undefined",
+    "name": "RTL Zwei (1080p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://live.omni3.pl/rtl2de/index.m3u8?token=ebnk.xyz",
+    "id": "ch-xa0f2v"
   },
   {
     "logo": "https://i.imgur.com/OodehFV.png",
