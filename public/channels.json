@@ -13,13 +13,13 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/3sat_2019.svg/960px-3sat_2019.svg.png",
     "group": "General",
-    "name": "3sat (720p) [Geo-blocked]",
+    "name": "3sat",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
+    "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://zdf-hls-18.akamaized.net/hls/live/2016501/dach/high/master.m3u8",
-    "id": "ch-58p8k"
+    "url": "https://dash4.antik.sk/live/test_drei_sat_tizen/playlist.m3u8",
+    "id": "ch-ig4krj"
   },
   {
     "logo": "https://images.pluto.tv/channels/65a67dd13af63d0008257f17/colorLogoPNG.png",
@@ -649,17 +649,6 @@
     "id": "ch-b5oexk"
   },
   {
-    "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Fix_and_Fox_Channel_Logo.png/250px-Fix_and_Fox_Channel_Logo.png",
-    "group": "Kids",
-    "name": "Fix & Foxi (540p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Kinder & Familie",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://live.omni3.pl/fixfoxide/index.m3u8?token=ebnk.xyz",
-    "id": "ch-pcgrqg"
-  },
-  {
     "logo": "https://i.imgur.com/ze04puX.png",
     "group": "Music",
     "name": "Folx Music Television",
@@ -1199,6 +1188,17 @@
     "id": "ch-kehzbp"
   },
   {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/N-tv_logo-september2017.svg/960px-N-tv_logo-september2017.svg.png",
+    "group": "General",
+    "name": "n-tv",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_ntv_tizen/playlist.m3u8",
+    "id": "ch-nwsl3o"
+  },
+  {
     "logo": "https://tvpnlogopeu.samsungcloud.tv/platform/image/sourcelogo/vc/00/02/34/DE4300003MR_20251209T125847SQUARE.png",
     "group": "News",
     "name": "Nachrichten 360 (1080p) [Geo-blocked]",
@@ -1373,6 +1373,17 @@
     "provider": "Public IPTV",
     "url": "https://stream03.welocal.stream/stream/fhd-nbypassau_49171/ngrp:stream_all/index.m3u8",
     "id": "ch-otfubf"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Nitro_Logo.svg/960px-Nitro_Logo.svg.png",
+    "group": "Entertainment",
+    "name": "Nitro",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_rtl_nitro_tizen/playlist.m3u8",
+    "id": "ch-z6rfdx"
   },
   {
     "logo": "https://i.imgur.com/7A2LRKI.png",
@@ -2466,24 +2477,35 @@
   {
     "logo": "https://i.imgur.com/94K94k2.png",
     "group": "Undefined",
-    "name": "RTL HD (1080p)",
+    "name": "RTL",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://live.omni3.pl/rtlde/index.m3u8?token=ebnk.xyz",
-    "id": "ch-3lhoy5"
+    "url": "https://dash4.antik.sk/live/test_rtl_ger_tizen/playlist.m3u8",
+    "id": "ch-l1fzj1"
+  },
+  {
+    "logo": "https://i.imgur.com/KbdK8t9.png",
+    "group": "Undefined",
+    "name": "RTL Super",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_super_rtl_tizen/playlist.m3u8",
+    "id": "ch-5sfikq"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/RTLZWEI_Logo_2019.svg/960px-RTLZWEI_Logo_2019.svg.png",
     "group": "Undefined",
-    "name": "RTL Zwei (1080p)",
+    "name": "RTL Zwei",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://live.omni3.pl/rtl2de/index.m3u8?token=ebnk.xyz",
-    "id": "ch-xa0f2v"
+    "url": "https://dash4.antik.sk/live/test_rtl_zwei_tizen/playlist.m3u8",
+    "id": "ch-4ggnj0"
   },
   {
     "logo": "https://i.imgur.com/OodehFV.png",
@@ -2794,17 +2816,6 @@
     "id": "ch-ou4ehf"
   },
   {
-    "logo": "https://i.imgur.com/KbdK8t9.png",
-    "group": "Undefined",
-    "name": "Super RTL HD (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://forsizero.github.io/iptv/m3u/superrtlhd.m3u",
-    "id": "ch-xhmcg2"
-  },
-  {
     "logo": "https://i.imgur.com/PxSgxRO.jpg",
     "group": "Undefined",
     "name": "SWR 3 Visual Radio (720p)",
@@ -2825,6 +2836,17 @@
     "provider": "Public IPTV",
     "url": "https://swrbwd-hls.akamaized.net/hls/live/2018672/swrbwd/master.m3u8",
     "id": "ch-fdmu0k"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/SWR_Logo_2023.svg/960px-SWR_Logo_2023.svg.png",
+    "group": "Undefined",
+    "name": "SWR Fernsehen HD",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_swr_tizen/playlist.m3u8",
+    "id": "ch-bqqwoi"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/SWR_Logo_2023.svg/960px-SWR_Logo_2023.svg.png",
@@ -3025,6 +3047,17 @@
     "id": "ch-dfbhzr"
   },
   {
+    "logo": "https://i.imgur.com/QPcmfZb.png",
+    "group": "Undefined",
+    "name": "VOX",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_vox_tizen/playlist.m3u8",
+    "id": "ch-8yqcw3"
+  },
+  {
     "logo": "https://i.imgur.com/RbqDMYx.png",
     "group": "Entertainment",
     "name": "WDR 1 Live (720p)",
@@ -3157,6 +3190,17 @@
     "id": "ch-c8rzsu"
   },
   {
+    "logo": "https://i.imgur.com/s4TZoxx.png",
+    "group": "News",
+    "name": "WELT",
+    "isRegional": false,
+    "gemeinwohlCategory": "Nachrichten & Info",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash4.antik.sk/live/test_welt_tizen/playlist.m3u8",
+    "id": "ch-rqe7fg"
+  },
+  {
     "logo": "https://i.imgur.com/DLXssJe.png",
     "group": "Undefined",
     "name": "Welt der Wunder TV (576p)",
@@ -3214,13 +3258,13 @@
   {
     "logo": "https://i.imgur.com/rtLb6m9.png",
     "group": "Undefined",
-    "name": "ZDF (720p) [Geo-blocked]",
+    "name": "ZDF",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
+    "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://zdf-hls-15.akamaized.net/hls/live/2016498/de/high/master.m3u8",
-    "id": "ch-t4czwb"
+    "url": "https://dash4.antik.sk/live/test_zdf_avc_25p/playlist.m3u8",
+    "id": "ch-agyd5e"
   },
   {
     "logo": "https://i.imgur.com/vtq1IWp.png",
