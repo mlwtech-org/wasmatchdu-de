@@ -2,7 +2,7 @@
   {
     "logo": "https://i.imgur.com/slSUDNX.png",
     "group": "Shop",
-    "name": "1-2-3 TV (270p)",
+    "name": "1-2-3.tv (270p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -79,7 +79,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Allg%C3%A4u_TV_Logo_%282021%29.svg/960px-Allg%C3%A4u_TV_Logo_%282021%29.svg.png",
     "group": "General",
-    "name": "Allgäu TV (1080p)",
+    "name": "Allgau TV (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -156,7 +156,7 @@
   {
     "logo": "https://i.imgur.com/ecXMjNl.png",
     "group": "Entertainment",
-    "name": "ARTE (720p) [Geo-blocked]",
+    "name": "arte (Germany) (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -167,7 +167,7 @@
   {
     "logo": "https://i.imgur.com/ecXMjNl.png",
     "group": "Entertainment",
-    "name": "arte HD",
+    "name": "arte (Germany) HD",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -178,7 +178,7 @@
   {
     "logo": "https://i.imgur.com/4SPOVN7.png",
     "group": "Entertainment",
-    "name": "Auction Hunters",
+    "name": "Auction Hunters (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -222,7 +222,7 @@
   {
     "logo": "https://images.pluto.tv/channels/62bc1784120ba80007935aaa/colorLogoPNG.png",
     "group": "Series",
-    "name": "Awkward",
+    "name": "Awkward (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -255,7 +255,7 @@
   {
     "logo": "https://images.pluto.tv/channels/630348a54c48ce00077eb6c7/colorLogoPNG.png",
     "group": "Comedy",
-    "name": "Becker",
+    "name": "Becker (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -266,7 +266,7 @@
   {
     "logo": "https://images.pluto.tv/channels/60afb576053df900076fa2f0/colorLogoPNG.png",
     "group": "Series",
-    "name": "Beverly Hills 90210",
+    "name": "Beverly Hills 90210 (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -332,7 +332,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Logo_Bayerischer_Rundfunk_2024.svg/960px-Logo_Bayerischer_Rundfunk_2024.svg.png",
     "group": "Undefined",
-    "name": "BR Fernsehen Nord (720p)",
+    "name": "BR Fernsehen (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -376,24 +376,13 @@
   {
     "logo": "https://images.pluto.tv/channels/611e7f224676bf00076a4d8d/colorLogoPNG.png",
     "group": "Comedy",
-    "name": "Cheers",
+    "name": "Cheers (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-611e7f224676bf00076a4d8d.m3u8",
     "id": "ch-b4ktn7"
-  },
-  {
-    "logo": "https://i.imgur.com/4SEAbVf.png",
-    "group": "Undefined",
-    "name": "Chemnitz Fernsehen (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://chemnitz.iptv-playoutcenter.de/chemnitz/chemnitzfernsehen.stream_1/playlist.m3u8",
-    "id": "ch-qbm679"
   },
   {
     "logo": "https://i.imgur.com/YFnmSLW.png",
@@ -409,7 +398,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Comedy_Central_2018.svg/960px-Comedy_Central_2018.svg.png",
     "group": "Comedy",
-    "name": "Comedy Central",
+    "name": "Comedy Central (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -420,13 +409,24 @@
   {
     "logo": "https://images.pluto.tv/channels/60c716084d842c00085f6e64/colorLogoPNG_1748434979824.png",
     "group": "Animation;Comedy",
-    "name": "Comedy Central South Park",
+    "name": "Comedy Central South Park (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-60c716084d842c00085f6e64.m3u8",
     "id": "ch-xofjye"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Curiosity_Channel_Logo_2023.svg/960px-Curiosity_Channel_Logo_2023.svg.png",
+    "group": "Education",
+    "name": "Curiosity Channel (720p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://jmp2.uk/plu-6576c20fb3801200084786c9.m3u8",
+    "id": "ch-jjd0mg"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/ARD_Dachmarke_2014.svg/960px-ARD_Dachmarke_2014.svg.png",
@@ -519,7 +519,7 @@
   {
     "logo": "https://i.imgur.com/K3lvrog.png",
     "group": "Religious",
-    "name": "Die Neue Zeit (576p)",
+    "name": "Die Neue Zeit TV (576p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -561,17 +561,6 @@
     "id": "ch-a47tjy"
   },
   {
-    "logo": "https://i.imgur.com/rnvprGj.png",
-    "group": "Undefined",
-    "name": "Dresden Fernsehen (1080p) [Not 24/7]",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
-    "provider": "Public IPTV",
-    "url": "https://dresden.iptv-playoutcenter.de/dresden/dresdenfernsehen.stream_1/playlist.m3u8",
-    "id": "ch-iiyde6"
-  },
-  {
     "logo": "https://i.imgur.com/8MRNFb9.png",
     "group": "News",
     "name": "DW Russian (1080p)",
@@ -607,7 +596,7 @@
   {
     "logo": "https://i.imgur.com/NXeygNk.png",
     "group": "Religious",
-    "name": "EWTN Germany (720p)",
+    "name": "EWTN (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -662,7 +651,7 @@
   {
     "logo": "https://i.imgur.com/3pGGLLD.png",
     "group": "General",
-    "name": "Franken Fernsehen (Nürnberg) (1080p) [Not 24/7]",
+    "name": "Franken Fernsehen (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -673,7 +662,7 @@
   {
     "logo": "https://images.pluto.tv/channels/62cebf042ffc6d0007c4e59a/colorLogoPNG.png",
     "group": "Comedy",
-    "name": "Frasier",
+    "name": "Frasier (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -684,7 +673,7 @@
   {
     "logo": "https://images.pluto.tv/channels/6790fa9e1cfc4aa96dfadcef/colorLogoPNG.png",
     "group": "Comedy",
-    "name": "Frasier: Berühmte Gäste",
+    "name": "Frasier: Beruhmte Gaste",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -794,7 +783,7 @@
   {
     "logo": "https://i.imgur.com/nvMpbip.png",
     "group": "Shop",
-    "name": "HSE24 Extra (1080p)",
+    "name": "HSE Extra (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -805,7 +794,7 @@
   {
     "logo": "https://i.imgur.com/qwh2urX.png",
     "group": "Shop",
-    "name": "HSE24 Trend (576p)",
+    "name": "HSE Trend (576p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -816,7 +805,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5e8b580a233dc90007f0cb9d/colorLogoPNG.png",
     "group": "Kids",
-    "name": "iCarly",
+    "name": "iCarly (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -849,7 +838,7 @@
   {
     "logo": "https://i.imgur.com/vmX8Qin.png",
     "group": "Shop",
-    "name": "Juwelo (720p)",
+    "name": "Juwelo (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -946,20 +935,9 @@
     "id": "ch-vvztza"
   },
   {
-    "logo": "https://i.imgur.com/easmJUw.png",
-    "group": "Undefined",
-    "name": "Leipzig Fernsehen (1080p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://leipzig.iptv-playoutcenter.de/leipzig/leipzigfernsehen.stream_1/playlist.m3u8",
-    "id": "ch-ovwwjn"
-  },
-  {
     "logo": "https://i.imgur.com/0OmBlfE.png",
     "group": "Religious",
-    "name": "Light Channel (576p) [Not 24/7]",
+    "name": "Light Channel (Germany) (576p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -981,7 +959,7 @@
   {
     "logo": "https://i.imgur.com/R74gG7U.png",
     "group": "Music",
-    "name": "Magenta Musik 360 (1080p)",
+    "name": "MagentaMusik 360 (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Musik & Kultur",
     "isUnstable": false,
@@ -1003,7 +981,7 @@
   {
     "logo": "https://images.pluto.tv/channels/66c6fcfc6838ee00085beb1a/colorLogoPNG.png",
     "group": "Series",
-    "name": "McLeods Töchter",
+    "name": "McLeods Tochter",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1025,7 +1003,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/MDR_Logo_2017.svg/960px-MDR_Logo_2017.svg.png",
     "group": "General",
-    "name": "MDR Fernsehen Sachsen (1080p) [Geo-blocked]",
+    "name": "MDR Fernsehen (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -1036,7 +1014,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/MDR_Logo_2017.svg/960px-MDR_Logo_2017.svg.png",
     "group": "General",
-    "name": "MDR Fernsehen Sachsen-Anhalt (1080p) [Geo-blocked]",
+    "name": "MDR Fernsehen Sachsen Anhalt (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -1058,7 +1036,7 @@
   {
     "logo": "https://images.pluto.tv/channels/634fe5afece2e60007c9d8b8/colorLogoPNG.png",
     "group": "Movies;Series",
-    "name": "Mission Impossible",
+    "name": "Mission Impossible (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -1080,7 +1058,7 @@
   {
     "logo": "https://i.imgur.com/8c54ycg.png",
     "group": "Movies",
-    "name": "MOVIEDOME (720p)",
+    "name": "Moviedome (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -1091,7 +1069,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/MTV_2021_%28brand_version%29.svg/960px-MTV_2021_%28brand_version%29.svg.png",
     "group": "Entertainment",
-    "name": "MTV",
+    "name": "MTV (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1102,7 +1080,7 @@
   {
     "logo": "https://images.pluto.tv/channels/6093f9ed2c75660007322bb7/colorLogoPNG_1750862971704.png",
     "group": "Entertainment",
-    "name": "MTV Catfish TV Show (720p)",
+    "name": "MTV Catfish TV Show DACH (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1113,7 +1091,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5caf330ea5068259a32320fd/colorLogoPNG.png",
     "group": "Entertainment",
-    "name": "MTV Dating (720p)",
+    "name": "MTV Dating (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1124,7 +1102,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5caf325764025859afdd6c4d/colorLogoPNG.png",
     "group": "Entertainment",
-    "name": "MTV Pluto TV",
+    "name": "MTV Pluto TV (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1135,7 +1113,7 @@
   {
     "logo": "https://images.pluto.tv/channels/685136fb33a52de120bbb086/colorLogoPNG_1780303948285.png",
     "group": "Entertainment",
-    "name": "MTV Reality (720p)",
+    "name": "MTV Reality (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1146,7 +1124,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5f9847fd513250000728a9a5/colorLogoPNG.png",
     "group": "Entertainment",
-    "name": "MTV Ridiculousness",
+    "name": "MTV Ridiculousness (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1157,7 +1135,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5cffcf5686dfe15595fb3f56/colorLogoPNG_1750154727513.png",
     "group": "Entertainment",
-    "name": "MTV Teen Mom (720p)",
+    "name": "MTV Teen Mom (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1168,7 +1146,7 @@
   {
     "logo": "https://i.imgur.com/lt7xNWW.png",
     "group": "General",
-    "name": "München TV (1080p) [Not 24/7]",
+    "name": "Munchen TV (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -1212,7 +1190,7 @@
   {
     "logo": "https://i.imgur.com/M8X3Kvc.png",
     "group": "Animation",
-    "name": "Naruto (720p)",
+    "name": "Naruto Germany (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1234,7 +1212,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Logo_NDR_Fernsehen_2017.svg/960px-Logo_NDR_Fernsehen_2017.svg.png",
     "group": "General",
-    "name": "NDR Hamburg (720p)",
+    "name": "NDR Fernsehen (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1245,7 +1223,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Logo_NDR_Fernsehen_2017.svg/960px-Logo_NDR_Fernsehen_2017.svg.png",
     "group": "General",
-    "name": "NDR Mecklenburg-Vorpommern (720p)",
+    "name": "NDR Fernsehen Mecklenburg Vorpommern (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1256,7 +1234,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Logo_NDR_Fernsehen_2017.svg/960px-Logo_NDR_Fernsehen_2017.svg.png",
     "group": "General",
-    "name": "NDR Niedersachsen (720p)",
+    "name": "NDR Fernsehen Niedersachsen (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1267,7 +1245,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Logo_NDR_Fernsehen_2017.svg/960px-Logo_NDR_Fernsehen_2017.svg.png",
     "group": "General",
-    "name": "NDR Schleswig-Holstein (720p)",
+    "name": "NDR Fernsehen Schleswig Holstein (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1278,7 +1256,7 @@
   {
     "logo": "https://images.pluto.tv/channels/67f3eb1c443f0671bc03ece8/colorLogoPNG_1748329104247.png",
     "group": "Kids",
-    "name": "Nick Jr. Club (720p)",
+    "name": "Nick Jr. Club (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -1289,7 +1267,7 @@
   {
     "logo": "https://i.imgur.com/E84jnP8.png",
     "group": "Kids",
-    "name": "Nickelodeon",
+    "name": "Nickelodeon (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -1311,7 +1289,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5f0d668b872e4400073acc68/colorLogoPNG_1750753617970.png",
     "group": "Kids",
-    "name": "Nickelodeon Teen (720p)",
+    "name": "Nickelodeon Teen (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -1322,7 +1300,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5ede448d3d50590007a4419e/colorLogoPNG_1750753703285.png",
     "group": "Kids",
-    "name": "Nickelodeon Toons (720p)",
+    "name": "Nickelodeon Toons (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -1388,7 +1366,7 @@
   {
     "logo": "https://i.imgur.com/7A2LRKI.png",
     "group": "General",
-    "name": "Noa 4 Hamburg (1080p)",
+    "name": "noa4 Hamburg (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1399,7 +1377,7 @@
   {
     "logo": "https://i.imgur.com/941nrGb.png",
     "group": "General",
-    "name": "Noa 4 Norderstedt (1080p)",
+    "name": "noa4 Norderstedt (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1586,7 +1564,7 @@
   {
     "logo": "https://i.imgur.com/bjTajXb.png",
     "group": "General",
-    "name": "OK Weinstraße (Neustadt) (432p) [Geo-blocked]",
+    "name": "OK Weinstrasse Neustadt (432p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -1639,17 +1617,6 @@
     "id": "ch-9bo9hf"
   },
   {
-    "logo": "https://i.imgur.com/nSQWo49.png",
-    "group": "Culture;News",
-    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.3\" group-title=\"Culture;News\",Ost West (576p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Nachrichten & Info",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "http://hls127.freeott.top:8080/OstWest/video.m3u8",
-    "id": "ch-kayd22"
-  },
-  {
     "logo": "https://i.imgur.com/voeQ6x1.png",
     "group": "Culture;News",
     "name": "like Gecko) Chrome/149.0.0.0 Safari/537.36\" group-title=\"Culture;News\",Ost West 24 (1080p)",
@@ -1659,6 +1626,17 @@
     "provider": "Public IPTV",
     "url": "http://stream.mcquack.net/455/index.m3u8",
     "id": "ch-4wsvxv"
+  },
+  {
+    "logo": "https://i.imgur.com/nSQWo49.png",
+    "group": "Culture;News",
+    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.3\" group-title=\"Culture;News\",Ost West (576p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Nachrichten & Info",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "http://hls127.freeott.top:8080/OstWest/video.m3u8",
+    "id": "ch-kayd22"
   },
   {
     "logo": "https://i.imgur.com/mksEgwx.png",
@@ -1707,7 +1685,7 @@
   {
     "logo": "https://images.pluto.tv/channels/64eddc3485efec00085b0369/colorLogoPNG.png",
     "group": "Series",
-    "name": "Perry Mason",
+    "name": "Perry Mason (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1718,7 +1696,7 @@
   {
     "logo": "https://i.imgur.com/T1532t9.png",
     "group": "Undefined",
-    "name": "Phoenix (720p) [Geo-blocked]",
+    "name": "phoenix (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -1729,7 +1707,7 @@
   {
     "logo": "https://images.pluto.tv/channels/65004605110545000842035d/colorLogoPNG_1751356419664.png",
     "group": "Movies;Series",
-    "name": "Pluto TV Action",
+    "name": "Pluto TV Action (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -1751,7 +1729,7 @@
   {
     "logo": "https://images.pluto.tv/channels/608181d420fc8500075f612a/colorLogoPNG_1747395463053.png",
     "group": "Animation",
-    "name": "Pluto TV Anime",
+    "name": "Pluto TV Anime (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -1773,7 +1751,7 @@
   {
     "logo": "https://images.pluto.tv/channels/64be7398e4391c0008cdedfe/colorLogoPNG_1776936976930.png",
     "group": "Movies",
-    "name": "Pluto TV Bud & Terence",
+    "name": "Pluto TV Bud & Terence (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -1883,7 +1861,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5d767b1c126c65d0a307355f/colorLogoPNG.png",
     "group": "Documentary",
-    "name": "Pluto TV History",
+    "name": "Pluto TV History (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Doku & Wissen",
     "isUnstable": false,
@@ -1894,7 +1872,7 @@
   {
     "logo": "https://images.pluto.tv/channels/62f4f4b88157cf00075c22db/colorLogoPNG.png",
     "group": "Movies;Series",
-    "name": "Pluto TV Horror",
+    "name": "Pluto TV Horror (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -1993,7 +1971,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5f98487036af340008da1e37/colorLogoPNG.png",
     "group": "Movies",
-    "name": "Pluto TV Paranormal",
+    "name": "Pluto TV Paranormal (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2026,7 +2004,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5dc287ce3086a20009f5024c/colorLogoPNG.png",
     "group": "Movies;Series",
-    "name": "Pluto TV Romance",
+    "name": "Pluto TV Romance (Germany) DACH",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2037,7 +2015,7 @@
   {
     "logo": "https://images.pluto.tv/channels/60ed498c4248a400077c0b9d/colorLogoPNG.png",
     "group": "Movies;Series",
-    "name": "Pluto TV Sci-Fi",
+    "name": "Pluto TV Sci-Fi (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2048,7 +2026,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5d767b4889bca2ce7b73ef2e/colorLogoPNG.png",
     "group": "Documentary;Science",
-    "name": "Pluto TV Science",
+    "name": "Pluto TV Science (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Doku & Wissen",
     "isUnstable": false,
@@ -2081,7 +2059,7 @@
   {
     "logo": "https://images.pluto.tv/channels/68ac5543a1ac0c90f2c8943e/colorLogoPNG_1760517341343.png",
     "group": "Sports",
-    "name": "Pluto TV Snooker 900 (720p)",
+    "name": "Pluto TV Snooker 900 (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Sport & Action",
     "isUnstable": false,
@@ -2092,7 +2070,7 @@
   {
     "logo": "https://images.pluto.tv/channels/61409f8d6feb30000766b675/colorLogoPNG.png",
     "group": "Documentary",
-    "name": "Pluto TV Space",
+    "name": "Pluto TV Space (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Doku & Wissen",
     "isUnstable": false,
@@ -2103,7 +2081,7 @@
   {
     "logo": "https://images.pluto.tv/channels/6152ee71bf99590007893a11/colorLogoPNG.png",
     "group": "Movies;Series",
-    "name": "Pluto TV Star Trek",
+    "name": "Pluto TV Star Trek (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2125,7 +2103,7 @@
   {
     "logo": "https://images.pluto.tv/channels/615333098185f00008715a56/colorLogoPNG.png",
     "group": "Documentary;Series",
-    "name": "Pluto TV True Crime",
+    "name": "Pluto TV True Crime (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Doku & Wissen",
     "isUnstable": false,
@@ -2200,20 +2178,9 @@
     "id": "ch-9bwhu1"
   },
   {
-    "logo": "https://i.imgur.com/f94kPed.png",
-    "group": "Shop",
-    "name": "QVC 2 Germany (540p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://qvcde-live.akamaized.net/hls/live/2097104/qps/master.m3u8",
-    "id": "ch-8y237v"
-  },
-  {
     "logo": "https://i.imgur.com/EybRtsI.png",
     "group": "Shop",
-    "name": "QVC Germany (720p)",
+    "name": "QVC (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2224,13 +2191,24 @@
   {
     "logo": "https://i.imgur.com/DwdkHGj.png",
     "group": "Shop",
-    "name": "QVC Style Germany (540p)",
+    "name": "QVC Style (Germany) (540p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
     "url": "https://qvcde-live.akamaized.net/hls/live/2097104/qby/master.m3u8",
     "id": "ch-pusffj"
+  },
+  {
+    "logo": "https://i.imgur.com/f94kPed.png",
+    "group": "Shop",
+    "name": "QVC Zwei (540p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://qvcde-live.akamaized.net/hls/live/2097104/qps/master.m3u8",
+    "id": "ch-8y237v"
   },
   {
     "logo": "https://i.imgur.com/u8OhwI1.png",
@@ -2334,7 +2312,18 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rbb_Fernsehen_Logo_2017.08.svg/960px-Rbb_Fernsehen_Logo_2017.08.svg.png",
     "group": "Undefined",
-    "name": "RBB Berlin (1080p) [Geo-blocked]",
+    "name": "rbb Fernsehen",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://dash2.antik.sk/live/test_rbb_tizen/playlist.m3u8",
+    "id": "ch-xd4i08"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rbb_Fernsehen_Logo_2017.08.svg/960px-Rbb_Fernsehen_Logo_2017.08.svg.png",
+    "group": "Undefined",
+    "name": "rbb Fernsehen Berlin (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -2345,24 +2334,13 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rbb_Fernsehen_Logo_2017.08.svg/960px-Rbb_Fernsehen_Logo_2017.08.svg.png",
     "group": "Undefined",
-    "name": "RBB Brandenburg (1080p) [Geo-blocked]",
+    "name": "rbb Fernsehen Brandenburg (1080p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
     "provider": "Public IPTV",
     "url": "https://rbb-hls-brandenburg.akamaized.net/hls/live/2017825/rbb_brandenburg/master.m3u8",
     "id": "ch-rmgb95"
-  },
-  {
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Rbb_Fernsehen_Logo_2017.08.svg/960px-Rbb_Fernsehen_Logo_2017.08.svg.png",
-    "group": "Undefined",
-    "name": "rbb Fernsehen",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://dash2.antik.sk/live/test_rbb_tizen/playlist.m3u8",
-    "id": "ch-xd4i08"
   },
   {
     "logo": "https://i.imgur.com/A0UKdix.png",
@@ -2477,7 +2455,7 @@
   {
     "logo": "https://i.imgur.com/94K94k2.png",
     "group": "Undefined",
-    "name": "RTL",
+    "name": "RTL (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2532,7 +2510,7 @@
   {
     "logo": "https://images.pluto.tv/channels/622f40c901d4b70007ad7609/colorLogoPNG.png",
     "group": "Comedy",
-    "name": "Sabrina Total verhext!",
+    "name": "Sabrina: Total verhext!",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2550,6 +2528,39 @@
     "provider": "Public IPTV",
     "url": "https://sachsen1.iptv-playoutcenter.de/sachsen1/sachsen1.stream_1/playlist.m3u8",
     "id": "ch-cociif"
+  },
+  {
+    "logo": "https://i.imgur.com/4SEAbVf.png",
+    "group": "Undefined",
+    "name": "Sachsen Fernsehen Chemnitz (1080p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://chemnitz.iptv-playoutcenter.de/chemnitz/chemnitzfernsehen.stream_1/playlist.m3u8",
+    "id": "ch-qbm679"
+  },
+  {
+    "logo": "https://i.imgur.com/rnvprGj.png",
+    "group": "Undefined",
+    "name": "Sachsen Fernsehen Dresden (1080p) [Not 24/7]",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": true,
+    "provider": "Public IPTV",
+    "url": "https://dresden.iptv-playoutcenter.de/dresden/dresdenfernsehen.stream_1/playlist.m3u8",
+    "id": "ch-iiyde6"
+  },
+  {
+    "logo": "https://i.imgur.com/easmJUw.png",
+    "group": "Undefined",
+    "name": "Sachsen Fernsehen Leipzig (1080p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "https://leipzig.iptv-playoutcenter.de/leipzig/leipzigfernsehen.stream_1/playlist.m3u8",
+    "id": "ch-ovwwjn"
   },
   {
     "logo": "https://i.imgur.com/GhKjHMG.png",
@@ -2620,7 +2631,7 @@
   {
     "logo": "https://i.imgur.com/h29rUcG.png",
     "group": "Undefined",
-    "name": "Sonus FM TV (1080p) [Not 24/7]",
+    "name": "Sonus FM (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -2631,7 +2642,7 @@
   {
     "logo": "https://i.imgur.com/1hNgHbB.png",
     "group": "Religious",
-    "name": "Sophia TV (720p)",
+    "name": "Sophia TV (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2642,7 +2653,7 @@
   {
     "logo": "https://i.imgur.com/T2JPCq2.png",
     "group": "Undefined",
-    "name": "Sophia TV Español (720p)",
+    "name": "Sophia TV Espanol (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2653,7 +2664,7 @@
   {
     "logo": "https://i.imgur.com/T2JPCq2.png",
     "group": "Religious",
-    "name": "Sophia TV Français (720p)",
+    "name": "Sophia TV Francais (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2664,7 +2675,7 @@
   {
     "logo": "https://images.pluto.tv/channels/646b14a0e94c3800082a8d3a/colorLogoPNG.png",
     "group": "Animation;Comedy",
-    "name": "South Park: Butters Collection",
+    "name": "South Park: Butters Collection (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2675,7 +2686,7 @@
   {
     "logo": "https://images.pluto.tv/channels/646b14747cb4b1000875724d/colorLogoPNG.png",
     "group": "Animation;Comedy",
-    "name": "South Park: Cartman Collection",
+    "name": "South Park: Cartman Collection (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2686,7 +2697,7 @@
   {
     "logo": "https://images.pluto.tv/channels/646b1404ee6a2f00082b5d66/colorLogoPNG.png",
     "group": "Animation;Comedy",
-    "name": "South Park: Kenny Collection",
+    "name": "South Park: Kenny Collection (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2697,7 +2708,7 @@
   {
     "logo": "https://images.pluto.tv/channels/646b14d0e1979c0008915a09/colorLogoPNG.png",
     "group": "Animation;Comedy",
-    "name": "South Park: Kyle Collection",
+    "name": "South Park: Kyle Collection (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2719,24 +2730,13 @@
   {
     "logo": "https://images.pluto.tv/channels/646b1438e94c3800082a8cff/colorLogoPNG.png",
     "group": "Animation;Comedy",
-    "name": "South Park: Stan Collection",
+    "name": "South Park: Stan Collection (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
     "provider": "Public IPTV",
     "url": "https://jmp2.uk/plu-646b1438e94c3800082a8cff.m3u8",
     "id": "ch-il7uaw"
-  },
-  {
-    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Curiosity_Channel_Logo_2023.svg/960px-Curiosity_Channel_Logo_2023.svg.png",
-    "group": "Education",
-    "name": "SPIEGEL TV (720p)",
-    "isRegional": false,
-    "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": false,
-    "provider": "Public IPTV",
-    "url": "https://jmp2.uk/plu-6576c20fb3801200084786c9.m3u8",
-    "id": "ch-jjd0mg"
   },
   {
     "logo": "https://images.pluto.tv/channels/5d00e8adaab96b5635b2a005/colorLogoPNG.png",
@@ -2785,7 +2785,7 @@
   {
     "logo": "https://images.pluto.tv/channels/69776ce979545c21a1220bff/colorLogoPNG_1769434849537.png",
     "group": "Movies;Series",
-    "name": "Star Trek: The Next Generation",
+    "name": "Star Trek: The Next Generation (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2796,7 +2796,7 @@
   {
     "logo": "https://images.pluto.tv/channels/69776b58036e883f39e5ab8a/colorLogoPNG_1769434091096.png",
     "group": "Movies;Series",
-    "name": "Star Trek: The Original Series",
+    "name": "Star Trek: The Original Series (Germany)",
     "isRegional": false,
     "gemeinwohlCategory": "Filme & Serien",
     "isUnstable": false,
@@ -2807,7 +2807,7 @@
   {
     "logo": "https://i.imgur.com/bVQBF6R.png",
     "group": "Sports",
-    "name": "Strongman Champions League (720p)",
+    "name": "Strongman (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Sport & Action",
     "isUnstable": true,
@@ -2829,7 +2829,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/SWR_Logo_2023.svg/960px-SWR_Logo_2023.svg.png",
     "group": "Undefined",
-    "name": "SWR Fernsehen Baden-Württemberg (720p) [Geo-blocked]",
+    "name": "SWR Fernsehen Baden-Wurttemberg (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -2862,7 +2862,7 @@
   {
     "logo": "https://i.imgur.com/LH0Gctv.png",
     "group": "Undefined",
-    "name": "Tagesschau 24 (720p)",
+    "name": "tagesschau24 (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2939,7 +2939,7 @@
   {
     "logo": "https://images.pluto.tv/channels/5d6792bd6be2998ad0ccce30/colorLogoPNG.png",
     "group": "Kids",
-    "name": "Totally Turtles (720p)",
+    "name": "Totally Turtles (Germany) (720p)",
     "isRegional": false,
     "gemeinwohlCategory": "Kinder & Familie",
     "isUnstable": false,
@@ -2950,7 +2950,7 @@
   {
     "logo": "https://i.imgur.com/ob9JJPU.png",
     "group": "Undefined",
-    "name": "TV38 Südost-Niedersachen (1080p)",
+    "name": "TV38 Sudost-Niedersachen (1080p)",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": false,
@@ -2983,7 +2983,7 @@
   {
     "logo": "https://i.imgur.com/tjD9fX2.png",
     "group": "General",
-    "name": "TV Oberfranken (TVO) (1080p) [Not 24/7]",
+    "name": "TV Oberfranken (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -2994,7 +2994,7 @@
   {
     "logo": "https://i.imgur.com/Gg6d4Jb.png",
     "group": "Undefined",
-    "name": "TVA (1080p) [Not 24/7]",
+    "name": "TVA (Germany) (1080p) [Not 24/7]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -3137,7 +3137,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/WDR_Fernsehen_Logo_2018.svg/960px-WDR_Fernsehen_Logo_2018.svg.png",
     "group": "General",
-    "name": "WDR Fernsehen Düsseldorf (720p) [Geo-blocked]",
+    "name": "WDR Fernsehen Dusseldorf (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -3159,7 +3159,7 @@
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/WDR_Fernsehen_Logo_2018.svg/960px-WDR_Fernsehen_Logo_2018.svg.png",
     "group": "General",
-    "name": "WDR Fernsehen Münster (720p) [Geo-blocked]",
+    "name": "WDR Fernsehen Munster (720p) [Geo-blocked]",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
     "isUnstable": true,
@@ -3225,7 +3225,7 @@
   {
     "logo": "https://i.imgur.com/98kLMjj.png",
     "group": "Sports",
-    "name": "World Poker Tour",
+    "name": "World Poker Tour Germany",
     "isRegional": false,
     "gemeinwohlCategory": "Sport & Action",
     "isUnstable": false,
