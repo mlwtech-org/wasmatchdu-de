@@ -9,6 +9,20 @@
   {
     "id": "1HDMusicTelevision.ru",
     "name": "1HD Music Television",
+    "url": "http://176.118.197.101/1HD/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "1HDMusicTelevision.ru",
+    "name": "1HD Music Television",
+    "url": "http://str2.iptvhd.ru:8080/1HD/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "1HDMusicTelevision.ru",
+    "name": "1HD Music Television",
     "url": "https://stream8.cinerama.uz/1267/tracks-v1a1/mono.m3u8",
     "group": "music",
     "isRegional": false
@@ -38,6 +52,13 @@
     "id": "1Plus1Ukraina.ua",
     "name": "1+1 Ukraina",
     "url": "http://stream.mcquack.net/219/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1Plus1Ukraina.ua",
+    "name": "1+1 Ukraina",
+    "url": "http://str2.iptvhd.ru:8080/1plus1/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -77,6 +98,13 @@
     "isRegional": false
   },
   {
+    "id": "2Plus2.ua",
+    "name": "2+2",
+    "url": "http://str2.iptvhd.ru:8080/2plus2/index.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "2Plus2Marathon.ua",
     "name": "2+2 Marathon",
     "url": "https://lowa8026-cmyk.github.io/Ukraine/Edyni_Novyny/2Plus2Marafon.m3u8",
@@ -108,6 +136,13 @@
     "id": "2x2.ru",
     "name": "2x2",
     "url": "http://185.23.80.23:8080/2x2/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
+    "url": "http://176.118.197.101/2x2/index.m3u8",
     "group": "entertainment",
     "isRegional": false
   },
@@ -224,13 +259,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -336,20 +364,6 @@
     "isRegional": false
   },
   {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "6PR.au",
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
@@ -438,13 +452,6 @@
     "name": "8NTV",
     "url": "https://60417ddeaf0d9.streamlock.net/ntv/videontv/playlist.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "8XM.pk",
-    "name": "8XM",
-    "url": "https://cdn4.mjunoon.tv:8087/streamtest/135M/chunks.m3u8",
-    "group": "music",
     "isRegional": false
   }
 ]
