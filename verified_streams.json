@@ -259,6 +259,13 @@
     "isRegional": false
   },
   {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -361,6 +368,20 @@
     "name": "5AAB TV",
     "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
     "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
     "isRegional": false
   },
   {
