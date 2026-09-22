@@ -33,8 +33,7 @@ export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { channels, globalChannels, setMiniPlayerChannel, useProxy } =
-    usePlayerStore();
+  const { channels, globalChannels, setMiniPlayerChannel } = usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -200,15 +199,6 @@ export const LivePlayer: React.FC = () => {
     if (Hls.isSupported()) {
       hls = new Hls({
         maxLiveSyncPlaybackRate: 1.5,
-        xhrSetup: function (xhr, url) {
-          if (useProxy && url.startsWith("http")) {
-            xhr.open(
-              "GET",
-              "https://corsproxy.io/?url=" + encodeURIComponent(url),
-              true,
-            );
-          }
-        },
       });
       hls.loadSource(hlsUrl);
       hls.attachMedia(video);
@@ -276,11 +266,10 @@ export const LivePlayer: React.FC = () => {
 
   const handleChannelChange = (channelId: string) => {
     navigate(`/live/${channelId}`, { replace: true, state: null });
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] flex flex-col text-white">
+    <div className="h-screen bg-[#0b0f19] flex flex-col text-white overflow-hidden">
       {/* Header */}
       <div className="h-16 border-b border-slate-800 flex items-center px-6 shrink-0 bg-slate-950 sticky top-0 z-40">
         <button
@@ -296,9 +285,9 @@ export const LivePlayer: React.FC = () => {
       </div>
 
       {/* Main Content Area - 2 Columns */}
-      <div className="flex-1 flex flex-col lg:flex-row max-w-[1600px] mx-auto w-full">
+      <div className="flex-1 flex flex-col lg:flex-row max-w-[1600px] mx-auto w-full min-h-0">
         {/* Left Column: Video Player (70%) */}
-        <div className="flex-1 p-4 lg:p-8 lg:border-r border-slate-800 flex flex-col gap-6">
+        <div className="flex-1 p-4 lg:p-8 lg:border-r border-slate-800 flex flex-col gap-6 overflow-y-auto">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold flex items-center gap-3">
               {currentChannelObj?.logo ? (
@@ -710,7 +699,7 @@ export const LivePlayer: React.FC = () => {
         </div>
 
         {/* Right Column: More Live Streams Sidebar (30%) */}
-        <div className="w-full lg:w-[420px] shrink-0 bg-[#0b0f19] lg:border-l border-slate-800 flex flex-col">
+        <div className="w-full lg:w-[420px] shrink-0 bg-[#0b0f19] lg:border-l border-slate-800 flex flex-col overflow-y-auto">
           <div className="px-6 py-5 border-b border-slate-800 flex items-center justify-between sticky top-0 z-10 bg-[#0b0f19]">
             <h2 className="text-xl font-bold text-white">More live streams</h2>
             <div className="flex bg-slate-800/60 rounded p-1">
