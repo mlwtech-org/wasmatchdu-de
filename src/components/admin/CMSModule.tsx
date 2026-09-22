@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Settings, Globe, Download, XCircle, ListVideo, MonitorPlay, ShieldCheck, RefreshCw } from "lucide-react";
+import {
+  Settings,
+  Globe,
+  Download,
+  XCircle,
+  ListVideo,
+  MonitorPlay,
+  ShieldCheck,
+  RefreshCw,
+} from "lucide-react";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 import { usePlayerStore } from "../../store/usePlayerStore";
@@ -8,23 +17,38 @@ import { parseM3U } from "../../utils/m3uParser";
 const cn = (...inputs: (string | undefined | null | false)[]) =>
   twMerge(clsx(inputs));
 
-export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "error" | "info") => void }> = ({ showToast }) => {
+export const CMSModule: React.FC<{
+  showToast: (msg: string, type: "success" | "error" | "info") => void;
+}> = ({ showToast }) => {
   const trendingEnabled = usePlayerStore((state) => state.trendingEnabled);
-  const setTrendingEnabled = usePlayerStore((state) => state.setTrendingEnabled);
+  const setTrendingEnabled = usePlayerStore(
+    (state) => state.setTrendingEnabled,
+  );
   const configuredFeeds = usePlayerStore((state) => state.configuredFeeds);
   const addConfiguredFeed = usePlayerStore((state) => state.addConfiguredFeed);
-  const removeConfiguredFeed = usePlayerStore((state) => state.removeConfiguredFeed);
+  const removeConfiguredFeed = usePlayerStore(
+    (state) => state.removeConfiguredFeed,
+  );
 
   const [isTrendingActive, setIsTrendingActive] = useState(trendingEnabled);
   const [feedUrl, setFeedUrl] = useState("https://i.mjh.nz/PlutoTV/us.m3u8");
   const [feedType, setFeedType] = useState<"global" | "regional">("global");
-  const [feedRoles, setFeedRoles] = useState<string[]>(["user", "operator", "admin", "dev"]);
+  const [feedRoles, setFeedRoles] = useState<string[]>([
+    "user",
+    "operator",
+    "admin",
+    "dev",
+  ]);
   const [isParsing, setIsParsing] = useState(false);
   const [promoBanner, setPromoBanner] = useState("");
   const [isPromoActive, setIsPromoActive] = useState(false);
 
-  const [verifiedStreamsCount, setVerifiedStreamsCount] = useState<number | null>(null);
-  const [verifiedStreamsData, setVerifiedStreamsData] = useState<any[]>([]);
+  const [verifiedStreamsCount, setVerifiedStreamsCount] = useState<
+    number | null
+  >(null);
+  const [verifiedStreamsData, setVerifiedStreamsData] = useState<
+    Record<string, unknown>[]
+  >([]);
   const [isSyncingPremium, setIsSyncingPremium] = useState(false);
 
   useEffect(() => {
@@ -66,13 +90,17 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
       usePlayerStore.getState().setChannels(uniqueChannels);
       addConfiguredFeed({
         id: `feed-${Date.now()}`,
-        name: feedUrl.split('/').pop() || 'Custom Feed',
+        name: feedUrl.split("/").pop() || "Custom Feed",
         url: feedUrl,
         type: feedType,
-        allowedRoles: feedRoles as any[]
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        allowedRoles: feedRoles as any[],
       });
       setFeedUrl("");
-      showToast(`Successfully loaded ${parsedChannels.length} channels!`, "success");
+      showToast(
+        `Successfully loaded ${parsedChannels.length} channels!`,
+        "success",
+      );
     } catch (e) {
       console.error(e);
       showToast("Failed to load feed. Invalid URL or CORS issue.", "error");
@@ -84,7 +112,7 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
   const handleSyncPremium = () => {
     if (!verifiedStreamsData.length) return;
     setIsSyncingPremium(true);
-    
+
     // Simulate network delay for UX
     setTimeout(() => {
       const existingChannels = usePlayerStore.getState().channels;
@@ -95,22 +123,24 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
         }
       });
       const uniqueChannels = Array.from(urlMap.values());
-      
+
       usePlayerStore.getState().setChannels(uniqueChannels);
       setIsSyncingPremium(false);
-      showToast(`Successfully deployed ${verifiedStreamsData.length} premium streams!`, "success");
+      showToast(
+        `Successfully deployed ${verifiedStreamsData.length} premium streams!`,
+        "success",
+      );
     }, 1200);
   };
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
       {/* Automated Premium Streams Metric Card */}
       <div className="bg-gradient-to-r from-emerald-900/40 to-slate-900 border border-emerald-500/20 rounded-2xl p-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10">
           <ShieldCheck className="w-48 h-48 text-emerald-500" />
         </div>
-        
+
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <h3 className="text-xl font-bold text-white flex items-center gap-2 mb-2">
@@ -118,14 +148,18 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
               One-Click Syncing: Premium Verified Streams
             </h3>
             <p className="text-slate-400 text-sm max-w-xl">
-              GitHub Actions automatically tests public streams for uptime and CORS compliance every 12 hours. 
-              These validated streams are isolated for the Premium Tier to guarantee zero buffering and maximum availability.
+              GitHub Actions automatically tests public streams for uptime and
+              CORS compliance every 12 hours. These validated streams are
+              isolated for the Premium Tier to guarantee zero buffering and
+              maximum availability.
             </p>
           </div>
-          
+
           <div className="flex items-center gap-6 bg-slate-950/50 p-4 rounded-xl border border-slate-800">
             <div className="text-center">
-              <p className="text-sm font-medium text-slate-500 mb-1">Working Streams</p>
+              <p className="text-sm font-medium text-slate-500 mb-1">
+                Working Streams
+              </p>
               {verifiedStreamsCount === null ? (
                 <div className="w-16 h-8 mx-auto bg-slate-800 rounded animate-pulse" />
               ) : (
@@ -140,7 +174,9 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
               disabled={isSyncingPremium || verifiedStreamsCount === null}
               className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 px-6 py-3 rounded-lg font-black transition-all shadow-[0_0_20px_-5px_rgba(16,185,129,0.8)] hover:shadow-[0_0_30px_0px_rgba(16,185,129,1)] scale-105"
             >
-              <RefreshCw className={cn("w-5 h-5", isSyncingPremium && "animate-spin")} />
+              <RefreshCw
+                className={cn("w-5 h-5", isSyncingPremium && "animate-spin")}
+              />
               {isSyncingPremium ? "Deploying..." : "Deploy to Players"}
             </button>
           </div>
@@ -174,7 +210,10 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
                   const newState = !isTrendingActive;
                   setIsTrendingActive(newState);
                   setTrendingEnabled(newState);
-                  showToast("Trending streams visibility updated globally!", "info");
+                  showToast(
+                    "Trending streams visibility updated globally!",
+                    "info",
+                  );
                 }}
                 className={cn(
                   "w-12 h-6 rounded-full transition-colors relative",
@@ -201,20 +240,22 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
                     Display an announcement at the top of the app.
                   </p>
                 </div>
-                <button 
+                <button
                   onClick={() => setIsPromoActive(!isPromoActive)}
                   className={cn(
                     "w-12 h-6 rounded-full transition-colors relative",
                     isPromoActive ? "bg-emerald-500" : "bg-slate-700",
                   )}
                 >
-                  <span className={cn(
-                    "absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform",
-                    isPromoActive ? "translate-x-6" : "translate-x-0",
-                  )} />
+                  <span
+                    className={cn(
+                      "absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform",
+                      isPromoActive ? "translate-x-6" : "translate-x-0",
+                    )}
+                  />
                 </button>
               </div>
-              
+
               <div className="relative">
                 <input
                   type="text"
@@ -223,8 +264,10 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
                   onChange={(e) => setPromoBanner(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-800 text-white text-sm rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 transition-colors"
                 />
-                <button 
-                  onClick={() => showToast("Banner updated globally!", "success")}
+                <button
+                  onClick={() =>
+                    showToast("Banner updated globally!", "success")
+                  }
                   className="absolute right-2 top-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded"
                 >
                   Save
@@ -252,11 +295,13 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
               placeholder="https://example.com/playlist.m3u"
               className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 transition-colors"
             />
-            
+
             <div className="flex gap-4">
               <select
                 value={feedType}
-                onChange={(e) => setFeedType(e.target.value as "global" | "regional")}
+                onChange={(e) =>
+                  setFeedType(e.target.value as "global" | "regional")
+                }
                 className="bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-2 focus:outline-none focus:border-indigo-500"
               >
                 <option value="global">Global (Standard)</option>
@@ -265,20 +310,28 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
             </div>
 
             <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-              <p className="text-sm font-bold text-slate-400 mb-2">Allowed Roles</p>
+              <p className="text-sm font-bold text-slate-400 mb-2">
+                Allowed Roles
+              </p>
               <div className="flex flex-wrap gap-2">
                 {["user", "operator", "admin", "dev"].map((role) => (
-                  <label key={role} className="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700">
+                  <label
+                    key={role}
+                    className="flex items-center gap-2 cursor-pointer bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700"
+                  >
                     <input
                       type="checkbox"
                       checked={feedRoles.includes(role)}
                       onChange={(e) => {
-                        if (e.target.checked) setFeedRoles([...feedRoles, role]);
+                        if (e.target.checked)
+                          setFeedRoles([...feedRoles, role]);
                         else setFeedRoles(feedRoles.filter((r) => r !== role));
                       }}
                       className="accent-indigo-500"
                     />
-                    <span className="text-sm text-slate-300 capitalize">{role}</span>
+                    <span className="text-sm text-slate-300 capitalize">
+                      {role}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -329,15 +382,22 @@ export const CMSModule: React.FC<{ showToast: (msg: string, type: "success" | "e
                       {feed.url}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className={cn(
-                        "text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded",
-                        feed.type === "global" ? "bg-blue-500/20 text-blue-400" : "bg-emerald-500/20 text-emerald-400"
-                      )}>
+                      <span
+                        className={cn(
+                          "text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded",
+                          feed.type === "global"
+                            ? "bg-blue-500/20 text-blue-400"
+                            : "bg-emerald-500/20 text-emerald-400",
+                        )}
+                      >
                         {feed.type}
                       </span>
                       <div className="flex gap-1">
                         {feed.allowedRoles.map((role) => (
-                          <span key={role} className="text-[10px] uppercase bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                          <span
+                            key={role}
+                            className="text-[10px] uppercase bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded"
+                          >
                             {role}
                           </span>
                         ))}

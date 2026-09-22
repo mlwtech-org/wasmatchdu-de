@@ -56,7 +56,7 @@ export const ContentIntelligence: React.FC = () => {
   const [simulatedRegion, setSimulatedRegion] = useState("Global");
   const [isScanning, setIsScanning] = useState(false);
 
-  const [config, setConfig] = useState<AlgorithmConfig>({
+  const [localConfig, setLocalConfig] = useState<AlgorithmConfig>({
     healthWeight: 1.0,
     regionalWeight: 1.5,
     categoryWeight: 1.2,
@@ -65,19 +65,19 @@ export const ContentIntelligence: React.FC = () => {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "algorithm_config", "live"), (snap) => {
       if (snap.exists()) {
-        setConfig(snap.data() as AlgorithmConfig);
+        const data = snap.data() as AlgorithmConfig;
+        setLocalConfig(data);
       }
     });
     return () => unsub();
   }, []);
 
-  const handleConfigChange = async (
-    key: keyof AlgorithmConfig,
-    value: number,
-  ) => {
-    const newConfig = { ...config, [key]: value };
-    setConfig(newConfig);
-    await setDoc(doc(db, "algorithm_config", "live"), newConfig);
+  const handleConfigChange = (key: keyof AlgorithmConfig, value: number) => {
+    setLocalConfig((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleConfigSync = async () => {
+    await setDoc(doc(db, "algorithm_config", "live"), localConfig);
   };
 
   // The actual algorithmic recommendations based on live data
@@ -306,57 +306,60 @@ export const ContentIntelligence: React.FC = () => {
 
             <div>
               <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>Health Weight ({config.healthWeight}x)</span>
+                <span>Health Weight ({localConfig.healthWeight}x)</span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="3"
                 step="0.1"
-                value={config.healthWeight}
+                value={localConfig.healthWeight}
                 onChange={(e) =>
                   handleConfigChange("healthWeight", parseFloat(e.target.value))
                 }
+                onPointerUp={handleConfigSync}
                 className="w-full accent-indigo-500"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>Regional Boost ({config.regionalWeight}x)</span>
+                <span>Regional Boost ({localConfig.regionalWeight}x)</span>
               </div>
               <input
                 type="range"
                 min="1"
                 max="5"
                 step="0.1"
-                value={config.regionalWeight}
+                value={localConfig.regionalWeight}
                 onChange={(e) =>
                   handleConfigChange(
                     "regionalWeight",
                     parseFloat(e.target.value),
                   )
                 }
+                onPointerUp={handleConfigSync}
                 className="w-full accent-emerald-500"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-xs text-slate-400 mb-1">
-                <span>Category Match ({config.categoryWeight}x)</span>
+                <span>Category Match ({localConfig.categoryWeight}x)</span>
               </div>
               <input
                 type="range"
                 min="1"
                 max="5"
                 step="0.1"
-                value={config.categoryWeight}
+                value={localConfig.categoryWeight}
                 onChange={(e) =>
                   handleConfigChange(
                     "categoryWeight",
                     parseFloat(e.target.value),
                   )
                 }
+                onPointerUp={handleConfigSync}
                 className="w-full accent-amber-500"
               />
             </div>

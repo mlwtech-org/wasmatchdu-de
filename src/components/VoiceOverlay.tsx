@@ -24,10 +24,13 @@ export const VoiceOverlay: React.FC<VoiceOverlayProps> = ({
 
   useEffect(() => {
     // Check for browser support
+    const win = window as unknown as {
+      SpeechRecognition: unknown;
+      webkitSpeechRecognition: unknown;
+    };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (win.SpeechRecognition ||
+      win.webkitSpeechRecognition) as new () => any;
 
     if (!SpeechRecognition) {
       setError("Your browser doesn't support voice search.");

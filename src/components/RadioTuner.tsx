@@ -24,12 +24,17 @@ export const RadioTuner: React.FC = () => {
   // Scroll active channel into view on mount or change
   useEffect(() => {
     if (scrollRef.current) {
-      const activeEl = scrollRef.current.querySelector('[data-active="true"]');
-      if (activeEl) {
-        activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
+      // Small timeout allows DOM to finish rendering the channels list before scrolling
+      setTimeout(() => {
+        const activeEl = scrollRef.current?.querySelector(
+          '[data-active="true"]',
+        );
+        if (activeEl) {
+          activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 50);
     }
-  }, [streamId]);
+  }, [streamId, tunedChannels]);
 
   const tuneTo = (index: number) => {
     if (index >= 0 && index < tunedChannels.length) {

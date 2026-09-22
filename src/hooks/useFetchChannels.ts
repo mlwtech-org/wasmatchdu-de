@@ -16,6 +16,7 @@ export const useFetchChannels = () => {
     recentlyWatched,
     activeProfileId,
     profiles,
+    user,
   } = usePlayerStore();
 
   const activeProfile = profiles.find((p) => p.id === activeProfileId);
@@ -62,13 +63,17 @@ export const useFetchChannels = () => {
           );
         }
 
-        const dashboardCandidates = allChannels.filter(
-          (c) =>
-            c.url.startsWith("https") &&
-            !c.url.match(/\d+\.\d+\.\d+\.\d+/) &&
-            c.logo &&
-            !c.isUnstable,
-        );
+        const isAdmin = user?.role === "admin" || user?.role === "dev";
+
+        const dashboardCandidates = isAdmin
+          ? allChannels
+          : allChannels.filter(
+              (c) =>
+                c.url.startsWith("https") &&
+                !c.url.match(/\d+\.\d+\.\d+\.\d+/) &&
+                c.logo &&
+                !c.isUnstable,
+            );
 
         // Sorting Logic (Personalization)
         // 1. Identify top 2 categories from watch history
@@ -134,5 +139,6 @@ export const useFetchChannels = () => {
     regionLock,
     recentlyWatched,
     watchHistory,
+    user,
   ]);
 };

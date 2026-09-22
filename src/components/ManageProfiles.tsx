@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
-import { Trash2, ArrowLeft, Edit2, Lock, Check, Globe, KeyRound } from "lucide-react";
+import {
+  Trash2,
+  ArrowLeft,
+  Edit2,
+  Lock,
+  Check,
+  Globe,
+  KeyRound,
+} from "lucide-react";
 import { AVATARS } from "../lib/avatars";
 import { cn } from "../utils/cn";
 
@@ -19,11 +27,23 @@ export const ManageProfiles: React.FC = () => {
   const [editContentRating, setEditContentRating] = useState("all");
 
   // Parental PIN Gate state
-  const [pinPromptProfileId, setPinPromptProfileId] = useState<string | null>(null);
+  const [pinPromptProfileId, setPinPromptProfileId] = useState<string | null>(
+    null,
+  );
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState(false);
 
-  const startEdit = (profile: any) => {
+  type ProfileParam = {
+    id: string;
+    name: string;
+    avatarUrl: string;
+    isKidsMode: boolean;
+    pin?: string;
+    regionLock?: string;
+    contentRating?: string;
+  };
+
+  const startEdit = (profile: ProfileParam) => {
     // If profile has a PIN, require verification before editing
     if (profile.pin) {
       setPinPromptProfileId(profile.id);
@@ -45,7 +65,7 @@ export const ManageProfiles: React.FC = () => {
     }
   };
 
-  const openEditPanel = (profile: any) => {
+  const openEditPanel = (profile: ProfileParam) => {
     setEditingProfileId(profile.id);
     setEditName(profile.name);
     setEditAvatarUrl(profile.avatarUrl);
@@ -89,7 +109,8 @@ export const ManageProfiles: React.FC = () => {
       {!editingProfileId && !pinPromptProfileId && (
         <div className="flex flex-col gap-4 w-full max-w-4xl">
           {profiles.map((profile) => {
-            const avatar = AVATARS.find((a) => a.id === profile.avatarUrl) || AVATARS[0];
+            const avatar =
+              AVATARS.find((a) => a.id === profile.avatarUrl) || AVATARS[0];
             const Icon = avatar.icon;
 
             return (
@@ -98,7 +119,9 @@ export const ManageProfiles: React.FC = () => {
                 className="flex items-center justify-between bg-slate-900/60 p-6 rounded-[2rem] border border-slate-800 backdrop-blur-xl transition-all hover:border-slate-700/60 group"
               >
                 <div className="flex items-center gap-6">
-                  <div className={`w-20 h-20 rounded-[1.5rem] bg-gradient-to-br ${avatar.color} flex items-center justify-center shadow-lg relative`}>
+                  <div
+                    className={`w-20 h-20 rounded-[1.5rem] bg-gradient-to-br ${avatar.color} flex items-center justify-center shadow-lg relative`}
+                  >
                     <Icon className="w-10 h-10 text-white/90" />
                     {profile.pin && (
                       <div className="absolute -top-2 -right-2 bg-slate-950 p-1.5 rounded-full border border-slate-800 text-cyan-400 shadow-md">
@@ -117,11 +140,13 @@ export const ManageProfiles: React.FC = () => {
                     </h3>
                     <div className="flex flex-wrap gap-2 mt-1">
                       <span className="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-700 font-medium">
-                        Rating: {profile.isKidsMode ? "Kids Friendly" : "All Access"}
+                        Rating:{" "}
+                        {profile.isKidsMode ? "Kids Friendly" : "All Access"}
                       </span>
                       {profile.regionLock && profile.regionLock !== "none" && (
                         <span className="text-xs bg-cyan-950/40 text-cyan-400 px-2.5 py-1 rounded-lg border border-cyan-500/20 font-medium flex items-center gap-1">
-                          <Globe className="w-3 h-3" /> Region Lock: {profile.regionLock.toUpperCase()}
+                          <Globe className="w-3 h-3" /> Region Lock:{" "}
+                          {profile.regionLock.toUpperCase()}
                         </span>
                       )}
                     </div>
@@ -138,7 +163,11 @@ export const ManageProfiles: React.FC = () => {
                   </button>
                   <button
                     onClick={() => {
-                      if (window.confirm(`Are you sure you want to delete ${profile.name}?`)) {
+                      if (
+                        window.confirm(
+                          `Are you sure you want to delete ${profile.name}?`,
+                        )
+                      ) {
                         removeProfile(profile.id);
                       }
                     }}
@@ -167,7 +196,9 @@ export const ManageProfiles: React.FC = () => {
           </div>
           <div className="text-center">
             <h2 className="text-2xl font-black mb-2">Parental Verification</h2>
-            <p className="text-slate-400 text-sm">Enter the PIN to edit this profile's restriction policy.</p>
+            <p className="text-slate-400 text-sm">
+              Enter the PIN to edit this profile's restriction policy.
+            </p>
           </div>
 
           <input
@@ -178,11 +209,17 @@ export const ManageProfiles: React.FC = () => {
             placeholder="0000"
             className={cn(
               "w-40 text-center bg-slate-950 border rounded-xl px-4 py-3 text-3xl font-bold tracking-[0.25em] focus:outline-none transition-all placeholder:text-slate-800 text-white",
-              pinError ? "border-red-500 animate-shake" : "border-slate-800 focus:border-cyan-500"
+              pinError
+                ? "border-red-500 animate-shake"
+                : "border-slate-800 focus:border-cyan-500",
             )}
           />
 
-          {pinError && <p className="text-red-500 text-sm font-bold animate-pulse">Incorrect PIN</p>}
+          {pinError && (
+            <p className="text-red-500 text-sm font-bold animate-pulse">
+              Incorrect PIN
+            </p>
+          )}
 
           <div className="flex gap-4 w-full mt-2">
             <button
@@ -239,7 +276,9 @@ export const ManageProfiles: React.FC = () => {
                       onClick={() => setEditAvatarUrl(avatar.id)}
                       className={cn(
                         `relative aspect-square rounded-2xl bg-gradient-to-br ${avatar.color} flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105`,
-                        isSelected ? "ring-4 ring-white scale-105" : "opacity-60 hover:opacity-100 ring-2 ring-transparent"
+                        isSelected
+                          ? "ring-4 ring-white scale-105"
+                          : "opacity-60 hover:opacity-100 ring-2 ring-transparent",
                       )}
                     >
                       <Icon className="w-1/2 h-1/2 text-white/90" />
@@ -259,9 +298,14 @@ export const ManageProfiles: React.FC = () => {
               <div className="flex-grow">
                 <h3 className="text-lg font-bold flex items-center gap-2">
                   Kids Safety Lock
-                  <span className="text-[9px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">Global Policy</span>
+                  <span className="text-[9px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                    Global Policy
+                  </span>
                 </h3>
-                <p className="text-slate-400 text-sm mt-0.5">Filter out all non-kids content globally, simplified visual mode.</p>
+                <p className="text-slate-400 text-sm mt-0.5">
+                  Filter out all non-kids content globally, simplified visual
+                  mode.
+                </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -279,9 +323,14 @@ export const ManageProfiles: React.FC = () => {
               <div>
                 <h3 className="text-lg font-bold flex items-center gap-2">
                   Geographic / Regional Lock
-                  <span className="text-[9px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">Regional Policy</span>
+                  <span className="text-[9px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
+                    Regional Policy
+                  </span>
                 </h3>
-                <p className="text-slate-400 text-sm mt-0.5">Restrict profile to load streams strictly from a specific country or language.</p>
+                <p className="text-slate-400 text-sm mt-0.5">
+                  Restrict profile to load streams strictly from a specific
+                  country or language.
+                </p>
               </div>
               <select
                 value={editRegionLock}
@@ -307,13 +356,17 @@ export const ManageProfiles: React.FC = () => {
                   <h3 className="text-lg font-bold flex items-center gap-2">
                     Security PIN (Parental Lock)
                   </h3>
-                  <p className="text-slate-400 text-sm mt-0.5">Require 4-digit PIN to login or switch out of this profile.</p>
+                  <p className="text-slate-400 text-sm mt-0.5">
+                    Require 4-digit PIN to login or switch out of this profile.
+                  </p>
                 </div>
                 <input
                   type="password"
                   maxLength={4}
                   value={editPin}
-                  onChange={(e) => setEditPin(e.target.value.replace(/[^0-9]/g, ""))}
+                  onChange={(e) =>
+                    setEditPin(e.target.value.replace(/[^0-9]/g, ""))
+                  }
                   placeholder="None"
                   className="w-24 text-center bg-slate-900 border border-slate-800 rounded-xl px-4 py-3 text-xl font-bold tracking-[0.25em] focus:outline-none focus:border-cyan-500 transition-all placeholder:text-slate-700 text-white"
                 />
