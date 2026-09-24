@@ -9,13 +9,6 @@
   {
     "id": "1HDMusicTelevision.ru",
     "name": "1HD Music Television",
-    "url": "http://176.118.197.101/1HD/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "1HDMusicTelevision.ru",
-    "name": "1HD Music Television",
     "url": "http://str2.iptvhd.ru:8080/1HD/index.m3u8",
     "group": "music",
     "isRegional": false
@@ -142,13 +135,6 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
-    "url": "http://176.118.197.101/2x2/index.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "2x2.ru",
-    "name": "2x2",
     "url": "https://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -259,10 +245,10 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
+    "id": "4E.gr",
+    "name": "4E",
+    "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
+    "group": "religious",
     "isRegional": false
   },
   {
@@ -364,6 +350,41 @@
     "isRegional": false
   },
   {
+    "id": "5Gold.il",
+    "name": "5Gold",
+    "url": "http://str2.iptvhd.ru:8080/sport5gold/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5Live.il",
+    "name": "5Live",
+    "url": "http://str2.iptvhd.ru:8080/5live/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5Plus.il",
+    "name": "5Plus",
+    "url": "http://89.33.29.115:8080/sportplus/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5Sport4K.il",
+    "name": "5Sport 4K",
+    "url": "http://str2.iptvhd.ru:8080/5SPORT_4K/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
+    "id": "5Sport.il",
+    "name": "5Sport",
+    "url": "http://str2.iptvhd.ru:8080/5sport/index.m3u8",
+    "group": "sports",
+    "isRegional": false
+  },
+  {
     "id": "5tv.ar",
     "name": "5tv",
     "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
@@ -459,13 +480,6 @@
     "name": "7S Music",
     "url": "https://mumbai-edge.smartplaytv.in/7SMusic/index.m3u8",
     "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "7TV.hu",
-    "name": "7.TV",
-    "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
-    "group": "general",
     "isRegional": false
   }
 ]
