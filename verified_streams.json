@@ -9,6 +9,13 @@
   {
     "id": "1HDMusicTelevision.ru",
     "name": "1HD Music Television",
+    "url": "http://176.118.197.101/1HD/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "1HDMusicTelevision.ru",
+    "name": "1HD Music Television",
     "url": "http://str2.iptvhd.ru:8080/1HD/index.m3u8",
     "group": "music",
     "isRegional": false
@@ -135,6 +142,13 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
+    "url": "http://176.118.197.101/2x2/index.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
     "url": "https://zabava-htlive.cdn.ngenix.net/hls/CH_2X2/variant.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -242,6 +256,13 @@
     "name": "3sat",
     "url": "https://dash4.antik.sk/live/test_drei_sat_tizen/playlist.m3u8",
     "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
     "isRegional": false
   },
   {
