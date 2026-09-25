@@ -495,6 +495,17 @@
     "id": "ch-1c55wv"
   },
   {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3d/2022_Disney_Channel_logo.svg",
+    "group": "Kids",
+    "name": "Disney Channel (Germany)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Kinder & Familie",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "http://178.27.12.3:9981/stream/channelid/269948147?profile=pass",
+    "id": "ch-qoy0m3"
+  },
+  {
     "logo": "https://i.imgur.com/sJaBU7X.jpeg",
     "group": "Music",
     "name": "DMF (1080p) [Not 24/7]",
@@ -801,6 +812,17 @@
     "provider": "Public IPTV",
     "url": "https://dash4.antik.sk/live/test_kabel_eins_tizen/playlist.m3u8",
     "id": "ch-fofl8l"
+  },
+  {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Kabel_eins_Doku_Logo_2016.svg/960px-Kabel_eins_Doku_Logo_2016.svg.png",
+    "group": "Documentary",
+    "name": "kabel eins Doku",
+    "isRegional": false,
+    "gemeinwohlCategory": "Doku & Wissen",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "http://178.27.12.3:9981/stream/channelid/1958526590?profile=pass",
+    "id": "ch-mxae9v"
   },
   {
     "logo": "https://i.ibb.co/1LzJz7Y/Channels4-profile-7.jpg",
@@ -1958,6 +1980,17 @@
     "id": "ch-q68lzg"
   },
   {
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/ProSieben_MAXX_Logo.svg/960px-ProSieben_MAXX_Logo.svg.png",
+    "group": "Undefined",
+    "name": "ProSieben Maxx",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "http://178.27.12.3:9981/stream/channelid/1567530044?profile=pass",
+    "id": "ch-rmp9r6"
+  },
+  {
     "logo": "https://i.imgur.com/3yamOmw.png",
     "group": "Undefined",
     "name": "PUNKTum Fernsehen (1080p) [Not 24/7]",
@@ -3071,13 +3104,13 @@
   {
     "logo": "https://i.imgur.com/1JIIGgL.png",
     "group": "Undefined",
-    "name": "ZDFneo (720p) [Geo-blocked]",
+    "name": "ZDFneo",
     "isRegional": false,
     "gemeinwohlCategory": "Unterhaltung",
-    "isUnstable": true,
+    "isUnstable": false,
     "provider": "Public IPTV",
-    "url": "https://zdf-hls-16.akamaized.net/hls/live/2016499/de/high/master.m3u8",
-    "id": "ch-cwl13v"
+    "url": "http://178.27.12.3:9981/stream/channelid/1351813628?profile=pass",
+    "id": "ch-13yaap"
   },
   {
     "logo": "https://upload.wikimedia.org/wikipedia/commons/2/24/Zee_One_Logo_2025.png",
