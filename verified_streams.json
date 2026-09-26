@@ -28,6 +28,20 @@
     "isRegional": false
   },
   {
+    "id": "1Plus1International.ua",
+    "name": "1+1 International",
+    "url": "https://dash2.antik.sk/live/test_one_plus_one_int_tizen/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "1Plus1Marafon.ua",
+    "name": "1+1 Marafon",
+    "url": "https://dash2.antik.sk/live/1plus1_marathon/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "1Plus1Ukraina.ua",
     "name": "1+1 Ukraina",
     "url": "http://stream.mcquack.net/219/index.m3u8",
@@ -347,13 +361,6 @@
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
     "group": "news",
-    "isRegional": false
-  },
-  {
-    "id": "6sotok.ua",
-    "name": "6 sotok",
-    "url": "http://stream.mcquack.net/405/index.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
