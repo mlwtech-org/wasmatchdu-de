@@ -16,13 +16,6 @@
   {
     "id": "1HDMusicTelevision.ru",
     "name": "1HD Music Television",
-    "url": "http://str2.iptvhd.ru:8080/1HD/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "1HDMusicTelevision.ru",
-    "name": "1HD Music Television",
     "url": "https://stream8.cinerama.uz/1267/tracks-v1a1/mono.m3u8",
     "group": "music",
     "isRegional": false
@@ -42,9 +35,9 @@
     "isRegional": false
   },
   {
-    "id": "1Plus1Ukraina.ua",
-    "name": "1+1 Ukraina",
-    "url": "http://str2.iptvhd.ru:8080/1plus1/index.m3u8",
+    "id": "1TV.ge",
+    "name": "1TV",
+    "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -73,13 +66,6 @@
     "id": "2Plus2.ua",
     "name": "2+2",
     "url": "http://stream.mcquack.net/173/index.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "2Plus2.ua",
-    "name": "2+2",
-    "url": "http://str2.iptvhd.ru:8080/2plus2/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -238,13 +224,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -347,48 +326,6 @@
     "name": "5AAB TV",
     "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
     "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "5Gold.il",
-    "name": "5Gold",
-    "url": "http://str2.iptvhd.ru:8080/sport5gold/index.m3u8",
-    "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5Live.il",
-    "name": "5Live",
-    "url": "http://str2.iptvhd.ru:8080/5live/index.m3u8",
-    "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5Plus.il",
-    "name": "5Plus",
-    "url": "http://89.33.29.115:8080/sportplus/index.m3u8",
-    "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5Sport4K.il",
-    "name": "5Sport 4K",
-    "url": "http://str2.iptvhd.ru:8080/5SPORT_4K/index.m3u8",
-    "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5Sport.il",
-    "name": "5Sport",
-    "url": "http://str2.iptvhd.ru:8080/5sport/index.m3u8",
-    "group": "sports",
-    "isRegional": false
-  },
-  {
-    "id": "5Stars.il",
-    "name": "5Stars",
-    "url": "http://89.33.29.115:8080/IL_5Stars/index.m3u8",
-    "group": "sports",
     "isRegional": false
   },
   {
