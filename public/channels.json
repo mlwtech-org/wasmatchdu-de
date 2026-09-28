@@ -2761,6 +2761,17 @@
     "id": "ch-5yqh01"
   },
   {
+    "logo": "https://i.imgur.com/l0RGbRI.png",
+    "group": "Entertainment",
+    "name": "TNT International (480p)",
+    "isRegional": false,
+    "gemeinwohlCategory": "Unterhaltung",
+    "isUnstable": false,
+    "provider": "Public IPTV",
+    "url": "http://91.228.35.249:8001/1:0:1:6a7:3138:13e:820000:0:0:0:",
+    "id": "ch-tqhtwb"
+  },
+  {
     "logo": "https://images.pluto.tv/channels/5d6792bd6be2998ad0ccce30/colorLogoPNG.png",
     "group": "Kids",
     "name": "Totally Turtles (Germany) (720p)",
