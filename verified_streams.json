@@ -238,13 +238,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -284,20 +277,6 @@
     "name": "4ever Theater",
     "url": "http://stream.mcquack.net/259/index.m3u8",
     "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "4FunKids.pl",
-    "name": "4 Fun Kids",
-    "url": "https://stream.4fun.tv:8889/hls/4fk_high/index.m3u8",
-    "group": "kids",
-    "isRegional": false
-  },
-  {
-    "id": "4FunTV.pl",
-    "name": "4 Fun TV",
-    "url": "https://stream.4fun.tv:8888/hls/4f_high/index.m3u8",
-    "group": "music",
     "isRegional": false
   },
   {
