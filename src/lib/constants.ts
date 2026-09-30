@@ -140,7 +140,7 @@ export const FALLBACK_CHANNELS: Channel[] = [
   {
     id: "verified-aljazeera",
     name: "Al Jazeera English",
-    url: "https://live-hls-web-aje.getaj.net/AJE/index.m3u8",
+    url: "https://amg01449-aljazeeramedianetw-aljazeeraenglish-us-5953.playouts.now.amagi.tv/playlist.m3u8",
     logo: "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/en/thumb/f/f2/Al_Jazeera_English_logo.svg/1200px-Al_Jazeera_English_logo.svg.png",
     group: "News",
     gemeinwohlCategory: "Nachrichten & Info",
@@ -312,6 +312,28 @@ export const FALLBACK_CHANNELS: Channel[] = [
     isRegional: false,
     isUnstable: false,
     currentProgram: "Live: i24News",
+  },
+  {
+    id: "asian-one-champ",
+    name: "ONE Championship",
+    url: "https://onechampionship.amagi.tv/playlist.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/ONE_Championship_logo.svg/200px-ONE_Championship_logo.svg.png",
+    group: "Sports",
+    gemeinwohlCategory: "Asia Pacific",
+    isRegional: true,
+    isUnstable: false,
+    currentProgram: "Live: ONE Championship",
+  },
+  {
+    id: "asian-fight-net",
+    name: "Fight Network",
+    url: "https://fightnetwork.amagi.tv/playlist.m3u8",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/UEFA_Champions_League_logo_2.svg/200px-UEFA_Champions_League_logo_2.svg.png",
+    group: "Sports",
+    gemeinwohlCategory: "Asia Pacific",
+    isRegional: true,
+    isUnstable: false,
+    currentProgram: "Live: Fight Network",
   },
 ];
 

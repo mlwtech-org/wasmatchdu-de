@@ -214,9 +214,22 @@ export const LivePlayer: React.FC = () => {
 
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
-          setIsBuffering(false);
-          hls.destroy();
-          setError("STREAM_OFFLINE");
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.log("fatal network error encountered, try to recover");
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log("fatal media error encountered, try to recover");
+              hls.recoverMediaError();
+              break;
+            default:
+              // cannot recover
+              setIsBuffering(false);
+              hls.destroy();
+              setError("STREAM_OFFLINE");
+              break;
+          }
         }
       });
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {

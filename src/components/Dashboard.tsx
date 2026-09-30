@@ -169,6 +169,8 @@ export const Dashboard: React.FC = () => {
     }
   };
 
+  const [activeRegion, setActiveRegion] = useState("Global (Auto)");
+
   const filteredChannels = useMemo(() => {
     return channels.filter((channel) => {
       // Hide unstable channels unless the user wants to see them
@@ -176,6 +178,19 @@ export const Dashboard: React.FC = () => {
 
       if (kidsMode && channel.gemeinwohlCategory !== "Kinder & Familie")
         return false;
+
+      // Region filtering
+      if (activeRegion !== "Global (Auto)") {
+        const cat = channel.gemeinwohlCategory || "";
+        // Only show if the channel is explicitly part of the selected region
+        if (
+          !cat.toLowerCase().includes(activeRegion.toLowerCase()) &&
+          !cat.toLowerCase().includes("global")
+        ) {
+          return false;
+        }
+      }
+
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         channel.name.toLowerCase().includes(searchLower) ||
@@ -183,7 +198,7 @@ export const Dashboard: React.FC = () => {
           channel.gemeinwohlCategory.toLowerCase().includes(searchLower));
       return matchesSearch;
     });
-  }, [channels, searchQuery, kidsMode, showUnstableChannels]);
+  }, [channels, searchQuery, kidsMode, showUnstableChannels, activeRegion]);
 
   // Feed intelligence based on active profile
   const { smartFeed } = useSmartFeed(
@@ -847,18 +862,21 @@ export const Dashboard: React.FC = () => {
             </div>
             <div className="space-y-3">
               {["Global (Auto)", "Europe", "North America", "Asia Pacific"].map(
-                (region, i) => (
+                (region) => (
                   <button
                     key={region}
-                    onClick={() => setIsRegionModalOpen(false)}
+                    onClick={() => {
+                      setActiveRegion(region);
+                      setIsRegionModalOpen(false);
+                    }}
                     className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${
-                      i === 0
+                      activeRegion === region
                         ? "bg-blue-600/20 border-blue-500 text-white"
                         : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:border-slate-600"
                     }`}
                   >
                     <span className="font-medium">{region}</span>
-                    {i === 0 && (
+                    {activeRegion === region && (
                       <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                     )}
                   </button>
