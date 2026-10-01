@@ -182,9 +182,12 @@ export const Dashboard: React.FC = () => {
       // Region filtering
       if (activeRegion !== "Global (Auto)") {
         const cat = channel.gemeinwohlCategory || "";
+        const channelRegion =
+          (channel as unknown as { region?: string }).region || "";
         // Only show if the channel is explicitly part of the selected region
         if (
           !cat.toLowerCase().includes(activeRegion.toLowerCase()) &&
+          !channelRegion.toLowerCase().includes(activeRegion.toLowerCase()) &&
           !cat.toLowerCase().includes("global")
         ) {
           return false;

@@ -6,12 +6,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const FAST_SOURCES = [
-  { id: "iptv-us", name: "Live TV (US)", url: "https://iptv-org.github.io/iptv/countries/us.m3u", provider: "Public IPTV" },
-  { id: "iptv-uk", name: "Live TV (UK)", url: "https://iptv-org.github.io/iptv/countries/uk.m3u", provider: "Public IPTV" },
-  { id: "iptv-in", name: "Live TV (IN)", url: "https://iptv-org.github.io/iptv/countries/in.m3u", provider: "Public IPTV" },
-  { id: "iptv-au", name: "Live TV (AU)", url: "https://iptv-org.github.io/iptv/countries/au.m3u", provider: "Public IPTV" },
-  { id: "iptv-ca", name: "Live TV (CA)", url: "https://iptv-org.github.io/iptv/countries/ca.m3u", provider: "Public IPTV" },
-  { id: "iptv-de", name: "Live TV (DE)", url: "https://iptv-org.github.io/iptv/countries/de.m3u", provider: "Public IPTV" }
+  { id: "iptv-us", name: "Live TV (US)", url: "https://iptv-org.github.io/iptv/countries/us.m3u", provider: "Public IPTV", region: "North America" },
+  { id: "iptv-uk", name: "Live TV (UK)", url: "https://iptv-org.github.io/iptv/countries/uk.m3u", provider: "Public IPTV", region: "Europe" },
+  { id: "iptv-in", name: "Live TV (IN)", url: "https://iptv-org.github.io/iptv/countries/in.m3u", provider: "Public IPTV", region: "Asia Pacific" },
+  { id: "iptv-au", name: "Live TV (AU)", url: "https://iptv-org.github.io/iptv/countries/au.m3u", provider: "Public IPTV", region: "Asia Pacific" },
+  { id: "iptv-ca", name: "Live TV (CA)", url: "https://iptv-org.github.io/iptv/countries/ca.m3u", provider: "Public IPTV", region: "North America" },
+  { id: "iptv-de", name: "Live TV (DE)", url: "https://iptv-org.github.io/iptv/countries/de.m3u", provider: "Public IPTV", region: "Europe" }
 ];
 
 const targetDir = path.join(__dirname, '..', 'public');
@@ -32,7 +32,7 @@ const generateId = (str) => {
 
 const NSFW_TERMS = ["xxx", "porn", "adult", "18+", "onlyfans", "playboy", "hustler", "x-rated", "nsfw"];
 
-const parseM3U = (m3uContent, providerName) => {
+const parseM3U = (m3uContent, providerName, sourceRegion) => {
   const lines = m3uContent.split("\n");
   const channels = [];
   let currentChannel = {};
@@ -66,7 +66,8 @@ const parseM3U = (m3uContent, providerName) => {
         logo: logoMatch ? logoMatch[1] : "",
         group,
         name,
-        isRegional: false,
+        isRegional: true,
+        region: sourceRegion || "Global (Auto)",
         gemeinwohlCategory,
         isUnstable: false,
         provider: providerName,
@@ -106,7 +107,7 @@ async function aggregateFeeds() {
       const res = await fetch(source.url);
       if (!res.ok) continue;
       const text = await res.text();
-      const parsedChannels = parseM3U(text, source.provider);
+      const parsedChannels = parseM3U(text, source.provider, source.region);
       
       for (const ch of parsedChannels) {
         if (!uniqueUrls.has(ch.url)) {
