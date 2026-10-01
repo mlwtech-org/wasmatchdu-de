@@ -53,9 +53,18 @@ export const useFetchChannels = () => {
       try {
         let allChannels: Channel[] = [];
 
-        // Fetch pre-aggregated static JSON for instant load
-        const res = await fetch("/channels.json");
-        if (res.ok) {
+        // Fetch from the data branch to get the freshest dynamically updated channels
+        let res = await fetch(
+          "https://raw.githubusercontent.com/mlwtech-org/wasmatchdu-de/data/public/channels.json?t=" +
+            Date.now(),
+        ).catch(() => null);
+
+        // Fallback to local if the remote branch isn't available or fails
+        if (!res || !res.ok) {
+          res = await fetch("/channels.json");
+        }
+
+        if (res && res.ok) {
           allChannels = await res.json();
         } else {
           console.warn(
