@@ -211,13 +211,20 @@ export const LivePlayer: React.FC = () => {
           video.play();
         });
       });
-
+      let retryCount = 0;
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
               console.log("fatal network error encountered, try to recover");
-              hls.startLoad();
+              if (retryCount < 2) {
+                retryCount++;
+                hls.startLoad();
+              } else {
+                setIsBuffering(false);
+                hls.destroy();
+                setError("STREAM_OFFLINE");
+              }
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
               console.log("fatal media error encountered, try to recover");

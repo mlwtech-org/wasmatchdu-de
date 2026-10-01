@@ -6,11 +6,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const FAST_SOURCES = [
-  { id: "pluto-us", name: "Pluto TV (US)", url: "https://i.mjh.nz/PlutoTV/us.m3u8", provider: "Pluto TV" },
-  { id: "samsung-us", name: "Samsung TV Plus (US)", url: "https://i.mjh.nz/SamsungTVPlus/us.m3u8", provider: "Samsung TV+" },
-  { id: "plex-us", name: "Plex Live TV", url: "https://i.mjh.nz/Plex/us.m3u8", provider: "Plex" },
-  { id: "roku-us", name: "Roku Channel", url: "https://i.mjh.nz/Roku/us.m3u8", provider: "Roku" },
-  { id: "tubi-us", name: "Tubi Live", url: "https://i.mjh.nz/Tubi/us.m3u8", provider: "Tubi" },
+  { id: "iptv-us", name: "Live TV (US)", url: "https://iptv-org.github.io/iptv/countries/us.m3u", provider: "Public IPTV" },
+  { id: "iptv-uk", name: "Live TV (UK)", url: "https://iptv-org.github.io/iptv/countries/uk.m3u", provider: "Public IPTV" },
+  { id: "iptv-in", name: "Live TV (IN)", url: "https://iptv-org.github.io/iptv/countries/in.m3u", provider: "Public IPTV" },
+  { id: "iptv-au", name: "Live TV (AU)", url: "https://iptv-org.github.io/iptv/countries/au.m3u", provider: "Public IPTV" },
+  { id: "iptv-ca", name: "Live TV (CA)", url: "https://iptv-org.github.io/iptv/countries/ca.m3u", provider: "Public IPTV" },
   { id: "iptv-de", name: "Live TV (DE)", url: "https://iptv-org.github.io/iptv/countries/de.m3u", provider: "Public IPTV" }
 ];
 
@@ -76,12 +76,7 @@ const parseM3U = (m3uContent, providerName) => {
       currentChannel.id = generateId(line);
       
       const urlLower = line.toLowerCase();
-      let isBlocked =
-        urlLower.includes("pluto.tv") ||
-        urlLower.includes("pluto") ||
-        urlLower.includes("dazn") ||
-        urlLower.includes("rakuten") ||
-        urlLower.includes("samsung");
+      let isBlocked = false;
         
       if (
         currentChannel.name &&
