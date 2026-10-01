@@ -71,7 +71,7 @@ export const FALLBACK_CHANNELS: Channel[] = [
     currentProgram: "Live: CBS News",
   },
   {
-    id: "verified-cgtn",
+    id: "verified-skynews",
     name: "Sky News",
     url: "https://skynewsau-live.akamaized.net/hls/live/2002689/skynewsau-extra1/master.m3u8",
     logo: "https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/en/thumb/e/ef/Sky_News_Australia_logo_%282017%29.svg/1200px-Sky_News_Australia_logo_%282017%29.svg.png",

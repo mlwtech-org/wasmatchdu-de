@@ -182,6 +182,8 @@ export const LivePlayer: React.FC = () => {
 
   useEffect(() => {
     if (!streamId) return;
+    setError(null);
+    setIsBuffering(true);
     setIsPreRollPlaying(true);
     const genre = currentChannelObj?.group || "Default";
     const bumper = GENRE_BUMPERS[genre] || GENRE_BUMPERS["Default"];
@@ -249,7 +251,18 @@ export const LivePlayer: React.FC = () => {
       });
     }
 
+    const bufferingTimeout = setTimeout(() => {
+      setIsBuffering(false);
+      setError("STREAM_OFFLINE");
+      if (hls) hls.destroy();
+    }, 12000); // 12 second timeout for geo-blocked/cors spinning streams
+
+    const clearBufferingTimeout = () => clearTimeout(bufferingTimeout);
+    video.addEventListener("playing", clearBufferingTimeout);
+
     return () => {
+      clearTimeout(bufferingTimeout);
+      video.removeEventListener("playing", clearBufferingTimeout);
       if (hls) hls.destroy();
     };
   }, [streamId, playbackUrl, isPreRollPlaying]);
