@@ -56,6 +56,13 @@
     "isRegional": false
   },
   {
+    "id": "1TwenteTV.nl",
+    "name": "1Twente TV",
+    "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "2GB.au",
     "name": "2GB",
     "url": "https://2gblive.akamaized.net/hls/live/2033805/2GB/index.m3u8",
@@ -231,13 +238,6 @@
     "isRegional": false
   },
   {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
-    "isRegional": false
-  },
-  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -304,6 +304,13 @@
     "id": "4SiDESTV.in",
     "name": "4 SiDES TV",
     "url": "https://stream.ottlive.co.in/4sidestv/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "4TVNews.in",
+    "name": "4TV News",
+    "url": "http://51.75.127.199:3141/4tv/index.m3u8",
     "group": "news",
     "isRegional": false
   },
@@ -409,13 +416,6 @@
     "id": "7SMusic.in",
     "name": "7S Music",
     "url": "https://cdn.pishow.tv/ott/live/1257/master.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "7SMusic.in",
-    "name": "7S Music",
-    "url": "https://mumbai-edge.smartplaytv.in/7SMusic/index.m3u8",
     "group": "music",
     "isRegional": false
   }
