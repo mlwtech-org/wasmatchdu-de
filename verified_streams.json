@@ -56,6 +56,13 @@
     "isRegional": false
   },
   {
+    "id": "1TwenteTV.nl",
+    "name": "1Twente TV",
+    "url": "https://ms7.mx-cd.net/dtv-11/198-989148/1Twente_TV.smil/chunklist_w954512639_b4292608_slNLD.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "2GB.au",
     "name": "2GB",
     "url": "https://2gblive.akamaized.net/hls/live/2033805/2GB/index.m3u8",
@@ -77,13 +84,6 @@
     "isRegional": false
   },
   {
-    "id": "2Plus2Marathon.ua",
-    "name": "2+2 Marathon",
-    "url": "https://lowa8026-cmyk.github.io/Ukraine/Edyni_Novyny/2Plus2Marafon.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "2TV.ge",
     "name": "2 TV",
     "url": "https://tv.cdn.xsg.ge/gpb-2tv/index.m3u8",
@@ -94,13 +94,6 @@
     "id": "2x2.ru",
     "name": "2x2",
     "url": "http://stream.mcquack.net/187/index.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "2x2.ru",
-    "name": "2x2",
-    "url": "http://flussonic.mkpnet.ru/tv-17540fb90079a865/video.m3u8",
     "group": "entertainment",
     "isRegional": false
   },
