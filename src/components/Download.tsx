@@ -44,8 +44,7 @@ export const Download = () => {
             <h3 className="text-2xl font-bold mb-2">Windows</h3>
             <p className="text-slate-400 mb-8 text-sm">Download the native desktop application (.exe) for Windows 10/11.</p>
             <a 
-              href="/JanataTv-Setup.exe" 
-              download
+              href="https://github.com/mlwtech-org/wasmatchdu-de/releases/latest/download/JanataTv-Setup.exe" 
               className="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-colors"
             >
               <DownloadIcon className="w-5 h-5" />
@@ -61,8 +60,7 @@ export const Download = () => {
             <h3 className="text-2xl font-bold mb-2">Android</h3>
             <p className="text-slate-400 mb-8 text-sm">Download the raw package file (.apk) to sideload on Android devices.</p>
             <a 
-              href="/JanataTv.apk" 
-              download
+              href="https://github.com/mlwtech-org/wasmatchdu-de/releases/latest/download/JanataTv.apk" 
               className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-xl transition-colors"
             >
               <DownloadIcon className="w-5 h-5" />
@@ -95,11 +93,10 @@ export const Download = () => {
         </div>
 
         <div className="mt-16 bg-slate-900/50 border border-slate-800 rounded-2xl p-6">
-          <h4 className="text-lg font-bold mb-2 text-slate-300">Developer Note on App Updates:</h4>
+          <h4 className="text-lg font-bold mb-2 text-slate-300">Automated App Updates:</h4>
           <p className="text-slate-400 text-sm">
-            To ensure these .exe and .apk files stay up-to-date automatically, the best approach is to configure a <strong>GitHub Actions CI/CD pipeline</strong>. 
-            GitHub Actions provides cloud-based build servers with pre-installed Android SDKs (Java 17) and Windows C++ build tools, which bypasses local machine environment limitations. 
-            Currently, these download buttons provide placeholder files until the automated cloud build pipeline is activated.
+            These .exe and .apk files are built automatically via our <strong>GitHub Actions CI/CD pipeline</strong>. 
+            Every time a new version is released on GitHub, cloud servers automatically compile a fresh, clean binary using the latest Android SDKs and Windows build tools, and attach them directly to this download page.
           </p>
         </div>
       </main>
