@@ -14,7 +14,7 @@ export const Homepage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 font-sans selection:bg-primary/30">
       {/* Header */}
-      <header className="container mx-auto px-6 py-6 flex justify-between items-center relative z-10">
+      <header className="container mx-auto px-6 py-6 flex justify-between items-center relative z-50">
         <div className="flex items-center gap-2 text-2xl md:text-3xl font-black tracking-tighter text-white">
           <img
             src="/logo.png"
