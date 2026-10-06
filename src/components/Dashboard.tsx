@@ -712,6 +712,12 @@ export const Dashboard: React.FC = () => {
         <RadioHub />
       ) : (
         <>
+
+          {/* Top Ad Banner */}
+          <div className="w-full max-w-[1600px] mx-auto pt-24 px-4 z-[90] relative">
+            <AdBanner />
+          </div>
+
           {/* Premium Hero Banner */}
           <div className="relative w-full z-40 bg-black mt-16 max-w-[1600px] mx-auto shadow-2xl">
             <HeroBanner />
