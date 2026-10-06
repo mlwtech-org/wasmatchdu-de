@@ -163,6 +163,13 @@
   {
     "id": "3ABNLatino.us",
     "name": "3ABN Latino",
+    "url": "http://138.59.177.78:9999/play/a0a3/index.m3u8",
+    "group": "religious",
+    "isRegional": false
+  },
+  {
+    "id": "3ABNLatino.us",
+    "name": "3ABN Latino",
     "url": "https://3abn.bozztv.com/3abn2/Lat_live/smil:Lat_live.smil/playlist.m3u8",
     "group": "religious",
     "isRegional": false
@@ -270,6 +277,13 @@
     "name": "4ever Theater",
     "url": "http://stream.mcquack.net/259/index.m3u8",
     "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "4FunDance.pl",
+    "name": "4 Fun Dance",
+    "url": "http://92.114.85.87:8018/play/a00k/index.m3u8",
+    "group": "music",
     "isRegional": false
   },
   {
@@ -396,20 +410,6 @@
     "name": "7 News",
     "url": "https://sscsott.com/7news/live/index.m3u8",
     "group": "news",
-    "isRegional": false
-  },
-  {
-    "id": "7SMusic.in",
-    "name": "7S Music",
-    "url": "https://mumt03.tangotv.in/Dsly5z3H7SMUSIC/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "7SMusic.in",
-    "name": "7S Music",
-    "url": "https://cdn.pishow.tv/ott/live/1257/master.m3u8",
-    "group": "music",
     "isRegional": false
   }
 ]
