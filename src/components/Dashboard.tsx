@@ -23,7 +23,7 @@ import {
   Grid,
   Globe2,
   Baby,
-  MonitorPlay, Download, Smartphone, Monitor,
+  MonitorPlay, Smartphone, Monitor,
   Settings,
   Download,
   AlertTriangle,
