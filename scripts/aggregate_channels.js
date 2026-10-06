@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import https from 'https';
+import http from 'http';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,9 +80,7 @@ const parseM3U = (m3uContent, providerName, sourceRegion) => {
       currentChannel.url = line;
       currentChannel.id = generateId(line);
       
-      const urlLower = line.toLowerCase();
       let isBlocked = false;
-        
       if (
         currentChannel.name &&
         (currentChannel.name.toLowerCase().includes("geo-blocked") ||
@@ -91,7 +91,6 @@ const parseM3U = (m3uContent, providerName, sourceRegion) => {
       }
       
       currentChannel.isUnstable = isBlocked;
-
       channels.push({ ...currentChannel });
       currentChannel = {};
     }
@@ -99,9 +98,24 @@ const parseM3U = (m3uContent, providerName, sourceRegion) => {
   return channels;
 };
 
+// Extremely fast liveness check: just abort immediately on response headers
+async function checkStreamReachable(url) {
+  return new Promise((resolve) => {
+    const isHttps = url.startsWith('https');
+    const client = isHttps ? https : http;
+    const req = client.request(url, { method: 'GET', timeout: 3500 }, (res) => {
+      req.destroy(); // Abort downloading video chunks
+      resolve(res.statusCode >= 200 && res.statusCode < 400);
+    });
+    req.on('error', () => resolve(false));
+    req.on('timeout', () => { req.destroy(); resolve(false); });
+    req.end();
+  });
+}
+
 async function aggregateFeeds() {
   console.log("Downloading and aggregating feeds...");
-  let allChannels = [];
+  let rawChannels = [];
   const uniqueUrls = new Set();
 
   for (const source of FAST_SOURCES) {
@@ -114,7 +128,7 @@ async function aggregateFeeds() {
       for (const ch of parsedChannels) {
         if (!uniqueUrls.has(ch.url)) {
           uniqueUrls.add(ch.url);
-          allChannels.push(ch);
+          rawChannels.push(ch);
         }
       }
       console.log(`Parsed ${parsedChannels.length} channels from ${source.name}`);
@@ -123,8 +137,29 @@ async function aggregateFeeds() {
     }
   }
 
-  console.log(`Writing ${allChannels.length} total channels to public/channels.json`);
-  fs.writeFileSync(path.join(targetDir, 'channels.json'), JSON.stringify(allChannels, null, 2));
+  console.log(`\nValidating ${rawChannels.length} streams for 100% liveness... (This may take a minute)`);
+  
+  const MAX_CONCURRENCY = 100; // Check 100 at a time
+  const verifiedChannels = [];
+  
+  for (let i = 0; i < rawChannels.length; i += MAX_CONCURRENCY) {
+    const batch = rawChannels.slice(i, i + MAX_CONCURRENCY);
+    const results = await Promise.all(batch.map(async (ch) => {
+      // If it's already marked as unstable, we can skip it or double check it.
+      // For maximum reliability, we only keep it if checkStreamReachable is true.
+      const isAlive = await checkStreamReachable(ch.url);
+      return isAlive ? ch : null;
+    }));
+    
+    for (const r of results) {
+      if (r) verifiedChannels.push(r);
+    }
+    process.stdout.write(`\rProgress: ${Math.min(i + MAX_CONCURRENCY, rawChannels.length)} / ${rawChannels.length}`);
+  }
+
+  console.log(`\nValidation complete. Kept ${verifiedChannels.length} highly reliable channels out of ${rawChannels.length}.`);
+  console.log(`Writing ${verifiedChannels.length} total channels to public/channels.json`);
+  fs.writeFileSync(path.join(targetDir, 'channels.json'), JSON.stringify(verifiedChannels, null, 2));
 }
 
 aggregateFeeds();
