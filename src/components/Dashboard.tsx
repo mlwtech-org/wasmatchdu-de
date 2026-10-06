@@ -642,11 +642,7 @@ export const Dashboard: React.FC = () => {
               <button
                 data-focusable="true"
                 onClick={() => {
-                  if (user?.isPro) {
-                    toggleProxy();
-                  } else {
-                    setIsProUpgradeModalOpen(true);
-                  }
+                  toggleProxy();
                 }}
                 className={cn(
                   "w-10 h-5 rounded-full transition-colors relative",
