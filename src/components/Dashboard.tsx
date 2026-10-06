@@ -423,11 +423,7 @@ export const Dashboard: React.FC = () => {
                 </button>
                 <button
                   onClick={() => {
-                    if (user?.isPro) {
-                      toggleProxy();
-                    } else {
-                      setIsProUpgradeModalOpen(true);
-                    }
+                    toggleProxy();
                   }}
                   className={`flex items-center justify-between w-full px-3 py-2 ${useProxy ? "bg-amber-500/10 hover:bg-amber-500/20" : "bg-slate-800/80 hover:bg-slate-700"} text-slate-200 rounded-lg text-sm font-medium transition-colors border ${useProxy ? "border-amber-500/30" : "border-slate-700/50"} group`}
                 >
@@ -439,7 +435,7 @@ export const Dashboard: React.FC = () => {
                   </div>
                   {!isSidebarCollapsed && (
                     <span className="text-[10px] font-bold bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded uppercase tracking-wider border border-amber-500/30">
-                      {useProxy ? "On" : "Pro"}
+                      {useProxy ? "On" : "Off"}
                     </span>
                   )}
                 </button>

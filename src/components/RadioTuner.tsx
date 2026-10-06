@@ -5,19 +5,22 @@ import { Radio, ChevronUp, ChevronDown, Activity, Play } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const RadioTuner: React.FC = () => {
-  const { channels, globalChannels } = usePlayerStore();
+  const { channels, globalChannels, showUnstableChannels } = usePlayerStore();
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Combine and sort channels by popularity (Viewer Count)
   const tunedChannels = useMemo(() => {
-    const allChannels = [...channels, ...globalChannels];
+    let allChannels = [...channels, ...globalChannels];
+    if (!showUnstableChannels) {
+      allChannels = allChannels.filter((c) => !c.isUnstable);
+    }
     const unique = Array.from(
       new Map(allChannels.map((c) => [c.id, c])).values(),
     );
     return unique.sort((a, b) => getViewerCount(b.id) - getViewerCount(a.id));
-  }, [channels, globalChannels]);
+  }, [channels, globalChannels, showUnstableChannels]);
 
   const currentIndex = tunedChannels.findIndex((c) => c.id === streamId);
 
