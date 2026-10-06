@@ -714,7 +714,7 @@ export const Dashboard: React.FC = () => {
         <>
 
           {/* Top Ad Banner */}
-          <div className="w-full max-w-[1600px] mx-auto pt-24 px-4 z-[90] relative">
+          <div className="w-full max-w-[1600px] mx-auto mt-20 px-4 relative z-10">
             <AdBanner />
           </div>
 

@@ -108,6 +108,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const { t } = useTranslation();
 
   // Use premium curated channels first; fall back to passed channels if needed
   const channels =
@@ -271,7 +272,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ featuredChannels }) => {
                 }}
               >
                 <Radio className="w-3 h-3" />
-                {headline}
+                {t(`categories.${headline}`, { defaultValue: headline })}
               </span>
             </div>
 
