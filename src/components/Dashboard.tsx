@@ -716,7 +716,7 @@ export const Dashboard: React.FC = () => {
           <div className="relative w-full z-40 bg-black mt-16 max-w-[1600px] mx-auto shadow-2xl">
             <HeroBanner />
           </div>
-        <div className="px-6 lg:px-8 max-w-7xl mx-auto"><AdBanner /></div>
+        
 
           {/* Main Content: Channel Shelves */}
           <main className="relative z-50 pb-24 transition-all duration-500 max-w-[1600px] mx-auto w-full -mt-8 md:-mt-16">
