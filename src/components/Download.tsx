@@ -1,4 +1,3 @@
-import React from 'react';
 import { Download as DownloadIcon, Smartphone, Monitor, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { usePWAInstall } from '../hooks/usePWAInstall';
