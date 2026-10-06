@@ -545,7 +545,7 @@ export const Dashboard: React.FC = () => {
                   : "text-slate-300 hover:bg-slate-900 hover:text-white",
               )}
             >
-              <MonitorPlay className="w-5 h-5" /> Global Surf
+              <MonitorPlay className="w-5 h-5" /> Premier Surf
             </button>
           </div>
 

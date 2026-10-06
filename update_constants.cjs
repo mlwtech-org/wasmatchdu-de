@@ -1,0 +1,80 @@
+const fs = require('fs');
+let content = fs.readFileSync('src/lib/constants.ts', 'utf8');
+const start = content.indexOf('export const FALLBACK_CHANNELS: Channel[] = [');
+const end = content.indexOf('];', start) + 2;
+const newArr = `export const FALLBACK_CHANNELS: Channel[] = [
+  {
+    id: "verified-ndtv",
+    name: "NDTV 24x7",
+    url: "https://raw.githubusercontent.com/amazeyourself/adaptive-streams/refs/heads/main/streams/in/YuppTV/NDTV24x7.m3u8",
+    logo: "https://dtil.tmsimg.com/assets/s154895_ld_h15_aa.png?lock=720x540",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: NDTV 24x7",
+  },
+  {
+    id: "verified-aajtak",
+    name: "Aaj Tak",
+    url: "http://103.213.31.109:90/AajtakHD/playlist.m3u8",
+    logo: "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_AAJ_TAK/images/LOGO_HD/image.png",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: Aaj Tak",
+  },
+  {
+    id: "verified-indiatoday",
+    name: "India Today",
+    url: "https://d1rc86nwwc9fag.cloudfront.net/vglive-sk-293160/master.m3u8",
+    logo: "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_INDIA_TODAY/images/LOGO_HD/image.png",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: India Today",
+  },
+  {
+    id: "verified-zeenews",
+    name: "Zee News",
+    url: "https://dknttpxmr0dwf.cloudfront.net/index_57.m3u8",
+    logo: "https://dtil.tmsimg.com/assets/GNLZZGG0023VWYC.png?lock=720x540",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: Zee News",
+  },
+  {
+    id: "verified-republic",
+    name: "Republic Bangla",
+    url: "https://vg-republictvlive.akamaized.net/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/main.m3u8",
+    logo: "https://xstreamcp-assets-msp.streamready.in/assets/LIVETV/LIVECHANNEL/LIVETV_LIVETVCHANNEL_RSYMDOT_BANGLA/images/LOGO_HD/image.png",
+    group: "News",
+    gemeinwohlCategory: "Nachrichten & Info",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: Republic TV",
+  },
+  {
+    id: "verified-ddnational",
+    name: "DD National",
+    url: "http://107.167.16.138/ddnational/index.m3u8?token=test",
+    logo: "https://ltsk-cdn.s3.eu-west-1.amazonaws.com/jumpstart/Temp_Live/cdn/HLS/Channel/transparentImages/DD%20National.png",
+    group: "Entertainment",
+    gemeinwohlCategory: "Unterhaltung",
+    isRegional: true,
+    region: "India",
+    isUnstable: false,
+    currentProgram: "Live: DD National",
+  }
+];`;
+content = content.substring(0, start) + newArr + content.substring(end);
+fs.writeFileSync('src/lib/constants.ts', content);
