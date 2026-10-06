@@ -418,7 +418,7 @@ export const Dashboard: React.FC = () => {
                     {!isSidebarCollapsed && <span>Region</span>}
                   </div>
                   {!isSidebarCollapsed && (
-                    <span className="text-xs text-slate-400">Global</span>
+                    <span className="text-xs text-slate-400">{activeRegion === "Global (Auto)" ? "Global" : activeRegion}</span>
                   )}
                 </button>
                 <button
