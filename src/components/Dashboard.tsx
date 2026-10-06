@@ -23,7 +23,7 @@ import {
   Grid,
   Globe2,
   Baby,
-  MonitorPlay, Download, Smartphone, Monitor,
+  MonitorPlay, Smartphone, Monitor,
   Settings,
   Download,
   AlertTriangle,
@@ -32,6 +32,8 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { AdBanner } from "./AdBanner";
+import { SubscribeOverlay } from "./SubscribeOverlay";
 import { auth } from "../lib/firebase";
 import { AVATARS } from "../lib/avatars";
 import { usePWAInstall } from "../hooks/usePWAInstall";
