@@ -66,6 +66,9 @@ const EarthCamViewer = lazy(() =>
 const Legal = lazy(() =>
   import("./components/Legal").then((m) => ({ default: m.Legal })),
 );
+const Download = lazy(() =>
+  import("./components/Download").then((m) => ({ default: m.Download })),
+);
 
 const PageLoader = () => (
   <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -180,6 +183,7 @@ function App() {
               }
             />
             <Route path="/legal" element={<Legal />} />
+            <Route path="/download" element={<Download />} />
           </Routes>
           <MiniPlayer />
         </Suspense>
