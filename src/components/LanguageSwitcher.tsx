@@ -6,10 +6,15 @@ import { usePlayerStore } from '../store/usePlayerStore';
 
 const LANGUAGES = [
   { code: 'en', label: 'English' },
-  { code: 'de', label: 'Deutsch' },
-  { code: 'es', label: 'Español' },
-  { code: 'fr', label: 'Français' },
-  { code: 'hi', label: 'हिन्दी' }
+  { code: 'hi', label: 'Hindi (हिन्दी)' },
+  { code: 'bn', label: 'Bengali (বাংলা)' },
+  { code: 'te', label: 'Telugu (తెలుగు)' },
+  { code: 'ta', label: 'Tamil (தமிழ்)' },
+  { code: 'mr', label: 'Marathi (मराठी)' },
+  { code: 'ml', label: 'Malayalam (മലയാളം)' },
+  { code: 'kn', label: 'Kannada (ಕನ್ನಡ)' },
+  { code: 'gu', label: 'Gujarati (ગુજરાતી)' },
+  { code: 'ur', label: 'Urdu (اردو)' }
 ];
 
 export const LanguageSwitcher: React.FC = () => {
