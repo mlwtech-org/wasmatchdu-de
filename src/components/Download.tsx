@@ -6,7 +6,6 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Download = () => {
   const { isInstallable, promptInstall } = usePWAInstall();
-  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-500/30 flex flex-col">
