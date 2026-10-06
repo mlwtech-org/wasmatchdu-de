@@ -332,7 +332,7 @@ export const Dashboard: React.FC = () => {
               data-focusable="true"
               onClick={() => navigate("/view-space")}
               className="hidden sm:flex items-center gap-2 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 px-3 py-1.5 md:px-4 rounded-full font-bold transition-all text-sm border border-purple-500/20 whitespace-nowrap shrink-0"
-              title="My Space"
+              title={t("dashboard.mySpace", { defaultValue: "My Space" })}
             >
               <Sparkles className="w-4 h-4" />
               <span className="hidden md:inline">My Space</span>
@@ -766,7 +766,7 @@ export const Dashboard: React.FC = () => {
                 {/* Verified Reliable Channels */}
                 {!searchQuery && !kidsMode && (
                   <ChannelRow
-                    title="Top Picks for You"
+                    title={t("dashboard.topPicks", { defaultValue: "Top Picks for You" })}
                     channels={FALLBACK_CHANNELS}
                   />
                 )}
@@ -774,7 +774,7 @@ export const Dashboard: React.FC = () => {
                 {/* Live Events Now */}
                 {!searchQuery && !kidsMode && liveEventsChannels.length > 0 && (
                   <ChannelRow
-                    title="🔴 Live Events & Breaking News"
+                    title={t("dashboard.liveEvents", { defaultValue: "🔴 Live Events & Breaking News" })}
                     channels={liveEventsChannels}
                   />
                 )}
@@ -785,7 +785,7 @@ export const Dashboard: React.FC = () => {
                   trendingEnabled &&
                   trendingChannels.length > 0 && (
                     <ChannelRow
-                      title="🔥 Trending Now"
+                      title={t("dashboard.trendingNow", { defaultValue: "🔥 Trending Now" })}
                       channels={trendingChannels}
                       isTrending={true}
                     />
@@ -796,7 +796,7 @@ export const Dashboard: React.FC = () => {
                   !kidsMode &&
                   usePlayerStore.getState().recentlyWatched.length > 0 && (
                     <ChannelRow
-                      title="Recently Watched"
+                      title={t("dashboard.recentlyWatched", { defaultValue: "Recently Watched" })}
                       channels={usePlayerStore
                         .getState()
                         .recentlyWatched.map((id) =>
