@@ -28,8 +28,8 @@ export const VoiceOverlay: React.FC<VoiceOverlayProps> = ({
       SpeechRecognition: unknown;
       webkitSpeechRecognition: unknown;
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const SpeechRecognition = (win.SpeechRecognition ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       win.webkitSpeechRecognition) as new () => any;
 
     if (!SpeechRecognition) {

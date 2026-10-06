@@ -192,7 +192,7 @@ export function useLiveTranslation(
         window.speechSynthesis.cancel();
       recognition.stop();
     };
-  }, [enabled, sourceLang, targetLang]);
+  }, [enabled, sourceLang, targetLang, speakAloud]);
 
   return translatedText;
 }

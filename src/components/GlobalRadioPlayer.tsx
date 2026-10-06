@@ -23,7 +23,7 @@ export const GlobalRadioPlayer: React.FC = () => {
     if (currentChannel && isPlaying) {
       setIsPlaying(false);
     }
-  }, [currentChannel]);
+  }, [currentChannel, isPlaying, setIsPlaying]);
 
   useEffect(() => {
     if (audioRef.current && currentStation) {
