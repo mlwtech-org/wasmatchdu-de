@@ -33,7 +33,7 @@ export const LivePlayer: React.FC = () => {
   const { streamId } = useParams<{ streamId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { channels, globalChannels, setMiniPlayerChannel } = usePlayerStore();
+  const { channels, globalChannels, setMiniPlayerChannel, useProxy } = usePlayerStore();
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -201,6 +201,11 @@ export const LivePlayer: React.FC = () => {
     if (Hls.isSupported()) {
       hls = new Hls({
         maxLiveSyncPlaybackRate: 1.5,
+        xhrSetup: function (xhr, url) {
+          if (useProxy && url.startsWith("http")) {
+            xhr.open("GET", "https://corsproxy.io/?" + encodeURIComponent(url), true);
+          }
+        },
       });
       hls.loadSource(hlsUrl);
       hls.attachMedia(video);
@@ -265,7 +270,7 @@ export const LivePlayer: React.FC = () => {
       video.removeEventListener("playing", clearBufferingTimeout);
       if (hls) hls.destroy();
     };
-  }, [streamId, playbackUrl, isPreRollPlaying]);
+  }, [streamId, playbackUrl, isPreRollPlaying, useProxy]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
