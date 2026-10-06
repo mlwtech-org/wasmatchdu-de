@@ -6,12 +6,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const FAST_SOURCES = [
-  { id: "iptv-us", name: "Live TV (US)", url: "https://iptv-org.github.io/iptv/countries/us.m3u", provider: "Public IPTV", region: "North America" },
-  { id: "iptv-uk", name: "Live TV (UK)", url: "https://iptv-org.github.io/iptv/countries/uk.m3u", provider: "Public IPTV", region: "Europe" },
-  { id: "iptv-in", name: "Live TV (IN)", url: "https://iptv-org.github.io/iptv/countries/in.m3u", provider: "Public IPTV", region: "Asia Pacific" },
-  { id: "iptv-au", name: "Live TV (AU)", url: "https://iptv-org.github.io/iptv/countries/au.m3u", provider: "Public IPTV", region: "Asia Pacific" },
-  { id: "iptv-ca", name: "Live TV (CA)", url: "https://iptv-org.github.io/iptv/countries/ca.m3u", provider: "Public IPTV", region: "North America" },
-  { id: "iptv-de", name: "Live TV (DE)", url: "https://iptv-org.github.io/iptv/countries/de.m3u", provider: "Public IPTV", region: "Europe" }
+  { id: "iptv-in", name: "Live TV (India)", url: "https://iptv-org.github.io/iptv/countries/in.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-hin", name: "Live TV (Hindi)", url: "https://iptv-org.github.io/iptv/languages/hin.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-tam", name: "Live TV (Tamil)", url: "https://iptv-org.github.io/iptv/languages/tam.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-tel", name: "Live TV (Telugu)", url: "https://iptv-org.github.io/iptv/languages/tel.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-mal", name: "Live TV (Malayalam)", url: "https://iptv-org.github.io/iptv/languages/mal.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-ben", name: "Live TV (Bengali)", url: "https://iptv-org.github.io/iptv/languages/ben.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-kan", name: "Live TV (Kannada)", url: "https://iptv-org.github.io/iptv/languages/kan.m3u", provider: "Public IPTV", region: "India" },
+  { id: "iptv-mar", name: "Live TV (Marathi)", url: "https://iptv-org.github.io/iptv/languages/mar.m3u", provider: "Public IPTV", region: "India" }
 ];
 
 const targetDir = path.join(__dirname, '..', 'public');

@@ -44,5 +44,5 @@ jobs:
         git checkout data 2>/dev/null || git checkout --orphan data
         git checkout main -- public/channels.json
         git add public/channels.json
-        git commit -m "chore: auto-update channels.json feed"
+        git commit -m "chore: auto-update channels.json feed" --no-verify || true
         git push origin data

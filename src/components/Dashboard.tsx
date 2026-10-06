@@ -169,7 +169,7 @@ export const Dashboard: React.FC = () => {
     }
   };
 
-  const [activeRegion, setActiveRegion] = useState("Global (Auto)");
+  const [activeRegion, setActiveRegion] = useState("India");
 
   const filteredChannels = useMemo(() => {
     return channels.filter((channel) => {
@@ -864,7 +864,7 @@ export const Dashboard: React.FC = () => {
               </h2>
             </div>
             <div className="space-y-3">
-              {["Global (Auto)", "Europe", "North America", "Asia Pacific"].map(
+              {["India", "Global (Auto)", "Europe", "North America", "Asia Pacific"].map(
                 (region) => (
                   <button
                     key={region}
