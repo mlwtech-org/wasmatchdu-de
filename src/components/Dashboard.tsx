@@ -33,7 +33,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { AdBanner } from "./AdBanner";
-import { SubscribeOverlay } from "./SubscribeOverlay";
 import { auth } from "../lib/firebase";
 import { AVATARS } from "../lib/avatars";
 import { usePWAInstall } from "../hooks/usePWAInstall";
