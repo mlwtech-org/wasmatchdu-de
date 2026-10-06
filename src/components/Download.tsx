@@ -1,7 +1,7 @@
 import { Download as DownloadIcon, Smartphone, Monitor, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { usePWAInstall } from '../hooks/usePWAInstall';
-import { useTranslation } from 'react-i18next';
+
 import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Download = () => {
