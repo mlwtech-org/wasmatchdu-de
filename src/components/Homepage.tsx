@@ -18,11 +18,11 @@ export const Homepage: React.FC = () => {
         <div className="flex items-center gap-2 text-2xl md:text-3xl font-black tracking-tighter text-white">
           <img
             src="/logo.png"
-            alt="WasMatchDu Logo"
+            alt="JanataTv Logo"
             className="h-8 md:h-10 w-auto drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
           />
           <span className="tracking-tighter text-white drop-shadow-md">
-            WasMatch<span className="text-cyan-400 font-light">Du</span>
+            Janata<span className="text-cyan-400 font-light">Tv</span>
           </span>
         </div>
         <nav className="hidden md:flex items-center gap-8 font-medium text-slate-300">

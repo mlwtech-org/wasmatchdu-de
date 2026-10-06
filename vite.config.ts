@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icon.png"],
       manifest: {
-        name: "WasMatchDu IPTV",
-        short_name: "WasMatchDu",
+        name: "JanataTv IPTV",
+        short_name: "JanataTv",
         description: "Streaming for the Common Good",
         theme_color: "#0f172a",
         background_color: "#0f172a",

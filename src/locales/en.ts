@@ -1,7 +1,7 @@
 export const en = {
   translation: {
     app: {
-      title: "WasMatchDu IPTV"
+      title: "JanataTv IPTV"
     },
     homepage: {
       features: "Features",
@@ -36,7 +36,7 @@ export const en = {
       bypassLogin: "Bypass Login (Dev Mode)"
     },
     dashboard: {
-      defaultTitle: "WasMatchDu Dashboard",
+      defaultTitle: "JanataTv Dashboard",
       selectChannel: "Select a channel to connect with your community.",
       seniorSafe: "Senior Safe",
       kidsMode: "Kids Mode",
@@ -52,7 +52,7 @@ export const en = {
       programGuide: "Program Guide",
       liveBroadcasting: "Live Broadcasting",
       youAreWatching: "You are watching",
-      providedForCommonGood: "Brought to you by WasMatchDu. Enjoy the program!"
+      providedForCommonGood: "Brought to you by JanataTv. Enjoy the program!"
     },
     categories: {
       "Filme & Serien": "Movies & Series",

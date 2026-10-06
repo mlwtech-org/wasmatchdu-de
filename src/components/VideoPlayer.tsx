@@ -310,7 +310,7 @@ export const VideoPlayer: React.FC = () => {
           debug: false,
           data: {
             env_key: envKey,
-            player_name: "WasMatchDu Player",
+            player_name: "JanataTv Player",
             player_init_time: Date.now(),
           },
         });
@@ -564,11 +564,11 @@ export const VideoPlayer: React.FC = () => {
       <div className="absolute top-6 right-6 z-20 flex items-center gap-3 pointer-events-none">
         <img
           src="/logo.png"
-          alt="WasMatchDu Icon"
+          alt="JanataTv Icon"
           className="w-10 md:w-12 h-10 md:h-12 drop-shadow-[0_0_15px_rgba(34,211,238,0.5)] object-contain"
         />
         <span className="text-xl md:text-2xl font-black tracking-tighter text-white drop-shadow-md">
-          WasMatch<span className="text-cyan-400 font-light">Du</span>
+          Janata<span className="text-cyan-400 font-light">Tv</span>
         </span>
       </div>
 

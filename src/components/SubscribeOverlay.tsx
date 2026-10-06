@@ -30,7 +30,7 @@ export const SubscribeOverlay: React.FC = () => {
             <Lock className="w-10 h-10 text-white -rotate-3" />
           </div>
           
-          <h2 className="text-3xl font-black text-white tracking-tight mb-2">WasMatchDu Premium</h2>
+          <h2 className="text-3xl font-black text-white tracking-tight mb-2">JanataTv Premium</h2>
           <p className="text-slate-400 mb-8 font-medium text-lg leading-relaxed">Subscribe to unlock live broadcasting and exclusive premium channels.</p>
           
           <div className="space-y-4 mb-8 text-left bg-slate-950/50 p-6 rounded-2xl border border-slate-800">
@@ -55,7 +55,7 @@ export const SubscribeOverlay: React.FC = () => {
             {isProcessing ? (
               <><Loader2 className="w-6 h-6 animate-spin" /> Preparing Checkout...</>
             ) : (
-              <><CreditCard className="w-6 h-6" /> Subscribe for $9.99/mo</>
+              <><CreditCard className="w-6 h-6" /> Subscribe for ₹99/mo</>
             )}
           </button>
         </div>

@@ -276,12 +276,12 @@ export const Dashboard: React.FC = () => {
               <div className="relative w-7 h-7">
                 <img
                   src="/icon.png"
-                  alt="WasMatchDu Logo"
+                  alt="JanataTv Logo"
                   className="w-full h-full object-contain rounded drop-shadow-[0_0_15px_rgba(34,211,238,0.5)]"
                 />
               </div>
               <span className="drop-shadow-md">
-                WasMatch<span className="text-cyan-400 font-light">Du</span>
+                Janata<span className="text-cyan-400 font-light">Tv</span>
               </span>
             </div>
           </div>
@@ -376,7 +376,7 @@ export const Dashboard: React.FC = () => {
                 className="w-full h-full object-cover rounded shadow"
               />
             </div>
-            WasMatchDu
+            JanataTv
           </div>
           <button
             data-focusable="true"

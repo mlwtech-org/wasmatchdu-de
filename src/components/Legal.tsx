@@ -33,7 +33,7 @@ export const Legal: React.FC = () => {
             </h2>
             <div className="space-y-4 text-slate-400 leading-relaxed">
               <p>
-                WasMatchDu is a media player and directory service. The platform
+                JanataTv is a media player and directory service. The platform
                 functions purely as a neutral search engine and aggregator of
                 publicly available streaming links (such as M3U/M3U8 playlists)
                 found on the internet.
@@ -93,8 +93,8 @@ export const Legal: React.FC = () => {
             </p>
             <div className="inline-flex items-center gap-3 bg-blue-950/50 px-6 py-4 rounded-xl border border-blue-800/50">
               <Mail className="w-5 h-5 text-blue-400" />
-              <a href="mailto:dmca@wasmatchdu.de" className="text-white font-bold text-lg hover:underline">
-                dmca@wasmatchdu.de
+              <a href="mailto:dmca@janatatv.in" className="text-white font-bold text-lg hover:underline">
+                dmca@janatatv.in
               </a>
             </div>
           </section>

@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.wasmatchdu.app',
-  appName: 'WasMatchDu IPTV',
+  appName: 'JanataTv IPTV',
   webDir: 'dist',
   plugins: {
     CapacitorHttp: {

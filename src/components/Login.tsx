@@ -152,11 +152,11 @@ export const Login: React.FC = () => {
             <div className="p-3 md:p-4 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] hover:bg-white/10 transition-colors flex items-center gap-4">
               <img
                 src="/logo.png"
-                alt="WasMatchDu Icon"
+                alt="JanataTv Icon"
                 className="w-16 md:w-20 h-16 md:h-20 drop-shadow-[0_0_20px_rgba(34,211,238,0.5)] object-contain"
               />
               <span className="text-3xl md:text-4xl font-black tracking-tighter text-white drop-shadow-md pr-4">
-                WasMatch<span className="text-cyan-400 font-light">Du</span>
+                Janata<span className="text-cyan-400 font-light">Tv</span>
               </span>
             </div>
           </div>
@@ -292,7 +292,7 @@ export const Login: React.FC = () => {
 
           <div className="mt-8 text-center text-xs text-slate-500 max-w-xs mx-auto space-y-2">
             <p>
-              WasMatchDu IPTV is a media player. It does not supply or include
+              JanataTv IPTV is a media player. It does not supply or include
               any media or content. Users must provide their own content.
             </p>
             <Link
