@@ -79,10 +79,20 @@
     "appId": "com.janatatv.app",
     "productName": "JanataTv",
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "nsis": {
-      "artifactName": "JanataTv-Setup.exe"
+      "artifactName": "JanataTv-Setup.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "directories": {
       "output": "release"
