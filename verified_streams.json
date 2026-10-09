@@ -100,13 +100,6 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
-    "url": "http://flussonic.mkpnet.ru/tv-17540fb90079a865/video.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "2x2.ru",
-    "name": "2x2",
     "url": "http://185.23.80.23:8080/2x2/index.m3u8",
     "group": "entertainment",
     "isRegional": false
@@ -340,20 +333,6 @@
     "name": "5AAB TV",
     "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
     "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "5tv.ar",
-    "name": "5tv",
-    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
