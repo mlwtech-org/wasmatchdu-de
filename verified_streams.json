@@ -357,6 +357,20 @@
     "isRegional": false
   },
   {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
     "id": "6PR.au",
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
