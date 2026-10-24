@@ -91,6 +91,13 @@
     "isRegional": false
   },
   {
+    "id": "2TV.lt",
+    "name": "2TV",
+    "url": "https://lnk5511.bstrm.net/live/687e3ff1679c8d4d68fab6c5/hd/manifest.mpd",
+    "group": "music",
+    "isRegional": false
+  },
+  {
     "id": "2x2.ru",
     "name": "2x2",
     "url": "http://stream.mcquack.net/187/index.m3u8",
@@ -235,13 +242,6 @@
     "name": "3sat",
     "url": "https://dash4.antik.sk/live/test_drei_sat_tizen/playlist.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
@@ -451,13 +451,6 @@
     "id": "7TV.es",
     "name": "7TV",
     "url": "https://especial7tv.gestec-video.com/hls/regional.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "7TV.es",
-    "name": "7TV",
-    "url": "https://streaming004.gestec-video.com/hls/7TVCORDOBA.m3u8",
     "group": "general",
     "isRegional": false
   }
