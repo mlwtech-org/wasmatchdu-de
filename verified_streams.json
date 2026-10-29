@@ -252,13 +252,6 @@
     "isRegional": false
   },
   {
-    "id": "4E.gr",
-    "name": "4E",
-    "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
     "id": "4everCinema.ua",
     "name": "4ever Cinema",
     "url": "http://stream.mcquack.net/258/index.m3u8",
@@ -339,6 +332,13 @@
     "id": "4SiDESTV.in",
     "name": "4 SiDES TV",
     "url": "https://stream.ottlive.co.in/4sidestv/index.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
+    "id": "4TVNews.in",
+    "name": "4TV News",
+    "url": "https://fta.ektv.in/live/647/master.m3u8",
     "group": "news",
     "isRegional": false
   },
@@ -458,6 +458,13 @@
     "id": "7SMusic.in",
     "name": "7S Music",
     "url": "https://mumbai-edge.smartplaytv.in/7SMusic/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "7SMusic.in",
+    "name": "7S Music",
+    "url": "https://fta.ektv.in/live/771/master.m3u8",
     "group": "music",
     "isRegional": false
   }
