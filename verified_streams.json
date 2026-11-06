@@ -100,14 +100,7 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
-    "url": "http://stream.mcquack.net/187/index.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "2x2.ru",
-    "name": "2x2",
-    "url": "http://flussonic.mkpnet.ru/tv-17540fb90079a865/video.m3u8",
+    "url": "http://176.118.197.101/2x2/index.m3u8",
     "group": "entertainment",
     "isRegional": false
   },
@@ -121,7 +114,14 @@
   {
     "id": "2x2.ru",
     "name": "2x2",
-    "url": "http://176.118.197.101/2x2/index.m3u8",
+    "url": "http://flussonic.mkpnet.ru/tv-17540fb90079a865/video.m3u8",
+    "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
+    "url": "http://stream.mcquack.net/187/index.m3u8",
     "group": "entertainment",
     "isRegional": false
   },
@@ -310,14 +310,14 @@
   {
     "id": "4FunTV.pl",
     "name": "4 Fun TV",
-    "url": "https://stream.4fun.tv:8888/hls/4f.m3u8",
+    "url": "https://stream.4fun.tv:8888/sd/4fun_sd_high.m3u8",
     "group": "music",
     "isRegional": false
   },
   {
     "id": "4FunTV.pl",
     "name": "4 Fun TV",
-    "url": "https://stream.4fun.tv:8888/sd/4fun_sd_high.m3u8",
+    "url": "https://stream.4fun.tv:8888/hls/4f.m3u8",
     "group": "music",
     "isRegional": false
   },
@@ -408,14 +408,14 @@
   {
     "id": "6TVTelugu.in",
     "name": "6 TV Telugu",
-    "url": "https://yuppparoriglin.akamaized.net/181224/smil:6tv.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b",
+    "url": "https://mumbai-edge.smartplaytv.in/6TVTelugu/index.m3u8",
     "group": "news",
     "isRegional": false
   },
   {
     "id": "6TVTelugu.in",
     "name": "6 TV Telugu",
-    "url": "https://mumbai-edge.smartplaytv.in/6TVTelugu/index.m3u8",
+    "url": "https://yuppparoriglin.akamaized.net/181224/smil:6tv.smil/playlist.m3u8?hdnts=st=1735898689~exp=1835898688~acl=*~hmac=f5fe24724fe05481e3841f9eb5ab8efdee0a3dd83645ae9dcf45703f525bab7b",
     "group": "news",
     "isRegional": false
   },
@@ -450,14 +450,14 @@
   {
     "id": "7SMusic.in",
     "name": "7S Music",
-    "url": "https://mumbai-edge.smartplaytv.in/7SMusic/index.m3u8",
+    "url": "https://fta.ektv.in/live/771/master.m3u8",
     "group": "music",
     "isRegional": false
   },
   {
     "id": "7SMusic.in",
     "name": "7S Music",
-    "url": "https://fta.ektv.in/live/771/master.m3u8",
+    "url": "https://mumbai-edge.smartplaytv.in/7SMusic/index.m3u8",
     "group": "music",
     "isRegional": false
   }
