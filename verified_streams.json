@@ -14,13 +14,6 @@
     "isRegional": false
   },
   {
-    "id": "1HDMusicTelevision.ru",
-    "name": "1HD Music Television",
-    "url": "https://stream8.cinerama.uz/1267/tracks-v1a1/mono.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
     "id": "1KZNTV.za",
     "name": "1KZN TV",
     "url": "https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8",
@@ -368,6 +361,20 @@
     "name": "5AAB TV",
     "url": "http://158.69.124.9:1935/5aabtv/5aabtv/playlist.m3u8",
     "group": "entertainment",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "https://617c5175c970b.streamlock.net:4444/tvcinco/live1/playlist.m3u8",
+    "group": "general",
+    "isRegional": false
+  },
+  {
+    "id": "5tv.ar",
+    "name": "5tv",
+    "url": "http://www.coninfo.net:1935/tvcinco/live1/playlist.m3u8",
+    "group": "general",
     "isRegional": false
   },
   {
