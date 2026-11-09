@@ -126,41 +126,6 @@
     "isRegional": false
   },
   {
-    "id": "3ABNCanada.ca",
-    "name": "3ABN Canada",
-    "url": "https://3abn.bozztv.com/3abncanada/3ABN/master.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNEnglish.us",
-    "name": "3ABN English",
-    "url": "https://3abn.bozztv.com/3abn2/3abn_live/smil:3abn_live.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNFrench.us",
-    "name": "3ABN French",
-    "url": "https://3abn.bozztv.com/3abn2/Fre_live/smil:Fre_live.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNInternational.us",
-    "name": "3ABN International",
-    "url": "https://3abn.bozztv.com/3abn2/Int_live/smil:Int_live.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNKids.us",
-    "name": "3ABN Kids",
-    "url": "https://3abn.bozztv.com/3abn2/Kids_live/smil:Kids_live.smil/playlist.m3u8",
-    "group": "kids",
-    "isRegional": false
-  },
-  {
     "id": "3ABNLatino.us",
     "name": "3ABN Latino",
     "url": "http://138.59.177.78:9999/play/a0a3/index.m3u8",
@@ -168,37 +133,9 @@
     "isRegional": false
   },
   {
-    "id": "3ABNLatino.us",
-    "name": "3ABN Latino",
-    "url": "https://3abn.bozztv.com/3abn2/Lat_live/smil:Lat_live.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNPraiseHimMusicNetwork.us",
-    "name": "3ABN Praise Him Music Network",
-    "url": "https://3abn.bozztv.com/3abn1/PraiseHim/smil:PraiseHim.smil/playlist.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNProclaimNetwork.us",
-    "name": "3ABN Proclaim! Network",
-    "url": "https://3abn.bozztv.com/3abn2/Pro_live/smil:Pro_live.smil/playlist.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
     "id": "3ABNRussia.ru",
     "name": "3ABN Russia",
     "url": "https://hls.tv.3angels.ru/stream.m3u8",
-    "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "3ABNRussia.ru",
-    "name": "3ABN Russia",
-    "url": "https://3abn.bozztv.com/3abn2/Rus_live/smil:Rus_live.smil/playlist.m3u8",
     "group": "religious",
     "isRegional": false
   },
@@ -389,13 +326,6 @@
     "name": "6 sotok",
     "url": "http://stream.mcquack.net/405/index.m3u8",
     "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "6ter.fr",
-    "name": "6ter",
-    "url": "http://149.62.177.107:9999/6ter/index.m3u8",
-    "group": "entertainment",
     "isRegional": false
   },
   {
