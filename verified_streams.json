@@ -35,13 +35,6 @@
     "isRegional": false
   },
   {
-    "id": "1Plus1Ukraina.ua",
-    "name": "1+1 Ukraina",
-    "url": "http://stream.mcquack.net/219/index.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
     "id": "1TV.ge",
     "name": "1TV",
     "url": "https://tv.cdn.xsg.ge/gpb-1tv/index.m3u8",
@@ -66,13 +59,6 @@
     "id": "2M.ma",
     "name": "2M",
     "url": "http://185.9.2.18/chid_218/index.m3u8",
-    "group": "general",
-    "isRegional": false
-  },
-  {
-    "id": "2Plus2.ua",
-    "name": "2+2",
-    "url": "http://stream.mcquack.net/173/index.m3u8",
     "group": "general",
     "isRegional": false
   },
@@ -108,13 +94,6 @@
     "id": "2x2.ru",
     "name": "2x2",
     "url": "http://flussonic.mkpnet.ru/tv-17540fb90079a865/video.m3u8",
-    "group": "entertainment",
-    "isRegional": false
-  },
-  {
-    "id": "2x2.ru",
-    "name": "2x2",
-    "url": "http://stream.mcquack.net/187/index.m3u8",
     "group": "entertainment",
     "isRegional": false
   },
@@ -238,6 +217,13 @@
     "isRegional": false
   },
   {
+    "id": "4DmasNoticiasTV.py",
+    "name": "4Dmas Noticias TV",
+    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
+    "group": "news",
+    "isRegional": false
+  },
+  {
     "id": "4E.gr",
     "name": "4E",
     "url": "http://eu2.tv4e.gr:554/live/smil:myStream.sdp.smil/playlist.m3u8",
@@ -249,34 +235,6 @@
     "name": "4E",
     "url": "http://eu2.tv4e.gr:1935/live/myStream.sdp/playlist.m3u8",
     "group": "religious",
-    "isRegional": false
-  },
-  {
-    "id": "4everCinema.ua",
-    "name": "4ever Cinema",
-    "url": "http://stream.mcquack.net/258/index.m3u8",
-    "group": "movies",
-    "isRegional": false
-  },
-  {
-    "id": "4everDrama.ua",
-    "name": "4ever Drama",
-    "url": "http://stream.mcquack.net/260/index.m3u8",
-    "group": "series",
-    "isRegional": false
-  },
-  {
-    "id": "4everMusic.ua",
-    "name": "4ever Music",
-    "url": "http://stream.mcquack.net/257/index.m3u8",
-    "group": "music",
-    "isRegional": false
-  },
-  {
-    "id": "4everTheater.ua",
-    "name": "4ever Theater",
-    "url": "http://stream.mcquack.net/259/index.m3u8",
-    "group": "entertainment",
     "isRegional": false
   },
   {
@@ -375,13 +333,6 @@
     "name": "6PR",
     "url": "https://6prlive.akamaized.net/hls/live/2033806/6PR/index.m3u8",
     "group": "news",
-    "isRegional": false
-  },
-  {
-    "id": "6sotok.ua",
-    "name": "6 sotok",
-    "url": "http://stream.mcquack.net/405/index.m3u8",
-    "group": "general",
     "isRegional": false
   },
   {
