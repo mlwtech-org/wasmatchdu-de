@@ -7,6 +7,13 @@
     "isRegional": false
   },
   {
+    "id": "1HDMusicTelevision.ru",
+    "name": "1HD Music Television",
+    "url": "http://176.118.197.101/1HD/index.m3u8",
+    "group": "music",
+    "isRegional": false
+  },
+  {
     "id": "1KZNTV.za",
     "name": "1KZN TV",
     "url": "https://cdn.freevisiontv.co.za/sttv/smil:1kzn.stream.smil/playlist.m3u8",
@@ -67,6 +74,13 @@
     "name": "2TV",
     "url": "https://lnk5511.bstrm.net/live/687e3ff1679c8d4d68fab6c5/hd/manifest.mpd",
     "group": "music",
+    "isRegional": false
+  },
+  {
+    "id": "2x2.ru",
+    "name": "2x2",
+    "url": "http://176.118.197.101/2x2/index.m3u8",
+    "group": "entertainment",
     "isRegional": false
   },
   {
@@ -214,13 +228,6 @@
     "name": "3TV",
     "url": "https://amg00312-amg00312c59-amgplt0022.playout.now3.amagi.tv/ts-us-e2-n2/playlist/amg00312-amg00312c59-amgplt0022/playlist.m3u8",
     "group": "Uncategorized",
-    "isRegional": false
-  },
-  {
-    "id": "4DmasNoticiasTV.py",
-    "name": "4Dmas Noticias TV",
-    "url": "https://rds3.desdeparaguay.net/4dmasnoticiastv/4dmasnoticiastv/playlist.m3u8",
-    "group": "news",
     "isRegional": false
   },
   {
